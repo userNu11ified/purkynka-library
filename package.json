@@ -1,6 +1,6 @@
 {
-	"name": "library",
-	"version": "0.0.1",
+	"name": "purkynka-library",
+	"version": "1.0.0",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
