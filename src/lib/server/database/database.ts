@@ -2,6 +2,7 @@ import { writable, type Writable } from 'svelte/store';
 import fs from 'fs/promises';
 import type { Database } from '$shared/database_types';
 import { transfer_old_database } from '$server/transfer/transfer';
+import { env } from '$env/dynamic/private';
 
 export const create_empty_database = (): Database => {
 	return {
@@ -29,13 +30,14 @@ export const create_empty_database = (): Database => {
 	};
 };
 
-const SHOULD_TRANSFER_OLD_DATABASE = true;
 const get_database = async (): Promise<Database> => {
+	const should_transfer_database = JSON.parse(env['SHOULD_TRANSFER_DATABASE'] ?? 'false');
+
 	const file_database = await fs.readFile('./data/database.json', 'utf-8').catch(() => null);
 
 	if (file_database !== null) return JSON.parse(file_database);
 
-	if (!SHOULD_TRANSFER_OLD_DATABASE) return create_empty_database();
+	if (!should_transfer_database) return create_empty_database();
 
 	const transferred_database = await transfer_old_database().catch(() => null);
 
