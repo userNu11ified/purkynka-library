@@ -48,6 +48,14 @@
 
 <svelte:window bind:innerWidth={$WINDOW_WIDTH} bind:innerHeight={$WINDOW_HEIGHT} on:keydown={on_key_down} />
 
+<svelte:head>
+	{#if $DARK_THEME}
+		<link rel="icon" href="/favicon-dark.svg" />
+	{:else}
+		<link rel="icon" href="/favicon-light.svg" />
+	{/if}
+</svelte:head>
+
 <div
 	class="app-mount"
 	style:--border-width={pixels(BORDER_WIDTH)}
