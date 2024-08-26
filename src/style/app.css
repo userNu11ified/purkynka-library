@@ -1,0 +1,130 @@
+* {
+	box-sizing: border-box;
+	font-family:
+		Nunito,
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		'Open Sans',
+		'Helvetica Neue',
+		sans-serif;
+
+	outline: var(--outline-width) var(--outline-style) transparent;
+	outline-offset: var(--border-width-negative);
+}
+
+*:focus-visible {
+	outline: var(--outline);
+}
+
+button {
+	padding: 0;
+	border: none;
+	border-radius: 0;
+
+	background-color: transparent;
+
+	font-size: 16px;
+
+	cursor: pointer;
+
+	user-select: none;
+}
+
+.button {
+	background-color: var(--base-surface);
+
+	&:not(:disabled):is(:hover, :focus-visible):not(:has(:is(:hover, :focus-visible))) {
+		background-color: var(--highlighted-surface);
+	}
+
+	&:not(:disabled):active:not(:has(:active)) {
+		background-color: var(--active-surface);
+	}
+}
+
+.shifted-button {
+	background-color: var(--shifted-base-surface);
+
+	&:not(:disabled):is(:hover, :focus-visible):not(:has(:is(:hover, :focus-visible))) {
+		background-color: var(--shifted-highlighted-surface);
+	}
+
+	&:not(:disabled):active:not(:has(:active)) {
+		background-color: var(--shifted-active-surface);
+	}
+}
+
+.searched-button {
+	background-color: var(--searched-base-surface);
+
+	&:not(:disabled):is(:hover, :focus-visible):not(:has(:is(:hover, :focus-visible))) {
+		background-color: var(--searched-highlighted-surface);
+	}
+
+	&:not(:disabled):active:not(:has(:active)) {
+		background-color: var(--searched-active-surface);
+	}
+}
+
+.selected-button {
+	background-color: var(--selected-base-surface);
+
+	&:not(:disabled):is(:hover, :focus-visible):not(:has(:is(:hover, :focus-visible))) {
+		background-color: var(--selected-highlighted-surface);
+	}
+
+	&:not(:disabled):active:not(:has(:active)) {
+		background-color: var(--selected-active-surface);
+	}
+}
+
+.error-button {
+	background-color: var(--error-base-surface);
+
+	&:not(:disabled):is(:hover, :focus-visible):not(:has(:is(:hover, :focus-visible))) {
+		background-color: var(--error-highlighted-surface);
+	}
+
+	&:not(:disabled):active:not(:has(:active)) {
+		background-color: var(--error-active-surface);
+	}
+}
+
+input {
+	padding-inline: 12px;
+	border: none;
+
+	background-color: var(--base-surface);
+
+	font-size: var(--font-size-regular);
+}
+
+input::placeholder {
+	user-select: none;
+}
+
+a {
+	color: var(--tertiary-700);
+
+	&:visited {
+		color: var(--primary-700);
+	}
+}
+
+*::-webkit-scrollbar {
+	width: calc(var(--scrollbar-width) + var(--border-width));
+
+	border-left: var(--border);
+
+	background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: var(--scrollbar-thumb-color);
+}
