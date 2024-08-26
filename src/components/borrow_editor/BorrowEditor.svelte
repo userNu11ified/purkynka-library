@@ -76,9 +76,9 @@
 		if (typeof value === 'number') {
 			reader_class = map_or_null<string>($DATABASE, 'reader_classes', value as ID);
 
-			const readers_in_class = $DATABASE.readers.filter((v) => v.class_name === value).length;
-			if (readers_in_class === 1) {
-				reader = $DATABASE.readers.find((v) => v.class_name === value)!;
+			const readers_in_class = $DATABASE.readers.filter((v) => v.class_name === value);
+			if (readers_in_class.length === 1) {
+				reader = readers_in_class[0];
 			}
 		} else {
 			reader_class = null;
