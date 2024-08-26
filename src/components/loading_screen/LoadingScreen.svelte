@@ -1,5 +1,4 @@
-<script>
-	import { CURRENT_STEP, TOTAL_STEPS } from '$client/loading_screen/loading_screen';
+<script lang="ts">
 	import { get_quote } from '$client/loading_screen/quotes';
 	import { percent } from '$client/style/css';
 	import DashboardText from '$components/dashboard/DashboardText.svelte';
@@ -7,6 +6,9 @@
 	import { fade } from 'svelte/transition';
 
 	const quote = get_quote();
+
+	export let current_step: number;
+	export let total_steps: number;
 </script>
 
 <div class="loading-screen" transition:fade>
@@ -20,9 +22,9 @@
 
 		<div class="loading-bar-container">
 			<div class="loading-bar">
-				<div class="loading-bar-inner" style:--width={percent(($CURRENT_STEP / TOTAL_STEPS) * 100)}></div>
+				<div class="loading-bar-inner" style:--width={percent((current_step / total_steps) * 100)}></div>
 			</div>
-			<div class="loading-progress">{$CURRENT_STEP}/{TOTAL_STEPS}</div>
+			<div class="loading-progress">{current_step}/{total_steps}</div>
 		</div>
 	</div>
 </div>

@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { INFO_OPENED } from '$client/student/student';
+	import { INFO_OPENED, STUDENT_DATABASE } from '$client/student/student';
 	import { percent } from '$client/style/css';
 	import Editor from '$components/editor/Editor.svelte';
 	import EditorAction from '$components/editor/EditorAction.svelte';
+
+	console.log($STUDENT_DATABASE);
 </script>
 
 <Editor editor_width={percent(50)}>

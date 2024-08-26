@@ -1,8 +1,10 @@
 <script lang="ts">
+	import '$style/app.css';
+	import '$style/theme.css';
+
 	import type { CopyTransformer, Filter, Sorter } from '$client/list/list';
 	import type { StudentBookListMappedItem } from '$client/lists/student_book_list';
-	import { get_request } from '$client/request/request';
-	import { INFO_OPENED, UDC_LIST_OPENED, type StudentDatabase, STUDENT_DATABASE } from '$client/student/student';
+	import { INFO_OPENED, UDC_LIST_OPENED, STUDENT_DATABASE } from '$client/student/student';
 	import { pixels } from '$client/style/css';
 	import {
 		DARK_THEME,
@@ -22,36 +24,25 @@
 	import { concat_authors, format_date, map_authors, map_or_null } from '$shared/book_util';
 	import { date_compare, string_compare } from '$shared/common_util';
 	import type { Database } from '$shared/database_types';
-
-	import '$style/app.css';
-	import '$style/theme.css';
 	import { get_return_date } from '$shared/borrow_util';
 	import StudentInfo from '$components/student_info/StudentInfo.svelte';
 	import StudentUdcList from '$components/student_udc_list/StudentUDCList.svelte';
-
-	const GET_ENDPOINTS = ['borrows', 'books', 'book-names', 'authors', 'udc'];
-	const get_student_database = async () => {
-		const data = await Promise.all(
-			GET_ENDPOINTS.map((endpoint) => get_request(`${window.origin}/api/v1/${endpoint}`).then((res) => res.json()))
-		);
-		STUDENT_DATABASE.set(
-			Object.fromEntries(data.map((v, i) => [GET_ENDPOINTS[i].replaceAll('-', '_'), v])) as StudentDatabase
-		);
-	};
-
-	get_student_database();
+	import { onMount } from 'svelte';
+	import {
+		get_endpoint_reload,
+		load_student,
+		STUDENT_CURRENT_STEP,
+		STUDENT_TOTAL_STEPS
+	} from '$client/student_loading_screen/student_loading_screen';
+	import LoadingScreen from '$components/loading_screen/LoadingScreen.svelte';
 
 	let list: List<DatabaseBook, StudentBookListMappedItem>;
 
-	const item_mapper = ({
-		string_id,
-		is_large,
-		name,
-		author,
-		udc,
-		annotation
-	}: DatabaseBook): StudentBookListMappedItem => {
-		const book_id = +string_id - 1;
+	const item_mapper = (
+		{ string_id, is_large, name, author, udc, annotation }: DatabaseBook,
+		index: number
+	): StudentBookListMappedItem => {
+		const book_id = index;
 
 		const borrow = $STUDENT_DATABASE.borrows.find((v) => v.book === book_id);
 		const borrow_date = borrow ? get_return_date(new Date(borrow.borrow_date), borrow.times_extended) : null;
@@ -130,6 +121,14 @@
 	const on_click_info = () => ($INFO_OPENED = true);
 	const on_click_udc_list = () => ($UDC_LIST_OPENED = true);
 	const on_click_theme_switcher = () => ($DARK_THEME = !$DARK_THEME);
+
+	const subscribe_to_updates = () => {
+		const event = new EventSource(`${window.origin}/api/v1/event/database-update`);
+		event.onmessage = async () => await load_student(get_endpoint_reload);
+		return () => event.close();
+	};
+
+	onMount(() => subscribe_to_updates());
 </script>
 
 <svelte:head>
@@ -153,13 +152,15 @@
 	class:dark-theme={$DARK_THEME}
 	class:light-theme={!$DARK_THEME}
 >
-	{#if $INFO_OPENED}
-		<StudentInfo></StudentInfo>
-	{:else if $UDC_LIST_OPENED}
-		<StudentUdcList></StudentUdcList>
-	{/if}
+	{#await load_student()}
+		<LoadingScreen current_step={$STUDENT_CURRENT_STEP} total_steps={STUDENT_TOTAL_STEPS}></LoadingScreen>
+	{:then}
+		{#if $INFO_OPENED}
+			<StudentInfo></StudentInfo>
+		{:else if $UDC_LIST_OPENED}
+			<StudentUdcList></StudentUdcList>
+		{/if}
 
-	{#if $STUDENT_DATABASE !== undefined}
 		<List
 			bind:this={list}
 			local_storage_key="student-list"
@@ -186,7 +187,7 @@
 				></ListAction>
 			</svelte:fragment>
 		</List>
-	{/if}
+	{/await}
 </div>
 
 <style>

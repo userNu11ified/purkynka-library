@@ -7,13 +7,13 @@
 	import { format_date } from '$shared/book_util';
 
 	export let list_item: ListItem<StudentBookListMappedItem>;
-	const item = list_item[1];
+	$: item = list_item[1];
 
 	export let even: boolean;
 	export let searched: boolean;
 	export let selected: boolean;
 
-	const borrowed = item.permanent ? 'Trvale' : item.return_date ? `Do ${format_date(item.return_date)}` : 'Volné';
+	$: borrowed = item?.permanent ? 'Trvale' : item?.return_date ? `Do ${format_date(item.return_date)}` : 'Volné';
 </script>
 
 <div
@@ -75,15 +75,15 @@
 		color: black;
 	}
 
-	.red {
+	.red:not(:is(.searched, .selected)) {
 		color: var(--borrowed-color);
 	}
 
-	.yellow {
+	.yellow:not(:is(.searched, .selected)) {
 		color: var(--permanent-color);
 	}
 
-	.green {
+	.green:not(:is(.searched, .selected)) {
 		color: var(--available-color);
 	}
 </style>

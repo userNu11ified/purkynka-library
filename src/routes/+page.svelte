@@ -2,7 +2,7 @@
 	import { CURRENTLY_EDITING_BOOK } from '$client/editors/book_editor';
 	import { CURRENTLY_EDITING_BORROW } from '$client/editors/borrow_editor';
 	import { CURRENTLY_EDITING_READER } from '$client/editors/reader_editor';
-	import { load } from '$client/loading_screen/loading_screen';
+	import { CURRENT_STEP, load, TOTAL_STEPS } from '$client/loading_screen/loading_screen';
 	import { PASSWORD, PASSWORD_UNSUBSCRIBER } from '$client/password/password';
 	import { CURRENT_PAGE_OPENED, SIDEBAR_OPENED } from '$client/sidebar/sidebar';
 	import { pixels } from '$client/style/css';
@@ -73,7 +73,7 @@
 		<PasswordPrompt />
 	{:else}
 		{#await load()}
-			<LoadingScreen />
+			<LoadingScreen current_step={$CURRENT_STEP} total_steps={TOTAL_STEPS} />
 		{:then}
 			<Sidebar></Sidebar>
 			<div class="content" class:opened={$SIDEBAR_OPENED}>
