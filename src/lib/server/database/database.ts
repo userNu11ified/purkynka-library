@@ -29,7 +29,7 @@ export const create_empty_database = (): Database => {
 	};
 };
 
-const SHOULD_TRANSFER_OLD_DATABASE = false;
+const SHOULD_TRANSFER_OLD_DATABASE = true;
 const get_database = async (): Promise<Database> => {
 	const file_database = await fs.readFile('./data/database.json', 'utf-8').catch(() => null);
 

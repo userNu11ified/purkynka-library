@@ -94,3 +94,24 @@ export const create_database_putter = <T extends Props>(database_key: keyof Data
 		return new Response();
 	}) as RequestHandler;
 };
+
+export const create_database_deleter = (database_key: keyof Database) => {
+	return (async ({ request, params }) => {
+		const authenticated = is_authenticated(request);
+		if (authenticated !== null) return authenticated;
+
+		const id_parameter = params['id'];
+		if (id_parameter === undefined) return new Response('ID not set!', { status: 400 });
+
+		const id = +id_parameter as ID;
+		if (isNaN(id) || id < 0) return new Response('Invalid ID!', { status: 400 });
+		if (Object.keys(get(DATABASE)[database_key]).length <= id) return new Response('ID out of range!', { status: 400 });
+
+		DATABASE.update((v) => {
+			v[database_key].splice(id, 1);
+			return v;
+		});
+
+		return new Response();
+	}) as RequestHandler;
+};
