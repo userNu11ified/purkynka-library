@@ -29,9 +29,6 @@ const recheck_password = async (text_password: Buffer) => {
 
 	const key = scryptSync(text_password, saved_salt, 64);
 
-	console.log(key);
-	console.log(saved_key);
-
 	if (key.equals(saved_key)) {
 		return new Response(saved_key.toString('hex'));
 	} else {
