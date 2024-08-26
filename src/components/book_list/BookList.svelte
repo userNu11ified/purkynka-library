@@ -41,7 +41,7 @@
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.author, right_item.author),
 		([left_id, left_item], [right_id, right_item]) =>
 			string_compare(left_item.udc?.short_name, right_item.udc?.short_name),
-		([left_id, left_item], [right_id, right_item]) => 0,
+		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.borrowed, right_item.borrowed),
 		([left_id, left_item], [right_id, right_item]) => date_compare(left_item.discard_date, right_item.discard_date)
 	];
 
