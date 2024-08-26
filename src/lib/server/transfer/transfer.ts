@@ -148,7 +148,7 @@ export const transfer_old_database = async () => {
 
 		const reader: DatabaseReader = {
 			id: i as ID,
-			name: `${first_name} ${last_name}`,
+			name: `${last_name} ${first_name}`,
 			class_name: class_id
 		};
 
