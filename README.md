@@ -42,6 +42,11 @@ I když je to možná trochu přehnané, použil jsem `scrypt` s výchozím nast
 
 Salt i samotný klíč je pak uložený v `data/password.json`.
 
+## Spuštění
+
+Pro spuštění stačí použít `npm run dev`.<br>
+To znamená, že budete potřebovat Node.JS. Při developmentu jsem používal `v20.14.0`.
+
 ## Endpointy
 
 ### localhost:5173
