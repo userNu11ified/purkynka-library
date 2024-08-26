@@ -4,7 +4,8 @@
 		<a href="https://github.com/userNu11ified">null</a>.
 	</div>
 	<div class="line">
-		Licensed under <a href="https://github.com/userNu11ified/purkynka-library/LICENSE.md">MIT</a>. Source code available
+		Licensed under <a href="https://github.com/userNu11ified/purkynka-library/blob/main/LICENSE">MIT</a>. Source code
+		available
 		<a href="https://github.com/userNu11ified/purkynka-library">here</a>.
 	</div>
 </div>
