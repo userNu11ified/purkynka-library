@@ -18,11 +18,11 @@ Při spuštění si načte buď celou databázi, pokud se jedná o stránku spr�
 
 Endpointy se nachází v `src/routes`, logika serveru zase v `src/lib/server`. Data se ukládají do složky `data`, kde je `database.json` obsahující samotnou databázi a `password.json` obsahující uložený `scrypt` klíč pro přihlašování.
 
-Při spuštění se databáze vytvoří prázdná, až na nějaké výchozí možnosti (viz. `src/lib/server/database.ts:create_empty_database`). Pokud Vám jede lokální SQL server a máte v něm nahranou starou databázi z knihovny, lze po trošce úpravy (jméno, heslo, apod.) nahrát starou databázi do nové. Kód je v `src/lib/server/database.ts:transfer_old_database`, ale očekává i CSV studentů a učitelů, ve složce `data/original`. Formát CSV souborů je `příjmení;jméno;třída` pro žáky a `příjmení;jméno;zkratka` pro učitele.
+Při spuštění se databáze vytvoří prázdná, až na nějaké výchozí možnosti (viz. `src/lib/server/database.ts:create_empty_database`). Pokud nějakým kouzelným způsobem máte přístup k SQL serveru se starou databází a CSV soubory žáků a učitelů ve formátu `příjmení;jméno;třída/zkratka`, můžete do `.env` souboru přidat `SHOULD_TRANSFER_DATABASE=true`. Pokud neexistuje ještě `database.json`, program se pokusí předělat stará data na nová.
 
 ### Společné
 
-Některé věci jsou společné napříč oběma stranami, ty jsou v `src/lib/shared`. Většinou jsou to samotné typy pro databázi apod., ale jsou zde i nějaké užitečné funkce, co jsem používal na hodně místech.
+Některé věci jsou společné napříč serverem a klientem, ty jsou v `src/lib/shared`. Většinou jsou to samotné typy pro databázi apod., ale jsou zde i nějaké užitečné funkce, co jsem používal na hodně místech.
 
 ## Databáze
 
@@ -51,12 +51,15 @@ To znamená, že budete potřebovat Node.JS. Při developmentu jsem používal `
 
 ### localhost:5173
 
-Samotná stránka s editorem knížek apod.<br>Načítá celou databázi, určeno pro učitele nebo správce knihovny.
+Samotná stránka s editorem knížek apod.<br>
+Načítá celou databázi, určeno pro učitele nebo správce knihovny.<br>
+Neaktualizuje se pří vnější aktualizaci databáze, takže by databázi neměl měnit víc jak jeden uživatel najednou.
 
 ### localhost:5173/student
 
 Samostatný seznam knih, který načte jen potřebné informace<br>
-Určeno studentům, pro zjištění knih v knihovně a jejich stav půjčení.
+Určeno studentům, pro zjištění knih v knihovně a jejich stav půjčení.<br>
+Oproti samotnému stránce se aktualizuje při aktualizaci databáze.
 
 ### localhost:5173/api/v1/...
 
@@ -72,7 +75,7 @@ PUT requesty se posílají na `localhost:5173/api/v1/.../id`, kde `id` je index 
 ## Použité knihovny
 
 Celá stránka je napsaná pomocí [SvelteKit](https://kit.svelte.dev/).<br>
-Listy s nekonečným scrollováním jsou vytvořeny pomocí [svelte-tiny-virtual-list](https://github.com/jonasgeiler/svelte-tiny-virtual-list), server-side validace dat je vytvořena pomocí [io-ts](https://github.com/gcanti/io-ts) a ikonky jsem vzal z [Iconify](https://icon-sets.iconify.design/mdi).<br>
+Listy s nekonečným scrollováním jsou vytvořeny pomocí [svelte-tiny-virtual-list](https://github.com/jonasgeiler/svelte-tiny-virtual-list), server-side validace dat je vytvořena pomocí [io-ts](https://github.com/gcanti/io-ts) a ikonky jsem vzal z [Iconify](https://icon-sets.iconify.design/mdi). Transfer staré databáze používá [mysql2](https://www.npmjs.com/package/mysql2).<br>
 Layout stránky vytvořila paní učitelka Houšková, designování stránky, barev a programování jsem pak dělal sám.
 
 ## Licence
