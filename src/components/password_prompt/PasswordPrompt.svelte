@@ -36,7 +36,18 @@
 			$PASSWORD = key;
 		}
 	};
+
+	let input_focused = false;
+
+	const on_input_focus_in = () => (input_focused = true);
+	const on_input_focus_out = () => (input_focused = false);
+
+	const on_key_down = (e: KeyboardEvent) => {
+		if (input_focused && e.code === 'Enter') on_click_login();
+	};
 </script>
+
+<svelte:window on:keydown={on_key_down} />
 
 <div class="password-prompt">
 	<DashboardText></DashboardText>
@@ -49,6 +60,8 @@
 			error_checkers={[REQUIRED_CHECKER, PASSWORD_CHECKER]}
 			placeholder="Heslo..."
 			input_type={password_visible ? 'text' : 'password'}
+			on:focusin={on_input_focus_in}
+			on:focusout={on_input_focus_out}
 		></EditorTextField>
 		{#if $editor_context['password'] !== null}
 			<button class="password-viewer" on:click={on_click_password_viewer}>
