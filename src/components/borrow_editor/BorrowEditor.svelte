@@ -146,6 +146,7 @@
 		editor_error_context_unsubscriber = editor.editor_error_context.subscribe(
 			(v: BorrowEditorErrorContext) => (has_errors = Object.values(v).findIndex((v) => v.size !== 0) !== -1)
 		);
+
 	});
 
 	onDestroy(() => {
@@ -172,7 +173,7 @@
 						items={$DATABASE.books}
 						item_stringifier={(item) => item.string_id}
 						filter={book_filter}
-						sorter={([left_id, left_item], [right_id, right_item]) => +left_item.string_id - +right_item.string_id}
+						sorter={([left_id, left_item], [right_id, right_item]) => left_id - right_id}
 						error_checkers={[REQUIRED_CHECKER, ID_REQUIRED_CHECKER]}
 						center
 						width={pixels(128)}
@@ -180,30 +181,11 @@
 						error_left
 						placeholder="Přír. č..."
 					>
-						<svelte:fragment slot="search-result" let:item>
+						<svelte:fragment slot="search-result" let:id let:item>
 							<div class="gray">
-								{map_or_null($DATABASE, 'book_names', $DATABASE.books[+item.string_id - 1].name)}
+								{map_or_null($DATABASE, 'book_names', $DATABASE.books[id].name)}
 							</div>
 							{item.string_id}
-						</svelte:fragment>
-					</EditorSearchableTextField>
-
-					<EditorSearchableTextField
-						context_field="book_name"
-						value={selected_book}
-						items={$DATABASE.books}
-						item_stringifier={name_item_stringifier}
-						filter={book_filter}
-						sorter={name_sorter}
-						error_checkers={[REQUIRED_CHECKER, ID_REQUIRED_CHECKER]}
-						on_option_selected={on_option_selected_book}
-						width={percent(100)}
-						flex
-						placeholder="Název knihy..."
-					>
-						<svelte:fragment slot="search-result" let:item>
-							<div class="gray">{item.string_id}</div>
-							{map_or_null($DATABASE, 'book_names', $DATABASE.books[+item.string_id - 1].name)}
 						</svelte:fragment>
 					</EditorSearchableTextField>
 				</Horizontal>

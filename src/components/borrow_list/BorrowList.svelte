@@ -112,6 +112,25 @@
 			list.close_options();
 		}
 	};
+
+	const on_click_permanent_book = async (borrow_index: number) => {
+		const borrow = $DATABASE.borrows[borrow_index];
+		borrow.permanent = true;
+
+		const res = await put_request(`${window.origin}/api/v1/borrows/${borrow_index}`, borrow);
+
+		if (res.ok) {
+			const borrow_history = await res.json();
+			DATABASE.update((v) => {
+				v.borrows[borrow_index] = borrow;
+				v.borrow_history[borrow.id] = borrow_history;
+
+				return v;
+			});
+
+			list.close_options();
+		}
+	};
 </script>
 
 <List
@@ -129,6 +148,6 @@
 	<svelte:fragment slot="options" let:item>
 		<ListOption icon_type="book-return" on:click={() => on_click_return_book(item[0])}>Vrátit</ListOption>
 		<ListOption icon_type="extend" on:click={() => on_click_extend_book(item[0])}>Prodloužit</ListOption>
-		<ListOption icon_type="book-lock">Trvale</ListOption>
+		<ListOption icon_type="book-lock" on:click={() => on_click_permanent_book(item[0])}>Trvale</ListOption>
 	</svelte:fragment>
 </List>

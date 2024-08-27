@@ -38,7 +38,7 @@
 	export let option_filter: (item: [number, T]) => boolean = () => true;
 
 	const get_items = (items: [number, T][], option_filter: (item: [number, T]) => boolean) =>
-		structuredClone(items).filter(option_filter);
+		structuredClone(base_items).filter(option_filter);
 
 	$: current_items = get_items(base_items, option_filter);
 
