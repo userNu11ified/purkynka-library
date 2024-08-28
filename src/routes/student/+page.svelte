@@ -4,7 +4,7 @@
 
 	import type { CopyTransformer, Filter, Sorter } from '$client/list/list';
 	import type { StudentBookListMappedItem } from '$client/lists/student_book_list';
-	import { INFO_OPENED, UDC_LIST_OPENED, STUDENT_DATABASE } from '$client/student/student';
+	import { INFO_OPENED, UDC_LIST_OPENED, STUDENT_DATABASE, LIST_SORT_BY_UDC } from '$client/student/student';
 	import { pixels } from '$client/style/css';
 	import {
 		DARK_THEME,
@@ -55,7 +55,7 @@
 			is_large,
 			book_name: map_or_null<string>($STUDENT_DATABASE as Database, 'book_names', name)!,
 			book_author: concat_authors(map_authors($STUDENT_DATABASE as Database, author)),
-			book_udc: map_or_null<Shorthand>($STUDENT_DATABASE as Database, 'udc', udc),
+			book_udc: structuredClone(map_or_null<Shorthand>($STUDENT_DATABASE as Database, 'udc', udc)),
 			annotation
 		};
 	};
@@ -127,6 +127,10 @@
 		event.onmessage = async () => await load_student(get_endpoint_reload);
 		return () => event.close();
 	};
+
+	LIST_SORT_BY_UDC.subscribe((v) => {
+		if (v !== null) list.set_search(v!, 5);
+	});
 
 	onMount(() => subscribe_to_updates());
 </script>

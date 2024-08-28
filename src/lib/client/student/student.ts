@@ -1,5 +1,6 @@
 import type { Author, Shorthand, DatabaseBook } from '$shared/book_types';
 import type { DatabaseBorrow } from '$shared/borrow_types';
+import type { Nullable } from '$shared/common_types';
 import { writable, type Writable } from 'svelte/store';
 
 export type StudentDatabase = {
@@ -15,3 +16,4 @@ export type StudentDatabase = {
 export const STUDENT_DATABASE: Writable<StudentDatabase> = writable();
 export const INFO_OPENED = writable(false);
 export const UDC_LIST_OPENED = writable(false);
+export const LIST_SORT_BY_UDC: Writable<Nullable<string>> = writable(null);

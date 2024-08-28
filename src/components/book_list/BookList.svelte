@@ -106,6 +106,8 @@
 
 				return v;
 			});
+
+			list.close_options();
 		}
 	};
 

@@ -1,4 +1,6 @@
 <script lang="ts" generics="T, V">
+	import { STUDENT_DATABASE } from '$client/student/student';
+
 	import Icon from '$components/icon/Icon.svelte';
 
 	import { sum } from '$client/math/math';
@@ -131,6 +133,7 @@
 
 		const new_value = search_bars[index].value;
 
+
 		debounce_width_animation = debounce_bars[index].animate([{ width: percent(0) }, { width: percent(100) }], {
 			duration: 1000,
 			fill: 'forwards'
@@ -138,6 +141,7 @@
 
 		debounce_width_animation.onfinish = () => {
 			$searched_by = [index, new_value];
+
 			close_options();
 
 			debounce_hide_animation = debounce_bars[index].animate([{ opacity: 1 }, { opacity: 0 }], {
@@ -146,6 +150,11 @@
 			});
 		};
 	};
+
+	export const set_search = (value: string, index: number) => {
+		search_bars[index].value = value;
+		$searched_by = [index, value];
+	}
 
 	// ITEM GETTING
 	const get_items = (
@@ -165,6 +174,9 @@
 		let filtered_items = filters[searched_by_column_index](new_items, search_query.trim().toLocaleLowerCase('cs'));
 
 		if (filtered_items !== null) go_to_index(0);
+
+		console.log($STUDENT_DATABASE);
+
 		return (filtered_items === null || search_query === "") ? new_items : filtered_items;
 	};
 

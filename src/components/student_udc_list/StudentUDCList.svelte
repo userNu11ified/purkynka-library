@@ -1,8 +1,13 @@
 <script lang="ts">
-	import { STUDENT_DATABASE, UDC_LIST_OPENED } from '$client/student/student';
+	import { LIST_SORT_BY_UDC, STUDENT_DATABASE, UDC_LIST_OPENED } from '$client/student/student';
 	import Editor from '$components/editor/Editor.svelte';
 	import EditorAction from '$components/editor/EditorAction.svelte';
 	import { string_compare } from '$shared/common_util';
+
+	const on_click_udc = (short_name: string) => {
+		$LIST_SORT_BY_UDC = short_name;
+		$UDC_LIST_OPENED = false;
+	}
 </script>
 
 <Editor>
@@ -10,11 +15,11 @@
 	<div slot="content">
 		<div class="info">Ve vyhledávání jde použít zkratka i celý název!</div>
 		<div class="list">
-			{#each $STUDENT_DATABASE.udc.sort((a, b) => string_compare(a.long_name, b.long_name)) as udc}
-				<div class="udc">
-					<div>{udc.short_name}</div>
+			{#each structuredClone($STUDENT_DATABASE.udc).sort((a, b) => string_compare(a.long_name, b.long_name)) as udc}
+				<button class="udc button" on:click={() => on_click_udc(udc.short_name)}>
+					<div>{udc.short_name}</div> 
 					<div>{udc.long_name}</div>
-				</div>
+				</button>
 			{/each}
 		</div>
 	</div>
@@ -43,16 +48,29 @@
 		grid-template-columns: 1fr 1fr;
 		gap: var(--border-width);
 
+		width: 100%;
 		height: 32px;
 
 		background-color: var(--border-color);
 
+		color: var(--text-color);
+
 		& > div {
+			height: 100%;
+
 			display: grid;
 			place-items: center;
 
 			background-color: var(--base-surface);
 			text-align: center;
+		}
+
+		&:is(:hover, :focus-visible) > div {
+			background-color: var(--highlighted-surface);
+		}
+
+		&:active > div {
+			background-color: var(--active-surface);
 		}
 
 		&:not(:last-child) {

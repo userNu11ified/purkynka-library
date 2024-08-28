@@ -35,7 +35,7 @@
 <div class="part center" class:even class:searched class:selected title={item.book_udc?.long_name ?? ''}>
 	<span>{item.book_udc?.short_name ?? ''}</span>
 </div>
-<div class="part center" class:even class:searched class:selected></div>
+<div class="part center" class:even class:searched class:selected title={item.annotation}><span>{item.annotation ?? ""}</span></div>
 
 <style>
 	.part {
