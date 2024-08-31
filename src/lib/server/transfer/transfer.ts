@@ -13,7 +13,7 @@ import type {
 	TransferUDC
 } from './transfer_types';
 import type { Database } from '$lib/shared/database_types';
-import type { Author, Shorthand } from '$lib/shared/book_types';
+import type { Shorthand } from '$lib/shared/book_types';
 import { create_empty_database } from '$server/database/database';
 import type { ID } from '$shared/common_types';
 import fs from 'fs/promises';
@@ -53,9 +53,6 @@ const get_tables = async (): Promise<TransferTables> => {
 };
 
 const string_filter = (value: string, current_value: string) => value.trim() === current_value.trim();
-const author_filter = (value: Author, current_value: Author) =>
-	(value.first_name?.trim() ?? null) === (current_value.first_name?.trim() ?? null) &&
-	value.last_name.trim() === current_value.last_name.trim();
 const shorthand_filter = (value: Shorthand, current_value: Shorthand) =>
 	value.short_name.trim() === current_value.short_name.trim() &&
 	value.long_name.trim() === current_value.long_name.trim();
@@ -68,10 +65,7 @@ const convert_old_tables = (old_tables: TransferTables): Database => {
 			.filter((v) => v.idbook_issue === book_issue_id)
 			.map((v) => {
 				const old_author = old_tables.author[v.idauthor];
-				return {
-					first_name: old_author.first_name?.trim() ?? null,
-					last_name: old_author.last_name.trim()
-				} as Author;
+				return [old_author.last_name, old_author.first_name].filter((v) => v !== null).join(', ');
 			});
 
 	const get_or_add = <T>(value: T, database_key: keyof Database, filter: (value: T, current_value: T) => boolean) => {
@@ -98,7 +92,7 @@ const convert_old_tables = (old_tables: TransferTables): Database => {
 			string_id: book_id,
 			is_large: false,
 			name: get_or_add(transfer_name.trim(), 'book_names', string_filter),
-			author: transfer_authors.map((transfer_author) => get_or_add(transfer_author, 'authors', author_filter)),
+			author: transfer_authors.map((transfer_author) => get_or_add(transfer_author, 'authors', string_filter)),
 			publisher: get_or_add(transfer_publisher.trim(), 'publishers', string_filter),
 			place_of_publishing: get_or_add(transfer_place.trim(), 'places_of_publishing', string_filter),
 			year_of_publishing: `${book_issue.year}`,

@@ -1,13 +1,6 @@
 import * as t from 'io-ts';
 import { TDate, TID, TNullable, TNullableString } from './common_types';
 
-export const TAuthor = t.type({
-	first_name: TNullableString,
-	last_name: t.string
-});
-
-export type Author = t.TypeOf<typeof TAuthor>;
-
 export const TShorthand = t.type({
 	short_name: t.string,
 	long_name: t.string
@@ -57,5 +50,5 @@ export const TBook = <
 export const TDatabaseBook = TBook(TID, TID, TID, t.string);
 export type DatabaseBook = t.TypeOf<typeof TDatabaseBook>;
 
-export const TMappedBook = TBook(t.string, TAuthor, TShorthand, TDate);
+export const TMappedBook = TBook(t.string, t.string, TShorthand, TDate);
 export type MappedBook = t.TypeOf<typeof TMappedBook>;

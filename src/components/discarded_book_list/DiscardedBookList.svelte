@@ -6,7 +6,7 @@
 	import List from '$components/list/List.svelte';
 	import ListOption from '$components/list/ListOption.svelte';
 	import type { DatabaseBook, Shorthand } from '$shared/book_types';
-	import { concat_authors, format_date, map_authors, map_or_null, stringify_author } from '$shared/book_util';
+	import { concat_authors, format_date, map_authors, map_or_null } from '$shared/book_util';
 	import { date_compare, string_compare } from '$shared/common_util';
 	import DiscardedBook from './DiscardedBook.svelte';
 

@@ -1,4 +1,4 @@
-import type { Author, DatabaseBook, Shorthand } from './book_types';
+import type { DatabaseBook, Shorthand } from './book_types';
 import type { DatabaseBorrow, DatabaseReader, BorrowHistory } from './borrow_types';
 
 export type Database = {
@@ -8,7 +8,7 @@ export type Database = {
 	givers: string[];
 	discard_reasons: string[];
 
-	authors: Author[];
+	authors: string[];
 
 	literature_types: Shorthand[];
 	udc: Shorthand[];

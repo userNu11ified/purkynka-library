@@ -1,4 +1,4 @@
-import type { Author, DatabaseBook, MappedBook, Shorthand } from './book_types';
+import type { DatabaseBook, MappedBook, Shorthand } from './book_types';
 import type { ID, Nullable } from './common_types';
 import type { Database } from './database_types';
 
@@ -33,12 +33,10 @@ export const create_empty_mapped_book = (database: Database, id: ID): MappedBook
 	};
 };
 
-export const map_authors = (database: Database, authors: ID[]): Author[] =>
+export const map_authors = (database: Database, authors: ID[]): string[] =>
 	authors.map((author_id) => database.authors[author_id]);
 
-export const stringify_author = (author: Author) =>
-	[author.last_name, author.first_name].filter((v) => v !== null).join(', ');
-export const concat_authors = (authors: Author[]) => authors.map((v) => stringify_author(v)).join(' - ');
+export const concat_authors = (authors: string[]) => authors.join(' — ');
 
 export const map_date_or_null = (date_string: Nullable<string>) =>
 	date_string === null ? null : new Date(date_string);

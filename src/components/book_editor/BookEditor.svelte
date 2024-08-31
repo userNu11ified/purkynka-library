@@ -16,10 +16,9 @@
 	import EditorToggleList from '$components/editor/fields/EditorToggleList.svelte';
 	import DoubleColumn from '$components/editor/layouts/DoubleColumn.svelte';
 	import Horizontal from '$components/editor/layouts/Horizontal.svelte';
-	import { create_empty_mapped_book, format_date, map_id_book, stringify_author } from '$shared/book_util';
+	import { create_empty_mapped_book, format_date, map_id_book } from '$shared/book_util';
 	import { deformat_date, string_compare } from '$shared/common_util';
 	import { onDestroy, onMount } from 'svelte';
-	import AuthorEditor from '../author_editor/AuthorEditor.svelte';
 	import UdcEditor from '../udc_editor/UDCEditor.svelte';
 	import { type Unsubscriber, get } from 'svelte/store';
 	import EditorAction from '$components/editor/EditorAction.svelte';
@@ -80,11 +79,19 @@
 	const parse_context_data = async () => {
 		const book_editor_context = get(editor.editor_context) as BookEditorContext;
 
-		const authors = [
-			book_editor_context['author_0'],
-			book_editor_context['author_1'],
-			book_editor_context['author_2']
-		].filter((v) => v !== null);
+		let authors = [book_editor_context['author_0'], book_editor_context['author_1'], book_editor_context['author_2']]
+			.filter((v) => v !== null)
+			.map(async (author: string | number) => {
+				if (typeof author === 'number') return author;
+
+				const res = await post_request(`${window.origin}/api/v1/authors`, author);
+
+				if (res.ok) {
+					const id = $DATABASE.authors.push(author) - 1;
+					return id;
+				}
+			});
+
 		delete book_editor_context['author_0'];
 		delete book_editor_context['author_1'];
 		delete book_editor_context['author_2'];
@@ -201,35 +208,24 @@
 					<EditorSearchableTextField
 						context_field="author_0"
 						value={book.author[0] ?? null}
-						item_stringifier={stringify_author}
 						items={$DATABASE.authors}
-						sorter={(left, right) => string_compare(left[1].last_name, right[1].last_name)}
-						error_checkers={[SPECIAL_ADDER_CHECKER]}
-					>
-						<AuthorEditor slot="special-adder" let:cancel {cancel} let:submit {submit}></AuthorEditor>
-					</EditorSearchableTextField>
+						sorter={(left, right) => string_compare(left[1], right[1])}
+					></EditorSearchableTextField>
 
 					<EditorSearchableTextField
 						context_field="author_1"
 						value={book.author[1] ?? null}
-						item_stringifier={stringify_author}
 						items={$DATABASE.authors}
-						sorter={(left, right) => string_compare(left[1].last_name, right[1].last_name)}
-						error_checkers={[SPECIAL_ADDER_CHECKER]}
-					>
-						<AuthorEditor slot="special-adder" let:cancel {cancel} let:submit {submit}></AuthorEditor>
-					</EditorSearchableTextField>
+						sorter={(left, right) => string_compare(left[1], right[1])}
+					></EditorSearchableTextField>
 
 					<EditorSearchableTextField
 						context_field="author_2"
 						value={book.author[2] ?? null}
-						item_stringifier={stringify_author}
 						items={$DATABASE.authors}
-						sorter={(left, right) => string_compare(left[1].last_name, right[1].last_name)}
+						sorter={(left, right) => string_compare(left[1], right[1])}
 						error_checkers={[SPECIAL_ADDER_CHECKER]}
-					>
-						<AuthorEditor slot="special-adder" let:cancel {cancel} let:submit {submit}></AuthorEditor>
-					</EditorSearchableTextField>
+					></EditorSearchableTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>
 			<EditorFieldGroup>

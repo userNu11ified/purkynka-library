@@ -1,10 +1,10 @@
-import type { Author, Shorthand, DatabaseBook } from '$shared/book_types';
+import type { Shorthand, DatabaseBook } from '$shared/book_types';
 import type { DatabaseBorrow } from '$shared/borrow_types';
 import { writable, type Writable } from 'svelte/store';
 
 export type StudentDatabase = {
 	book_names: string[];
-	authors: Author[];
+	authors: string[];
 
 	udc: Shorthand[];
 
