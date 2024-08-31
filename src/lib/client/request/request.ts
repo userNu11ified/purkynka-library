@@ -5,14 +5,14 @@ export const get_request = async (endpoint: string) => {
 	return fetch(endpoint);
 };
 
-export const post_request = async (endpoint: string, data: any) => {
+export const post_request = async (endpoint: string, data: any, stringify: boolean = true) => {
 	const headers = new Headers();
 	headers.append('Authorization', get(PASSWORD) ?? '');
 
 	return fetch(endpoint, {
 		headers,
 		method: 'POST',
-		body: JSON.stringify(data)
+		body: stringify ? JSON.stringify(data) : data
 	});
 };
 

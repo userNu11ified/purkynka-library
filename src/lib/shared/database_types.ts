@@ -1,22 +1,31 @@
-import type { DatabaseBook, Shorthand } from './book_types';
-import type { DatabaseBorrow, DatabaseReader, BorrowHistory } from './borrow_types';
+import { TDatabaseBook, TShorthand, type DatabaseBook, type Shorthand } from './book_types';
+import {
+	type DatabaseBorrow,
+	type DatabaseReader,
+	type BorrowHistory,
+	TDatabaseReader,
+	TDatabaseBorrow,
+	TBorrowHistory
+} from './borrow_types';
+import * as t from 'io-ts';
 
-export type Database = {
-	book_names: string[];
-	publishers: string[];
-	places_of_publishing: string[];
-	givers: string[];
-	discard_reasons: string[];
+export const TDatabase = t.type({
+	book_names: t.array(t.string),
+	publishers: t.array(t.string),
+	places_of_publishing: t.array(t.string),
+	givers: t.array(t.string),
+	discard_reasons: t.array(t.string),
+	authors: t.array(t.string),
 
-	authors: string[];
+	literature_types: t.array(TShorthand),
+	udc: t.array(TShorthand),
 
-	literature_types: Shorthand[];
-	udc: Shorthand[];
+	reader_classes: t.array(t.string),
+	readers: t.array(TDatabaseReader),
 
-	reader_classes: string[];
-	readers: DatabaseReader[];
+	books: t.array(TDatabaseBook),
+	borrows: t.array(TDatabaseBorrow),
+	borrow_history: t.array(TBorrowHistory)
+});
 
-	books: DatabaseBook[];
-	borrows: DatabaseBorrow[];
-	borrow_history: BorrowHistory[];
-};
+export type Database = t.TypeOf<typeof TDatabase>;
