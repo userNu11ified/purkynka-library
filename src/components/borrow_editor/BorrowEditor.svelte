@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { DATABASE } from '$client/database/database';
+	import type { EditorContext } from '$client/editor/editor';
 	import { ID_REQUIRED_CHECKER, REQUIRED_CHECKER } from '$client/editor/error_checkers';
 	import { CURRENTLY_EDITING_BORROW, type BorrowEditorErrorContext } from '$client/editors/borrow_editor';
 	import { CURRENTLY_EDITING_READER } from '$client/editors/reader_editor';
@@ -25,6 +26,7 @@
 	import { get, type Unsubscriber, type Writable } from 'svelte/store';
 
 	let editor: Editor<any, any>;
+	let editor_context: Writable<EditorContext>;
 
 	let [edit_type, book_id] = $CURRENTLY_EDITING_BORROW!;
 
@@ -50,14 +52,6 @@
 		(map_or_null<string>($DATABASE, 'book_names', item.name) ?? '').toLocaleLowerCase('cs').includes(lowercase_query) ||
 		item.string_id.includes(lowercase_query);
 
-	const name_item_stringifier = (item: DatabaseBook) => map_or_null<string>($DATABASE, 'book_names', item.name)!;
-
-	const name_sorter: Sorter<DatabaseBook> = ([left_id, left_item], [right_id, right_item]) =>
-		string_compare(
-			map_or_null<string>($DATABASE, 'book_names', left_item.name) ?? '',
-			map_or_null<string>($DATABASE, 'book_names', right_item.name) ?? ''
-		);
-
 	const on_option_selected_book = (value: Nullable<number | string>) => {
 		if (typeof value === 'number') selected_book = $DATABASE.books[value];
 		else selected_book = null;
@@ -77,7 +71,7 @@
 			reader_class = map_or_null<string>($DATABASE, 'reader_classes', value as ID);
 
 			const readers_in_class = $DATABASE.readers.filter((v) => v.class_name === value);
-			if (readers_in_class.length === 1) {
+			if (readers_in_class.length === 1 && !/[0-9]/g.test(reader_class!)) {
 				reader = readers_in_class[0];
 			}
 		} else {
@@ -89,7 +83,9 @@
 
 	const on_option_selected_reader = (value: Nullable<number | string>) => {
 		if (typeof value === 'number') {
-			reader_class = map_or_null<string>($DATABASE, 'reader_classes', $DATABASE.readers[value].class_name);
+			class_input.update_string_value(
+				map_or_null<string>($DATABASE, 'reader_classes', $DATABASE.readers[value].class_name)
+			);
 		}
 	};
 
@@ -105,8 +101,8 @@
 	const save = async () => {
 		const editor_context = get(editor.editor_context);
 
-		if (typeof editor_context["reader_class"] === "string") {
-			const reader_class = editor_context["reader_class"];
+		if (typeof editor_context['reader_class'] === 'string') {
+			const reader_class = editor_context['reader_class'];
 			const class_res = await post_request(`${window.origin}/api/v1/reader-classes`, reader_class);
 
 			if (class_res.ok) {
@@ -114,11 +110,11 @@
 			}
 		}
 
-		if (typeof editor_context["reader"] === "string") {
+		if (typeof editor_context['reader'] === 'string') {
 			const reader: DatabaseReader = {
 				id: get_lowest_missing_id($DATABASE.readers) as ID,
-				name: editor_context["reader"],
-				class_name: editor_context["reader_class"]
+				name: editor_context['reader'],
+				class_name: editor_context['reader_class']
 			};
 
 			const reader_res = await post_request(`${window.origin}/api/v1/readers`, reader);
@@ -128,11 +124,11 @@
 			}
 		}
 
-		const reader = $DATABASE.readers[editor_context['reader']]
+		const reader = $DATABASE.readers[editor_context['reader']];
 
 		let borrow: DatabaseBorrow = {
 			id: $DATABASE.borrow_history.length,
-			book: editor_context['book_id'],
+			book: book_id as ID,
 			reader: reader.id,
 			borrow_date: new Date().toISOString(),
 			return_date: null,
@@ -167,10 +163,10 @@
 	};
 
 	onMount(() => {
+		editor_context = editor.editor_context;
 		editor_error_context_unsubscriber = editor.editor_error_context.subscribe(
 			(v: BorrowEditorErrorContext) => (has_errors = Object.values(v).findIndex((v) => v.size !== 0) !== -1)
 		);
-
 	});
 
 	onDestroy(() => {
@@ -191,27 +187,9 @@
 			<svelte:fragment slot="name">Kniha</svelte:fragment>
 			<svelte:fragment slot="fields">
 				<Horizontal>
-					<EditorSearchableTextField
-						context_field="book_id"
-						value={selected_book}
-						items={$DATABASE.books}
-						item_stringifier={(item) => item.string_id}
-						filter={book_filter}
-						sorter={([left_id, left_item], [right_id, right_item]) => left_id - right_id}
-						error_checkers={[REQUIRED_CHECKER, ID_REQUIRED_CHECKER]}
-						center
-						width={pixels(128)}
-						on_option_selected={on_option_selected_book}
-						error_left
-						placeholder="Přír. č..."
-					>
-						<svelte:fragment slot="search-result" let:id let:item>
-							<div class="gray">
-								{map_or_null($DATABASE, 'book_names', $DATABASE.books[id].name)}
-							</div>
-							{item.string_id}
-						</svelte:fragment>
-					</EditorSearchableTextField>
+					<EditorTextField value={`${book_id + 1}`} disabled center width={pixels(128)}></EditorTextField>
+					<EditorTextField value={map_or_null($DATABASE, 'book_names', selected_book?.name ?? null)} disabled flex
+					></EditorTextField>
 				</Horizontal>
 			</svelte:fragment>
 		</EditorFieldGroup>

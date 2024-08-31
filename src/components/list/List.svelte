@@ -133,7 +133,6 @@
 
 		const new_value = search_bars[index].value;
 
-
 		debounce_width_animation = debounce_bars[index].animate([{ width: percent(0) }, { width: percent(100) }], {
 			duration: 1000,
 			fill: 'forwards'
@@ -154,7 +153,7 @@
 	export const set_search = (value: string, index: number) => {
 		search_bars[index].value = value;
 		$searched_by = [index, value];
-	}
+	};
 
 	// ITEM GETTING
 	const get_items = (
@@ -175,9 +174,7 @@
 
 		if (filtered_items !== null) go_to_index(0);
 
-		console.log($STUDENT_DATABASE);
-
-		return (filtered_items === null || search_query === "") ? new_items : filtered_items;
+		return filtered_items === null || search_query === '' ? new_items : filtered_items;
 	};
 
 	export let current_items: ListItem<V>[] = [];

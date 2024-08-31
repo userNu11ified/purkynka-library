@@ -3,8 +3,6 @@
 	import { percent } from '$client/style/css';
 	import Editor from '$components/editor/Editor.svelte';
 	import EditorAction from '$components/editor/EditorAction.svelte';
-
-	console.log($STUDENT_DATABASE);
 </script>
 
 <Editor editor_width={percent(50)}>
