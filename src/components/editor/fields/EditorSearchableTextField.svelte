@@ -38,7 +38,7 @@
 	export let option_filter: (item: [number, T]) => boolean = () => true;
 
 	const get_items = (items: [number, T][], option_filter: (item: [number, T]) => boolean) =>
-		structuredClone(items).filter(option_filter);
+		structuredClone(base_items).filter(option_filter);
 
 	$: current_items = get_items(base_items, option_filter);
 
@@ -158,8 +158,9 @@
 	const special_adder_cancel = () => (special_adder_open = false);
 
 	// EDITOR
+	export let has_editor: Nullable<boolean> = null;
 	let editor_open = false;
-	$: editor_button_visible = $$slots['editor'] && context_field && typeof $editor_context[context_field!] === 'number';
+	$: editor_button_visible = has_editor && context_field && typeof $editor_context[context_field!] === 'number';
 	export let on_click_editor: Nullable<(id: number) => void> = null;
 	const on_click_editor_button = () => {
 		if (on_click_editor) on_click_editor($editor_context[context_field!]);

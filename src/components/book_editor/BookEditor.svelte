@@ -352,7 +352,7 @@
 			<EditorFieldGroup>
 				<svelte:fragment slot="name">Anotace</svelte:fragment>
 				<svelte:fragment slot="fields">
-					<EditorTextField context_field="annotation" value={book.annotation}></EditorTextField>
+					<EditorTextField context_field="annotation" value={book.annotation} has_title></EditorTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>
 

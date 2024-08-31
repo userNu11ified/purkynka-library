@@ -11,6 +11,7 @@
 	export let placeholder: Nullable<string> = null;
 	export let flex: Nullable<boolean> = null;
 	export let input_type: 'text' | 'password' = 'text';
+	export let has_title: Nullable<boolean> = null;
 
 	export let value: Nullable<string>;
 	value ??= '';
@@ -84,9 +85,11 @@
 		<input
 			class="text-field"
 			class:center
+			class:has-title={has_title}
 			type="text"
 			{disabled}
 			{placeholder}
+			title={has_title && context_field ? $editor_context[context_field] : ""}
 			bind:value
 			on:focusin
 			on:focusout
@@ -151,6 +154,10 @@
 
 	.center {
 		text-align: center;
+	}
+
+	.has-title {
+		cursor: help;
 	}
 
 	.error {

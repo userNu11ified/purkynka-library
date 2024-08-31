@@ -20,7 +20,7 @@
 	import { format_date, map_id_book, map_or_null } from '$shared/book_util';
 	import type { BorrowHistory, DatabaseBorrow, DatabaseReader } from '$shared/borrow_types';
 	import type { ID, Nullable } from '$shared/common_types';
-	import { string_compare } from '$shared/common_util';
+	import { get_lowest_missing_id, string_compare } from '$shared/common_util';
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { get, type Unsubscriber, type Writable } from 'svelte/store';
 
@@ -104,7 +104,31 @@
 	const cancel = () => ($CURRENTLY_EDITING_BORROW = null);
 	const save = async () => {
 		const editor_context = get(editor.editor_context);
-		const reader = $DATABASE.readers[editor_context['reader']];
+
+		if (typeof editor_context["reader_class"] === "string") {
+			const reader_class = editor_context["reader_class"];
+			const class_res = await post_request(`${window.origin}/api/v1/reader-classes`, reader_class);
+
+			if (class_res.ok) {
+				editor_context['reader_class'] = $DATABASE.reader_classes.push(reader_class) - 1;
+			}
+		}
+
+		if (typeof editor_context["reader"] === "string") {
+			const reader: DatabaseReader = {
+				id: get_lowest_missing_id($DATABASE.readers) as ID,
+				name: editor_context["reader"],
+				class_name: editor_context["reader_class"]
+			};
+
+			const reader_res = await post_request(`${window.origin}/api/v1/readers`, reader);
+
+			if (reader_res.ok) {
+				editor_context['reader'] = $DATABASE.readers.push(reader) - 1;
+			}
+		}
+
+		const reader = $DATABASE.readers[editor_context['reader']]
 
 		let borrow: DatabaseBorrow = {
 			id: $DATABASE.borrow_history.length,
@@ -146,6 +170,7 @@
 		editor_error_context_unsubscriber = editor.editor_error_context.subscribe(
 			(v: BorrowEditorErrorContext) => (has_errors = Object.values(v).findIndex((v) => v.size !== 0) !== -1)
 		);
+
 	});
 
 	onDestroy(() => {
@@ -172,7 +197,7 @@
 						items={$DATABASE.books}
 						item_stringifier={(item) => item.string_id}
 						filter={book_filter}
-						sorter={([left_id, left_item], [right_id, right_item]) => +left_item.string_id - +right_item.string_id}
+						sorter={([left_id, left_item], [right_id, right_item]) => left_id - right_id}
 						error_checkers={[REQUIRED_CHECKER, ID_REQUIRED_CHECKER]}
 						center
 						width={pixels(128)}
@@ -180,30 +205,11 @@
 						error_left
 						placeholder="Přír. č..."
 					>
-						<svelte:fragment slot="search-result" let:item>
+						<svelte:fragment slot="search-result" let:id let:item>
 							<div class="gray">
-								{map_or_null($DATABASE, 'book_names', $DATABASE.books[+item.string_id - 1].name)}
+								{map_or_null($DATABASE, 'book_names', $DATABASE.books[id].name)}
 							</div>
 							{item.string_id}
-						</svelte:fragment>
-					</EditorSearchableTextField>
-
-					<EditorSearchableTextField
-						context_field="book_name"
-						value={selected_book}
-						items={$DATABASE.books}
-						item_stringifier={name_item_stringifier}
-						filter={book_filter}
-						sorter={name_sorter}
-						error_checkers={[REQUIRED_CHECKER, ID_REQUIRED_CHECKER]}
-						on_option_selected={on_option_selected_book}
-						width={percent(100)}
-						flex
-						placeholder="Název knihy..."
-					>
-						<svelte:fragment slot="search-result" let:item>
-							<div class="gray">{item.string_id}</div>
-							{map_or_null($DATABASE, 'book_names', $DATABASE.books[+item.string_id - 1].name)}
 						</svelte:fragment>
 					</EditorSearchableTextField>
 				</Horizontal>
@@ -219,7 +225,7 @@
 						value={reader_class}
 						items={$DATABASE.reader_classes}
 						sorter={([left_id, left_item], [right_id, right_item]) => string_compare(left_item, right_item)}
-						error_checkers={[REQUIRED_CHECKER, ID_REQUIRED_CHECKER]}
+						error_checkers={[REQUIRED_CHECKER]}
 						center
 						width={pixels(128)}
 						error_left
@@ -239,10 +245,11 @@
 						item_stringifier={(item) => item.name}
 						filter={reader_filter}
 						sorter={([left_id, left_item], [right_id, right_item]) => string_compare(left_item.name, right_item.name)}
-						error_checkers={[REQUIRED_CHECKER, ID_REQUIRED_CHECKER]}
+						error_checkers={[REQUIRED_CHECKER]}
 						flex
 						placeholder="Jméno..."
 						on_option_selected={on_option_selected_reader}
+						has_editor
 						on_click_editor={(id) => ($CURRENTLY_EDITING_READER = ['Upravit čtenáře', id])}
 						get_option_key={([id, item]) => `${item.class_name}-${item.name}`}
 					>
@@ -250,8 +257,6 @@
 							<div class="gray">{map_or_null($DATABASE, 'reader_classes', item.class_name)}</div>
 							{item.name}
 						</svelte:fragment>
-						<svelte:fragment slot="special-adder">a</svelte:fragment>
-						<svelte:fragment slot="editor">a</svelte:fragment>
 					</EditorSearchableTextField>
 				</Horizontal>
 			</svelte:fragment>
