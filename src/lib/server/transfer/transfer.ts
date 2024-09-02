@@ -1,5 +1,6 @@
 import mysql from 'mysql2/promise';
 import type {
+	NewBook,
 	TransferAuthor,
 	TransferBook,
 	TransferBookHasAuthor,
@@ -13,11 +14,12 @@ import type {
 	TransferUDC
 } from './transfer_types';
 import type { Database } from '$lib/shared/database_types';
-import type { Shorthand } from '$lib/shared/book_types';
+import type { DatabaseBook, Shorthand } from '$lib/shared/book_types';
 import { create_empty_database } from '$server/database/database';
 import type { ID } from '$shared/common_types';
 import fs from 'fs/promises';
 import type { DatabaseReader } from '$shared/borrow_types';
+import { parse } from 'path';
 
 const get_tables = async (): Promise<TransferTables> => {
 	const connection = await mysql.createConnection({
@@ -148,6 +150,72 @@ export const transfer_old_database = async () => {
 
 		database.readers.push(reader);
 	});
+
+	const new_books = (await fs.readFile('./data/original/new_books.csv', 'utf-8')).split('\r\n');
+	const headers = new_books.splice(0, 1)[0].split(';');
+
+	const mapped_new_books: { [key: string]: DatabaseBook } = {};
+
+	const empty_to_null = (value: string) => (value.trim() === '' ? null : value);
+	const remove_quotes = (value: string) => value.replaceAll('"', '');
+	const parse_string = (value: string) => empty_to_null(remove_quotes(value));
+
+	new_books.forEach((v) => {
+		const columns = v.split(';');
+		const new_book = Object.fromEntries(columns.map((v, i) => [headers[i], v])) as NewBook;
+
+		if (Object.hasOwn(mapped_new_books, new_book.id)) {
+			// Already added, add new author
+			mapped_new_books[new_book.id].author.push(
+				get_or_add(`${new_book.last_name}, ${new_book.first_name}`, 'authors', string_filter)
+			);
+		} else {
+			// New book
+			const name = parse_string(new_book.name);
+			const author = `${new_book.last_name}, ${new_book.first_name}`;
+			const publisher = parse_string(new_book.publisher);
+			const place_of_publishing = parse_string(new_book.place);
+			const year_of_publishing = parse_string(new_book.year);
+			const edition = parse_string(new_book.issue);
+			const page_count = parse_string(new_book.page_count);
+			const literature_type = parse_string(new_book.signature);
+			const udc = database.udc.findIndex((v) => v.long_name === parse_string(new_book.udc)?.trim());
+			const add_date = parse_string(new_book.add_date);
+			const price = parse_string(new_book.price);
+			const document_number = parse_string(new_book.doc_number);
+			const giver = parse_string(new_book.giver);
+			const note = parse_string(new_book.note);
+
+			const database_book: DatabaseBook = {
+				string_id: new_book.id,
+				is_large: false,
+				name: name ? get_or_add(name, 'book_names', string_filter) : null,
+				author: author === ', ' ? [] : [get_or_add(author, 'authors', string_filter)],
+				publisher: publisher ? get_or_add(publisher, 'publishers', string_filter) : null,
+				place_of_publishing: place_of_publishing
+					? get_or_add(place_of_publishing, 'places_of_publishing', string_filter)
+					: null,
+				year_of_publishing,
+				edition,
+				page_count,
+				literature_type: literature_type ? ((literature_type.includes('Naučná') ? 0 : 1) as ID) : null,
+				udc: udc as ID,
+				add_date: add_date ? new Date(add_date).toISOString() : null,
+				price: price,
+				document_number,
+				giver: giver ? get_or_add(giver, 'givers', string_filter) : null,
+				annotation: null,
+				discard_date: null,
+				discard_reason: null,
+				discard_document: null,
+				note
+			};
+
+			mapped_new_books[new_book.id] = database_book;
+		}
+	});
+
+	Object.values(mapped_new_books).forEach((v) => database.books.push(v));
 
 	return database;
 };

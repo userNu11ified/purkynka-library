@@ -61,3 +61,32 @@ export type TransferTables = {
 	signature: TransferIDMap<TransferSignature>;
 	udc: TransferIDMap<TransferUDC>;
 };
+
+export type NewBook = {
+	id: string;
+	name: string;
+	year: string;
+	issue: string;
+	idbook_issue: string;
+	price: string;
+	page_count: string;
+	add_date: string;
+	discard_date: string;
+	isbn13: string;
+	barcode: string;
+	doc_number: string;
+	note: string;
+	idauthor: string;
+	first_name: string;
+	last_name: string;
+	idsignature: string;
+	signature: string;
+	idplace: string;
+	place: string;
+	idpublisher: string;
+	publisher: string;
+	idudc: string;
+	udc: string;
+	idgiver: string;
+	giver: string;
+};
