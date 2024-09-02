@@ -79,18 +79,20 @@
 	const parse_context_data = async () => {
 		const book_editor_context = get(editor.editor_context) as BookEditorContext;
 
-		let authors = [book_editor_context['author_0'], book_editor_context['author_1'], book_editor_context['author_2']]
-			.filter((v) => v !== null)
-			.map(async (author: string | number) => {
-				if (typeof author === 'number') return author;
+		let authors = await Promise.all(
+			[book_editor_context['author_0'], book_editor_context['author_1'], book_editor_context['author_2']]
+				.filter((v) => v !== null)
+				.map(async (author: string | number) => {
+					if (typeof author === 'number') return author;
 
-				const res = await post_request(`${window.origin}/api/v1/authors`, author);
+					const res = await post_request(`${window.origin}/api/v1/authors`, author);
 
-				if (res.ok) {
-					const id = $DATABASE.authors.push(author) - 1;
-					return id;
-				}
-			});
+					if (res.ok) {
+						const id = $DATABASE.authors.push(author) - 1;
+						return id;
+					}
+				})
+		);
 
 		delete book_editor_context['author_0'];
 		delete book_editor_context['author_1'];
@@ -120,6 +122,8 @@
 		const database_book = await parse_context_data();
 		const string_id = +database_book.string_id;
 
+		console.log(database_book);
+
 		const res = await post_request(`${window.origin}/api/v1/books`, {
 			amount,
 			data: database_book
@@ -145,9 +149,11 @@
 		$CURRENTLY_EDITING_BOOK = null;
 	};
 
-	const on_click_patch = async () => {
+	const on_click_put = async () => {
 		if (has_errors) return;
 		const database_book = await parse_context_data();
+
+		console.log(database_book);
 
 		const res = await put_request(`${window.origin}/api/v1/books/${edited_book_id}`, database_book);
 
@@ -420,15 +426,15 @@
 				>
 			</div>
 		{:else if edit_type === 'Upravit knihu'}
-			<EditorAction button_color="var(--success-600)" disabled={has_errors} on_click={() => on_click_patch()}
+			<EditorAction button_color="var(--success-600)" disabled={has_errors} on_click={() => on_click_put()}
 				>Uložit</EditorAction
 			>
 		{:else if edit_type === 'Vyřadit knihu'}
-			<EditorAction button_color="var(--success-600)" disabled={has_errors} on_click={() => on_click_patch()}
+			<EditorAction button_color="var(--success-600)" disabled={has_errors} on_click={() => on_click_put()}
 				>Vyřadit</EditorAction
 			>
 		{:else if edit_type === 'Zrušit vyřazení knihy'}
-			<EditorAction button_color="var(--success-600)" disabled={has_errors} on_click={() => on_click_patch()}
+			<EditorAction button_color="var(--success-600)" disabled={has_errors} on_click={() => on_click_put()}
 				>Zrušit vyřazení</EditorAction
 			>
 		{/if}
