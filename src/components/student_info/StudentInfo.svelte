@@ -8,37 +8,43 @@
 <Editor editor_width={percent(50)}>
 	<svelte:fragment slot="title"><div class="greeting">Zdravím! 👋</div></svelte:fragment>
 	<div class="info" slot="content">
-		<div>Pokud tohle čtete, tak jste navštívili naší školní knihovnu, ale i tak jste skončili před počítačem.</div>
+		<div>
+			Pokud tohle čtete, tak jste navštívili naší školní knihovnu, ale i tak jste skončili před počítačem a otevřeli
+			jste si <b>Program evidence knih a výpůjček</b>.
+		</div>
 		<div class="title">Informace</div>
 		<div>
-			Tato stránka je určena pro žáky. Můžete si tady zkontrolovat, jestli v knihovně nějakou knížku máme a zároveň její
-			stav půjčení.<br />
-			U některých knih je i anotace, která obsahuje stručné informace o dané knize.<br />
-			Pokud hledáte nějaký typ knížky, ale ne žádnou specifickou, vedle tlačítka pro informace je tlačítko pro seznam MDT.<br
-			/>
-			Seznam MDT zároveň obsahuje jen ty, od kterých máme v knihovně nějakou knihu.
+			Jeho výhodou je, že je <b>pro vás přístupný</b>, takže si můžete kdykoliv zjistit, zda máme vámi žádanou knihu v
+			knihovně, případně si zjistit, jaké knihy v knihovně jsou celkově. Podle přírůstkového čísla knihy, kterou jste si
+			půjčili ze školní knihovny, si můžete kdykoliv zjistit, kdy nejpozději (do 1 měsíce od půjčení) ji máte vrátit.
 		</div>
-		<div class="title">Půjčení</div>
+		<div class="title">Jak se v programu orientovat</div>
+		<div>Vyhledávat jde třemi způsoby:</div>
+		<ol>
+			<li>
+				Podle názvu (pokud zadáte jen několik písmen z názvu, ukážou se vám všechny knihy, které mají tuto skupinu
+				písmen v názvu - příklad: matemat = Matematika…., Matema-tické…, Základy matematiky… s matematikou ….atd)
+			</li>
+			<li>Podle autora - opět stačí zadat několik písmen a nabídnou se možnosti</li>
+			<li>
+				Podle MDT = mezinárodního desetinného třídění - knihy jsou zařazeny do určitých skupin podle zaměření, např.
+				počítače, ekonomika, hudba, právo, angličtina atd. (seznam okruhů s příslušným číslem najdete opět v nabídce
+				programu dole pod zkratkou MDT) U některých knih je i anotace, kde je stručná informace o knize
+			</li>
+		</ol>
 		<div>
-			Pokud si tady nějakou knížku najdete, a zároveň je volná, lze ji jednoduše v knihovně najít podle přírustkového
-			čísla.<br />
-			Poté stačí zajít s knihou za paní učitelkou Houškovou, která si Vás zapíše zároveň s výpůjčkou.
+			<b>Pokud si nějakou knihu vyberete</b>, úplně vlevo uvidíte, zda je kniha volná, půjčená (pak je tam datum, kdy se
+			má nejpozději vrátit do knihovny) nebo půjčená trvale (pak ji má některý vyučující ve své příruční knihovně v
+			kabinetě). U požadované <b>volné</b> knihy si napište její přírůstkové číslo i s písmenkem za ním a dojděte si pro
+			knihu do knihovny.
 		</div>
-		<div>Knihy se půjčují na měsíc, ale doba půjčení jde prodloužit vždy o měsíc, pokud by to bylo potřeba.</div>
-		<div class="title">Zdrojový kód</div>
+		<div>
+			Pokud zadáte přírůstkové číslo knihy, kterou máte půjčenou, najdete úplně vlevo datum, do kdy ji máte nejpozději
+			vrátit.
+		</div>
+		<div class="title">Pro 🤓</div>
 		<div>
 			Celý zdrojový kód lze najít na <a href="https://github.com/userNu11ified/purkynka-library">GitHubu</a>. <br />
-			Práci jsem dělal sám, až na pár použitých knihoven. <br />
-			Obsahuje i samostatnou stránku pro editaci knih, která tady nejde vidět. <br />
-			Jestli očekáváte extrémně čistý kód, tak asi budete muset jinam. <br />
-			Celá stránka je psaná pomocí <a href="https://kit.svelte.dev/">SvelteKit</a> a
-			<a href="https://www.typescriptlang.org/">TypeScriptu</a>, pro nekonečný scrolling používám
-			<a href="https://github.com/jonasgeiler/svelte-tiny-virtual-list">svelte-tiny-virtual-list</a>, na server-side
-			validaci dat <a href="https://github.com/gcanti/io-ts">io-ts</a> a ikonky jsou z
-			<a href="https://icon-sets.iconify.design/mdi">Iconify</a>. <br />
-			Layout stránky byl navržen paní učitelkou Houškovou, barvičky jsem dělal sám.
-		</div>
-		<div>
 			Made with <span title="...and lots of screaming at TypeScript...">❤️</span> by
 			<a href="https://github.com/userNu11ified">null</a>.
 		</div>
@@ -55,7 +61,7 @@
 
 	.info {
 		font-size: var(--font-size-regular);
-		& > div:not(:last-child) {
+		& > :is(div, ol):not(:last-child) {
 			width: 100%;
 			margin-bottom: 12px;
 			line-height: 1.5;
