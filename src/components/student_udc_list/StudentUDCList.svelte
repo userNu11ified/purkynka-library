@@ -17,7 +17,7 @@
 			Ve vyhledávání můžete použít jak číslo, tak název - <b>stačí i kliknout na vybraný řádek ve zdejším seznamu.</b>
 		</div>
 		<div class="list">
-			{#each structuredClone($STUDENT_DATABASE.udc).sort((a, b) => string_compare(a.long_name, b.long_name)) as udc}
+			{#each structuredClone($STUDENT_DATABASE.udc).sort((a, b) => string_compare(a.short_name, b.short_name)) as udc}
 				<button class="udc button" on:click={() => on_click_udc(udc.short_name)}>
 					<div>{udc.short_name}</div>
 					<div>{udc.long_name}</div>
