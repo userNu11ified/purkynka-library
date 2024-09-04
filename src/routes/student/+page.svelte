@@ -83,7 +83,7 @@
 				([id, item]) =>
 					(item.permanent && lowercase_query === 'trvale') ||
 					(item.return_date === null && lowercase_query === 'volné') ||
-					format_date(item.return_date!).includes(lowercase_query)
+					(!item.permanent && item.return_date && format_date(item.return_date!).includes(lowercase_query))
 			),
 		(items, lowercase_query) => {
 			if (list === undefined) return null;
