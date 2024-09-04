@@ -7,17 +7,19 @@
 	const on_click_udc = (short_name: string) => {
 		$LIST_SORT_BY_UDC = short_name;
 		$UDC_LIST_OPENED = false;
-	}
+	};
 </script>
 
 <Editor>
 	<svelte:fragment slot="title">Seznam MDT</svelte:fragment>
 	<div slot="content">
-		<div class="info">Ve vyhledávání jde použít zkratka i celý název!</div>
+		<div class="info">
+			Ve vyhledávání můžete použít jak číslo, tak název - <b>stačí i kliknout na vybraný řádek ve zdejším seznamu.</b>
+		</div>
 		<div class="list">
 			{#each structuredClone($STUDENT_DATABASE.udc).sort((a, b) => string_compare(a.long_name, b.long_name)) as udc}
 				<button class="udc button" on:click={() => on_click_udc(udc.short_name)}>
-					<div>{udc.short_name}</div> 
+					<div>{udc.short_name}</div>
 					<div>{udc.long_name}</div>
 				</button>
 			{/each}
@@ -40,7 +42,6 @@
 
 	.info {
 		margin-bottom: 8px;
-		font-weight: bold;
 	}
 
 	.udc {
