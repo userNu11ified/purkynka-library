@@ -56,7 +56,7 @@
 		},
 		(items, lowercase_query) =>
 			items.filter(
-				([id, item]) => (item.is_large && lowercase_query === 'V') || (!item.is_large && lowercase_query === 'm')
+				([id, item]) => (item.is_large && lowercase_query === 'v') || (!item.is_large && lowercase_query === 'm')
 			),
 		(items, lowercase_query) =>
 			items.filter(([id, item]) => (item.name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)),
@@ -68,7 +68,10 @@
 					(item.udc?.short_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query) ||
 					(item.udc?.long_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)
 			),
-		(items, lowercase_query) => items.filter(([id, item]) => item.borrowed ? item.borrowed.toLocaleLowerCase("cs").includes(lowercase_query) : false),
+		(items, lowercase_query) =>
+			items.filter(([id, item]) =>
+				item.borrowed ? item.borrowed.toLocaleLowerCase('cs').includes(lowercase_query) : false
+			),
 		(items, lowercase_query) =>
 			items.filter(([id, item]) => item.discard_date && format_date(item.discard_date).includes(lowercase_query))
 	];

@@ -95,7 +95,7 @@
 		},
 		(items, lowercase_query) =>
 			items.filter(
-				([id, item]) => (item.is_large && lowercase_query === 'V') || (!item.is_large && lowercase_query === 'm')
+				([id, item]) => (item.is_large && lowercase_query === 'v') || (!item.is_large && lowercase_query === 'm')
 			),
 		(items, lowercase_query) =>
 			items.filter(([id, item]) => (item.book_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)),
