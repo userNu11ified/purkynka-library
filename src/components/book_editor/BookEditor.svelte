@@ -99,8 +99,8 @@
 		delete book_editor_context['author_2'];
 
 		book_editor_context['author'] = authors;
-		book_editor_context['add_date'] = deformat_date(book_editor_context['add_date']);
-		book_editor_context['discard_date'] = deformat_date(book_editor_context['discard_date']);
+		book_editor_context['add_date'] = deformat_date(book_editor_context['add_date'])?.toISOString() ?? null;
+		book_editor_context['discard_date'] = deformat_date(book_editor_context['discard_date'])?.toISOString() ?? null;
 
 		NEEDS_POSTING.forEach(async ([book_field, database_field]) => {
 			const value = book_editor_context[book_field];
