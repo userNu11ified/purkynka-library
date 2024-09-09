@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { DATABASE } from '$client/database/database';
-	import type { CopyTransformer, Filter, Sorter } from '$client/list/list';
+	import type { CopyTransformer, Filter, ListItem, Sorter } from '$client/list/list';
 	import type { PermanentBorrowListMappedItem } from '$client/lists/permanent_borrow_list';
 	import { put_request } from '$client/request/request';
 	import List from '$components/list/List.svelte';
@@ -67,6 +67,7 @@
 			.join('\n');
 
 	$: items = $DATABASE.borrows.filter((v) => v.permanent);
+	let current_items: ListItem<PermanentBorrowListMappedItem>[] = [];
 
 	const on_click_return_book = async (borrow_index: number) => {
 		const borrow = $DATABASE.borrows[borrow_index];
@@ -88,6 +89,7 @@
 
 <List
 	bind:this={list}
+	bind:current_items
 	local_storage_key="permanent-borrow-list"
 	headers={['Přír. č.', '', 'Název knihy', 'Cena', 'Čtenář', 'Půjčeno dne']}
 	{items}
@@ -101,4 +103,47 @@
 	<svelte:fragment slot="options" let:item>
 		<ListOption icon_type="book-return" on:click={() => on_click_return_book(item[0])}>Vrátit</ListOption>
 	</svelte:fragment>
+	<svelte:fragment slot="action-bar">
+		<div class="book-count">
+			<div class="text">Počet knih</div>
+			<div class="info">
+				<div class="part">{current_items.length}</div>
+				<div class="part">/</div>
+				<div class="part">{items.length}</div>
+			</div>
+			<div class="border"></div>
+		</div>
+	</svelte:fragment>
 </List>
+
+<style>
+	.book-count {
+		position: relative;
+
+		display: grid;
+		grid-template-rows: 1fr 1fr;
+
+		color: var(--text-color);
+		text-align: center;
+	}
+
+	.text {
+		font-weight: bold;
+	}
+
+	.info {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+
+	.border {
+		position: absolute;
+		left: -24px;
+		right: -24px;
+		top: 25%;
+		bottom: 25%;
+
+		border-right: var(--border);
+		border-left: var(--border);
+	}
+</style>
