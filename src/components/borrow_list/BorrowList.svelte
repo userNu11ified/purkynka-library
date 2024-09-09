@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { DATABASE } from '$client/database/database';
-	import type { CopyTransformer, Filter, Sorter } from '$client/list/list';
+	import type { CopyTransformer, Filter, ListItem, Sorter } from '$client/list/list';
 	import type { BorrowListMappedItem } from '$client/lists/borrow_list';
 	import { put_request } from '$client/request/request';
 	import List from '$components/list/List.svelte';
@@ -13,7 +13,13 @@
 
 	let list: List<DatabaseBorrow, BorrowListMappedItem>;
 
-	const item_mapper = ({ book, reader, borrow_date, times_extended }: DatabaseBorrow): BorrowListMappedItem => {
+	const item_mapper = ({
+		book,
+		reader,
+		borrow_date,
+		times_extended,
+		permanent
+	}: DatabaseBorrow): BorrowListMappedItem => {
 		const database_book = $DATABASE.books[book];
 		const database_reader = $DATABASE.readers[reader];
 
@@ -27,9 +33,12 @@
 			reader_class: map_or_null<string>($DATABASE, 'reader_classes', database_reader.class_name)!,
 			borrow_date: mapped_borrow_date,
 			times_extended,
-			return_date: get_return_date(mapped_borrow_date, times_extended)
+			return_date: get_return_date(mapped_borrow_date, times_extended),
+			permanent
 		};
 	};
+
+	const item_filter = (items: ListItem<BorrowListMappedItem>[]) => items.filter((v) => !v[1].permanent);
 
 	const sorters: Sorter<BorrowListMappedItem>[] = [
 		([left_id, left_item], [right_id, right_item]) => left_item.book_id - right_item.book_id,
@@ -74,8 +83,6 @@
 					`${item.book_id + 1}\t${item.is_large ? 'V' : 'm'}\t${item.book_name}\t${item.reader_name}\t${item.reader_class}\t${format_date(item.borrow_date)}\t${item.times_extended}x\t${format_date(item.return_date)}`
 			)
 			.join('\n');
-
-	$: items = $DATABASE.borrows.filter((v) => !v.permanent);
 
 	const on_click_return_book = async (borrow_index: number) => {
 		const borrow = $DATABASE.borrows[borrow_index];
@@ -137,8 +144,9 @@
 	bind:this={list}
 	local_storage_key="borrow-list"
 	headers={['Přír. č.', '', 'Název knihy', 'Čtenář', 'Třída', 'Půjčeno dne', 'Prodlouženo', 'Vrátit do']}
-	{items}
+	items={$DATABASE.borrows}
 	{item_mapper}
+	{item_filter}
 	{sorters}
 	{filters}
 	{copy_transformer}

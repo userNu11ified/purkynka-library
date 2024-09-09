@@ -7,4 +7,5 @@ export type BorrowListMappedItem = {
 	borrow_date: Date;
 	times_extended: number;
 	return_date: Date;
+	permanent: boolean;
 };
