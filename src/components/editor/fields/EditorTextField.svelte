@@ -101,12 +101,15 @@
 
 	$: check_errors($editor_context, value!);
 	$: errors = get_errors($editor_error_context);
+
+	// STYLE
+	export let error_left: Nullable<boolean> = null;
 </script>
 
 <div class="editor-text-field" class:flex style:--width={width}>
 	{#if errors !== null}
 		<div class="error" class:visible={focused}>
-			<div class="error-text">
+			<div class="error-text" class:error-left={error_left}>
 				{#each errors as error, i}
 					<div class="line">{error}</div>
 				{/each}
@@ -250,5 +253,10 @@
 		background-color: var(--base-surface);
 
 		color: var(--text-color);
+
+		&.error-left {
+			left: unset;
+			right: calc(100% + 8px);
+		}
 	}
 </style>

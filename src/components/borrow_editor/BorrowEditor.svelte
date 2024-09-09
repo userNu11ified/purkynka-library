@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { DATABASE } from '$client/database/database';
-	import type { EditorContext } from '$client/editor/editor';
-	import { ID_REQUIRED_CHECKER, REQUIRED_CHECKER } from '$client/editor/error_checkers';
+	import type { EditorContext, EditorErrorContext } from '$client/editor/editor';
+	import { DATE_CHECKER, REQUIRED_CHECKER } from '$client/editor/error_checkers';
 	import { CURRENTLY_EDITING_BORROW, type BorrowEditorErrorContext } from '$client/editors/borrow_editor';
 	import { CURRENTLY_EDITING_READER } from '$client/editors/reader_editor';
-	import type { Sorter } from '$client/list/list';
 	import { post_request } from '$client/request/request';
 	import { pixels, percent } from '$client/style/css';
 	import Editor from '$components/editor/Editor.svelte';
@@ -21,7 +20,7 @@
 	import { format_date, map_id_book, map_or_null } from '$shared/book_util';
 	import type { BorrowHistory, DatabaseBorrow, DatabaseReader } from '$shared/borrow_types';
 	import type { ID, Nullable } from '$shared/common_types';
-	import { get_lowest_missing_id, string_compare } from '$shared/common_util';
+	import { deformat_date, get_lowest_missing_id, string_compare } from '$shared/common_util';
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { get, type Unsubscriber, type Writable } from 'svelte/store';
 
@@ -30,10 +29,9 @@
 
 	let [edit_type, book_id] = $CURRENTLY_EDITING_BORROW!;
 
-	const get_return_date = () => {
-		const current_date = new Date();
-		current_date.setMonth(current_date.getMonth() + 1);
-		return current_date;
+	const get_return_date = (date: Date = new Date()) => {
+		date.setMonth(date.getMonth() + 1);
+		return date;
 	};
 
 	let borrow_id: number;
@@ -88,9 +86,22 @@
 		}
 	};
 
+	let return_date_input: EditorTextField;
+	const on_change_borrow_date = (borrow_date: Nullable<string>) => {
+		if (!editor?.editor_error_context) return;
+
+		if (get(editor.editor_error_context)['borrow_date'].size !== 0) return return_date_input.set_value('Špatné datum');
+		if ($editor_context['permanent']) return return_date_input.set_value('—');
+
+		const value = $editor_context['borrow_date'];
+		const return_date = format_date(get_return_date(deformat_date(value)!));
+		return_date_input.set_value(return_date);
+	};
+	$: on_change_borrow_date($editor_context?.['borrow_date'] ?? null);
+
 	const cancel = () => ($CURRENTLY_EDITING_BORROW = null);
 	const save = async () => {
-		const editor_context = get(editor.editor_context);
+		const editor_context = $editor_context;
 
 		if (typeof editor_context['reader_class'] === 'string') {
 			const reader_class = editor_context['reader_class'];
@@ -121,7 +132,7 @@
 			id: $DATABASE.borrow_history.length,
 			book: book_id as ID,
 			reader: reader.id,
-			borrow_date: new Date().toISOString(),
+			borrow_date: deformat_date(editor_context['borrow_date'])!.toISOString(),
 			return_date: null,
 			times_extended: 0,
 			permanent: editor_context['permanent']
@@ -155,6 +166,7 @@
 
 	onMount(() => {
 		editor_context = editor.editor_context;
+
 		editor_error_context_unsubscriber = editor.editor_error_context.subscribe(
 			(v: BorrowEditorErrorContext) => (has_errors = Object.values(v).findIndex((v) => v.size !== 0) !== -1)
 		);
@@ -234,9 +246,17 @@
 		<EditorFieldGroup>
 			<svelte:fragment slot="name">Datum půjčení</svelte:fragment>
 			<Horizontal slot="fields">
-				<EditorTextField value={format_date(new Date())} center width={pixels(128)} disabled></EditorTextField>
+				<EditorTextField
+					context_field="borrow_date"
+					error_checkers={[REQUIRED_CHECKER, DATE_CHECKER]}
+					value={format_date(new Date())}
+					center
+					width={pixels(128)}
+					error_left
+				></EditorTextField>
 				<Icon type="arrow-right" />
-				<EditorTextField value={return_date} center width={pixels(128)} disabled></EditorTextField>
+				<EditorTextField bind:this={return_date_input} value={return_date} center width={pixels(128)} disabled
+				></EditorTextField>
 				<EditorToggle context_field="permanent" value={false} padding on_change={on_change_permanent}
 					>Trvale</EditorToggle
 				>
