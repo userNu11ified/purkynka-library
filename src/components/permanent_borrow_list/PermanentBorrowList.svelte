@@ -12,7 +12,7 @@
 
 	let list: List<DatabaseBorrow, PermanentBorrowListMappedItem>;
 
-	const item_mapper = ({ book, reader, borrow_date }: DatabaseBorrow): PermanentBorrowListMappedItem => {
+	const item_mapper = ({ book, reader, borrow_date, permanent }: DatabaseBorrow): PermanentBorrowListMappedItem => {
 		const database_book = $DATABASE.books[book];
 		const database_reader = $DATABASE.readers[reader];
 
@@ -22,9 +22,12 @@
 			book_name: map_or_null<string>($DATABASE, 'book_names', database_book.name)!,
 			reader_name: database_reader.name,
 			price: database_book.price,
-			borrow_date: new Date(borrow_date)
+			borrow_date: new Date(borrow_date),
+			permanent
 		};
 	};
+
+	const item_filter = (items: ListItem<PermanentBorrowListMappedItem>[]) => items.filter((v) => v[1].permanent);
 
 	const sorters: Sorter<PermanentBorrowListMappedItem>[] = [
 		([left_id, left_item], [right_id, right_item]) => left_item.book_id - right_item.book_id,
@@ -66,8 +69,8 @@
 			)
 			.join('\n');
 
-	$: items = $DATABASE.borrows.filter((v) => v.permanent);
 	let current_items: ListItem<PermanentBorrowListMappedItem>[] = [];
+	$: TOTAL_ITEMS = $DATABASE.borrows.filter((v) => v.permanent).length;
 
 	const on_click_return_book = async (borrow_index: number) => {
 		const borrow = $DATABASE.borrows[borrow_index];
@@ -83,6 +86,8 @@
 
 				return v;
 			});
+
+			list.close_options();
 		}
 	};
 </script>
@@ -92,8 +97,9 @@
 	bind:current_items
 	local_storage_key="permanent-borrow-list"
 	headers={['Přír. č.', '', 'Název knihy', 'Cena', 'Čtenář', 'Půjčeno dne']}
-	{items}
+	items={$DATABASE.borrows}
 	{item_mapper}
+	{item_filter}
 	{sorters}
 	{filters}
 	{copy_transformer}
@@ -109,7 +115,7 @@
 			<div class="info">
 				<div class="part">{current_items.length}</div>
 				<div class="part">/</div>
-				<div class="part">{items.length}</div>
+				<div class="part">{TOTAL_ITEMS}</div>
 			</div>
 			<div class="border"></div>
 		</div>

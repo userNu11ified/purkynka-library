@@ -7,4 +7,5 @@ export type PermanentBorrowListMappedItem = {
 	price: Nullable<string>;
 	reader_name: string;
 	borrow_date: Date;
+	permanent: boolean;
 };

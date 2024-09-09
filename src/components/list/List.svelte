@@ -155,6 +155,8 @@
 		$searched_by = [index, value];
 	};
 
+	export let item_filter: Nullable<(items: ListItem<V>[]) => ListItem<V>[]> = null;
+
 	// ITEM GETTING
 	const get_items = (
 		items: T[],
@@ -164,6 +166,10 @@
 		let new_items = structuredClone(items)
 			.map((v, i) => [i, item_mapper(v, i)] as ListItem<V>)
 			.sort((left, right) => sorters[sorted_by_column_index](left, right) * (sort_ascending ? 1 : -1));
+
+		if (item_filter !== null) {
+			new_items = item_filter(new_items);
+		}
 
 		if (searched_by_column_index === null) {
 			go_to_index(0);
