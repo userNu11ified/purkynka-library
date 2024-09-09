@@ -10,9 +10,9 @@ export const deformat_date = (formatted_date: Nullable<string>) => {
 	if (formatted_date === null) return null;
 
 	const [year, month, day] = formatted_date
-		.split('. ')
+		.split('.')
 		.reverse()
-		.map((v) => +v);
+		.map((v) => +v.trim());
 
 	return new Date(year, month - 1, day);
 };

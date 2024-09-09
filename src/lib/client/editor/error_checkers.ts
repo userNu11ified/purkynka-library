@@ -24,7 +24,7 @@ export const ID_REQUIRED_CHECKER: ErrorChecker = (snapshot) => {
 export const DATE_CHECKER: ErrorChecker = (snapshot) => {
 	if (
 		snapshot.string_value !== '' &&
-		!/^(0?[1-9]|[12][0-9]|3[01])\.\s(0?[1-9]|1[012])\.\s\d+$/g.test(snapshot.string_value)
+		!/^(0?[1-9]|[12][0-9]|3[01])\.\s*(0?[1-9]|1[012])\.\s*\d+$/g.test(snapshot.string_value)
 	)
 		return 'Špatný formát! (D. M. RRRR)';
 
