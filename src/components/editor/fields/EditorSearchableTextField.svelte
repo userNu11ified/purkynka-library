@@ -46,6 +46,9 @@
 		current_items = get_items(base_items, option_filter);
 	};
 
+	let input_element: EditorTextField;
+
+	export const focus = () => input_element.focus();
 	let focused = false;
 	const on_focus_in = () => (focused = true);
 	const on_focus_out = (e: FocusEvent) => {
@@ -191,6 +194,7 @@
 	<EditorTextField
 		context_field={null}
 		bind:value={string_value}
+		bind:this={input_element}
 		{center}
 		{width}
 		{placeholder}

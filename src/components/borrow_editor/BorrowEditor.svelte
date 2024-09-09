@@ -48,15 +48,6 @@
 	let editor_error_context_unsubscriber: Unsubscriber;
 	let has_errors = false;
 
-	const book_filter = (lowercase_query: string, item: DatabaseBook) =>
-		(map_or_null<string>($DATABASE, 'book_names', item.name) ?? '').toLocaleLowerCase('cs').includes(lowercase_query) ||
-		item.string_id.includes(lowercase_query);
-
-	const on_option_selected_book = (value: Nullable<number | string>) => {
-		if (typeof value === 'number') selected_book = $DATABASE.books[value];
-		else selected_book = null;
-	};
-
 	let class_input: EditorSearchableTextField<string>;
 	let reader_input: EditorSearchableTextField<DatabaseReader>;
 
@@ -167,6 +158,7 @@
 		editor_error_context_unsubscriber = editor.editor_error_context.subscribe(
 			(v: BorrowEditorErrorContext) => (has_errors = Object.values(v).findIndex((v) => v.size !== 0) !== -1)
 		);
+		class_input.focus();
 	});
 
 	onDestroy(() => {

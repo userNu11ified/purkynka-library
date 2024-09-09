@@ -31,6 +31,9 @@
 	$: update_context(value!);
 
 	// FOCUS
+	let input_element: HTMLInputElement;
+	export const focus = () => input_element.focus();
+
 	let focused = false;
 	const on_focus_in = () => (focused = true);
 	const on_focus_out = () => (focused = false);
@@ -89,8 +92,9 @@
 			type="text"
 			{disabled}
 			{placeholder}
-			title={has_title && context_field ? $editor_context[context_field] : ""}
+			title={has_title && context_field ? $editor_context[context_field] : ''}
 			bind:value
+			bind:this={input_element}
 			on:focusin
 			on:focusout
 			on:focusin={on_focus_in}
