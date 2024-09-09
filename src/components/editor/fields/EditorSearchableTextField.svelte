@@ -111,6 +111,9 @@
 
 	$: update_context(string_value);
 
+	// POST INPUT ACTION
+	export let after_input: Nullable<() => void> = null;
+
 	// ERROR CHECKING
 	export let error_checkers: ErrorChecker[] = [];
 	const editor_error_context = get_editor_error_context<EditorErrorContext>();
@@ -200,6 +203,7 @@
 		{placeholder}
 		on:focusin={on_focus_in}
 		on:focusout={on_focus_out}
+		{after_input}
 	></EditorTextField>
 	<div class="extra-buttons">
 		{#if editor_button_visible}

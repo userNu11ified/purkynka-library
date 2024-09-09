@@ -16,6 +16,8 @@
 	export let value: Nullable<string>;
 	value ??= '';
 
+	export const set_value = (new_value: string) => (value = new_value);
+
 	const editor_context = get_editor_context<BookEditorContext>();
 	export let context_field: Nullable<string> = null;
 
@@ -37,6 +39,33 @@
 	let focused = false;
 	const on_focus_in = () => (focused = true);
 	const on_focus_out = () => (focused = false);
+
+	// POST INPUT ACTION
+	let debounce_bar: HTMLDivElement;
+	let debounce_width_animation: Nullable<Animation> = null;
+	let debounce_hide_animation: Nullable<Animation> = null;
+
+	export let after_input: Nullable<() => void> = null;
+	const on_input = () => {
+		if (after_input !== null) {
+			debounce_width_animation?.cancel();
+			debounce_hide_animation?.cancel();
+
+			debounce_width_animation = debounce_bar.animate([{ width: percent(0) }, { width: percent(100) }], {
+				duration: 2500,
+				fill: 'forwards'
+			});
+
+			debounce_width_animation.onfinish = () => {
+				debounce_hide_animation = debounce_bar.animate([{ opacity: 1 }, { opacity: 0 }], {
+					duration: 100,
+					fill: 'forwards'
+				});
+
+				after_input();
+			};
+		}
+	};
 
 	// ERROR CHECKING
 	export let error_checkers: ErrorChecker[] = [];
@@ -99,6 +128,7 @@
 			on:focusout
 			on:focusin={on_focus_in}
 			on:focusout={on_focus_out}
+			on:input={on_input}
 		/>
 	{:else if input_type === 'password'}
 		<input
@@ -112,7 +142,11 @@
 			on:focusout
 			on:focusin={on_focus_in}
 			on:focusout={on_focus_out}
+			on:input={on_input}
 		/>
+	{/if}
+	{#if after_input !== null}
+		<div class="debounce-bar" bind:this={debounce_bar}></div>
 	{/if}
 </div>
 
@@ -162,6 +196,20 @@
 
 	.has-title {
 		cursor: help;
+	}
+
+	.debounce-bar {
+		position: absolute;
+		bottom: 0;
+		left: var(--border-radius-regular);
+
+		width: 0%;
+		max-width: calc(100% - var(--border-radius-regular) * 2);
+		height: var(--border-width);
+
+		border-radius: var(--border-radius-regular);
+
+		background-color: var(--primary-600);
 	}
 
 	.error {

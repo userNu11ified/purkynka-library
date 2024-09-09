@@ -26,6 +26,7 @@
 	import type { Database } from '$shared/database_types';
 	import { FORCE_UPDATE } from '$client/list/list';
 	import { post_request, put_request } from '$client/request/request';
+	import type { Nullable } from '$shared/common_types';
 
 	let editor: Editor<any, any>;
 
@@ -58,6 +59,22 @@
 					(v) => v.short_name === book.literature_type?.short_name && v.long_name === book.literature_type.long_name
 				)
 			: null;
+
+	let edition_input: EditorTextField;
+	const edition_after_input = () => {
+		const value = get(editor.editor_context)['edition'] as Nullable<string>;
+		if (value === null) return;
+
+		let last_number = -1;
+		[...value].forEach((v, i) => {
+			if (/[0-9]/g.test(v)) last_number = i;
+		});
+
+		if (last_number === -1 || value[last_number + 1] === '.') return;
+
+		const new_value = `${value.slice(0, last_number + 1)}.${value.slice(last_number + 1)}`;
+		edition_input.set_value(new_value);
+	};
 
 	const on_click_cancel = () => ($CURRENTLY_EDITING_BOOK = null);
 
@@ -268,7 +285,13 @@
 			<EditorFieldGroup>
 				<svelte:fragment slot="name">Číslo vydání</svelte:fragment>
 				<svelte:fragment slot="fields">
-					<EditorTextField context_field="edition" value={book.edition} width={pixels(256)}></EditorTextField>
+					<EditorTextField
+						bind:this={edition_input}
+						context_field="edition"
+						value={book.edition}
+						width={pixels(256)}
+						after_input={edition_after_input}
+					></EditorTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>
 
