@@ -260,7 +260,7 @@
 			<EditorFieldGroup>
 				<svelte:fragment slot="name">Rok vydání</svelte:fragment>
 				<svelte:fragment slot="fields">
-					<EditorTextField context_field="year_of_publishing" value={book.year_of_publishing} center width={pixels(128)}
+					<EditorTextField context_field="year_of_publishing" value={book.year_of_publishing} width={pixels(128)}
 					></EditorTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>
@@ -322,7 +322,6 @@
 						context_field="add_date"
 						value={book.add_date ? format_date(book.add_date) : null}
 						width={pixels(128)}
-						center
 						error_checkers={[DATE_CHECKER]}
 					></EditorTextField>
 				</svelte:fragment>
@@ -331,14 +330,14 @@
 			<EditorFieldGroup>
 				<svelte:fragment slot="name">Cena knihy</svelte:fragment>
 				<svelte:fragment slot="fields">
-					<EditorTextField context_field="price" value={book.price} width={pixels(128)} center></EditorTextField>
+					<EditorTextField context_field="price" value={book.price} width={pixels(128)}></EditorTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>
 
 			<EditorFieldGroup>
 				<svelte:fragment slot="name">Číslo dokladu</svelte:fragment>
 				<svelte:fragment slot="fields">
-					<EditorTextField context_field="document_number" value={book.document_number} width={pixels(192)} center
+					<EditorTextField context_field="document_number" value={book.document_number} width={pixels(192)}
 					></EditorTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>
@@ -369,7 +368,6 @@
 						context_field="discard_date"
 						value={book.discard_date ? format_date(book.discard_date) : null}
 						width={pixels(128)}
-						center
 						error_checkers={[DATE_CHECKER]}
 					></EditorTextField>
 				</svelte:fragment>
