@@ -14,7 +14,7 @@
 
 	const item_mapper = ({ book, reader, borrow_date, permanent }: DatabaseBorrow): PermanentBorrowListMappedItem => {
 		const database_book = $DATABASE.books[book];
-		const database_reader = $DATABASE.readers[reader];
+		const database_reader = $DATABASE.readers.find((v) => v.id === reader)!;
 
 		return {
 			book_id: book,

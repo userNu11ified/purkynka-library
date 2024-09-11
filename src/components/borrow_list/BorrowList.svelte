@@ -21,7 +21,7 @@
 		permanent
 	}: DatabaseBorrow): BorrowListMappedItem => {
 		const database_book = $DATABASE.books[book];
-		const database_reader = $DATABASE.readers[reader];
+		const database_reader = $DATABASE.readers.find((v) => v.id === reader)!;
 
 		const mapped_borrow_date = new Date(borrow_date);
 

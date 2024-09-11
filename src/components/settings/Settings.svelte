@@ -30,6 +30,8 @@
 
 			if (res.ok) {
 				location.reload();
+			} else {
+				console.log(await res.text());
 			}
 		}
 	};
