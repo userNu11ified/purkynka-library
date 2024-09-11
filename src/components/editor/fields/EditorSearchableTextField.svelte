@@ -100,7 +100,7 @@
 
 		editor_context.update((v) => {
 			const found_id = id_mapper(string_value.trim().toLocaleLowerCase('cs'));
-			const value = found_id === -1 ? (string_value === '' ? null : string_value) : found_id;
+			const value = found_id === -1 ? (string_value === '' ? null : string_value.trim()) : found_id;
 
 			v[context_field] = value;
 			if (on_option_selected !== null) on_option_selected(value);

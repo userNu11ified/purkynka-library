@@ -25,7 +25,7 @@
 		if (context_field === null) return;
 
 		editor_context.update((v) => {
-			v[context_field] = value === '' ? null : value;
+			v[context_field] = value === '' ? null : value.trim();
 			return v;
 		});
 	};
