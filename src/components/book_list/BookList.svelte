@@ -124,6 +124,11 @@
 		list.close_options();
 	};
 
+	const on_click_add_again_book = (book_id: number) => {
+		$CURRENTLY_EDITING_BOOK = ['Vytvořit knihu', book_id as ID];
+		list.close_options();
+	};
+
 	onMount(() => {
 		list.refresh_items();
 	});
@@ -155,6 +160,7 @@
 		{:else}
 			<ListOption icon_type="book-discard" on:click={() => on_click_discard_book(item[0])} red>Vyřadit</ListOption>
 		{/if}
+		<ListOption icon_type="book-add" on:click={() => on_click_add_again_book(item[0])}>Přidat znovu</ListOption>
 	</svelte:fragment>
 
 	<svelte:fragment slot="action-bar">

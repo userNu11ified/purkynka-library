@@ -34,12 +34,12 @@
 	let has_errors: boolean = false;
 
 	const [edit_type, edited_book_id] = $CURRENTLY_EDITING_BOOK!;
-	const book =
-		edited_book_id === $DATABASE.books.length
-			? create_empty_mapped_book($DATABASE, edited_book_id)
-			: map_id_book($DATABASE, edited_book_id);
+	const NEW_BOOK = edited_book_id === $DATABASE.books.length;
+	const book = NEW_BOOK ? create_empty_mapped_book($DATABASE, edited_book_id) : map_id_book($DATABASE, edited_book_id);
 
-	if (edit_type === 'Vyřadit knihu') {
+	if (!NEW_BOOK && edit_type === 'Vytvořit knihu') {
+		book.string_id = `${$DATABASE.books.length + 1}`;
+	} else if (edit_type === 'Vyřadit knihu') {
 		book.discard_date = new Date();
 	} else if (edit_type === 'Zrušit vyřazení knihy') {
 		book.discard_date = null;
@@ -169,8 +169,6 @@
 	const on_click_put = async () => {
 		if (has_errors) return;
 		const database_book = await parse_context_data();
-
-		console.log(database_book);
 
 		const res = await put_request(`${window.origin}/api/v1/books/${edited_book_id}`, database_book);
 
