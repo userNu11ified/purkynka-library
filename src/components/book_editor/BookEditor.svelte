@@ -358,7 +358,11 @@
 			<EditorFieldGroup>
 				<svelte:fragment slot="name">Číslo dokladu</svelte:fragment>
 				<svelte:fragment slot="fields">
-					<EditorTextField context_field="document_number" value={book.document_number} width={pixels(192)}
+					<EditorTextField
+						context_field="document_number"
+						value={book.document_number}
+						width={pixels(192)}
+						reset_on_focus
 					></EditorTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>
@@ -371,6 +375,7 @@
 						value={book.giver}
 						items={$DATABASE.givers}
 						sorter={(left, right) => string_compare(left[1], right[1])}
+						reset_on_focus
 					></EditorSearchableTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>

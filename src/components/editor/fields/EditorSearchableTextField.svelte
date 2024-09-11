@@ -50,7 +50,10 @@
 
 	export const focus = () => input_element.focus();
 	let focused = false;
-	const on_focus_in = () => (focused = true);
+	const on_focus_in = () => {
+		if (reset_on_focus) update_string_value(null);
+		focused = true;
+	};
 	const on_focus_out = (e: FocusEvent) => {
 		if (search_results_container?.contains(e.relatedTarget as HTMLElement)) return;
 		focused = false;
@@ -176,6 +179,7 @@
 	export let error_left: Nullable<boolean> = null;
 	export let center: Nullable<boolean> = null;
 	export let flex: Nullable<boolean> = null;
+	export let reset_on_focus: Nullable<boolean> = null;
 	export let width: string = percent(100);
 	export let placeholder: Nullable<string> = null;
 </script>

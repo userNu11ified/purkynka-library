@@ -37,7 +37,10 @@
 	export const focus = () => input_element.focus();
 
 	let focused = false;
-	const on_focus_in = () => (focused = true);
+	const on_focus_in = () => {
+		if (reset_on_focus) value = '';
+		focused = true;
+	};
 	const on_focus_out = () => (focused = false);
 
 	// POST INPUT ACTION
@@ -104,6 +107,7 @@
 
 	// STYLE
 	export let error_left: Nullable<boolean> = null;
+	export let reset_on_focus: Nullable<boolean> = null;
 </script>
 
 <div class="editor-text-field" class:flex style:--width={width}>
