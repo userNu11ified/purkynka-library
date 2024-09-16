@@ -40,13 +40,18 @@
 
 	const item_filter = (items: ListItem<BorrowListMappedItem>[]) => items.filter((v) => !v[1].permanent);
 
-	const sorters: Sorter<BorrowListMappedItem>[] = [
+	const sorters: (Sorter<BorrowListMappedItem> | Sorter<BorrowListMappedItem>[])[] = [
 		([left_id, left_item], [right_id, right_item]) => left_item.book_id - right_item.book_id,
 		([left_id, left_item], [right_id, right_item]) => +left_item.is_large - +right_item.is_large,
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.book_name, right_item.book_name),
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.reader_name, right_item.reader_name),
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.reader_class, right_item.reader_class),
-		([left_id, left_item], [right_id, right_item]) => date_compare(left_item.borrow_date, right_item.borrow_date),
+		[
+			([left_id, left_item], [right_id, right_item]) => date_compare(left_item.borrow_date, right_item.borrow_date),
+			([left_id, left_item], [right_id, right_item]) =>
+				$DATABASE.borrows.findIndex((v) => v.book === left_item.book_id) -
+				$DATABASE.borrows.findIndex((v) => v.book === right_item.book_id)
+		],
 		([left_id, left_item], [right_id, right_item]) => left_item.times_extended - right_item.times_extended,
 		([left_id, left_item], [right_id, right_item]) => date_compare(left_item.return_date, right_item.return_date)
 	];
