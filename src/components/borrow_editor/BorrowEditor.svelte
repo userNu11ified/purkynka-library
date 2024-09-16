@@ -64,7 +64,6 @@
 				reader = readers_in_class[0];
 			}
 		} else {
-			reader_class = null;
 			reader = null;
 			reader_input?.update_string_value(reader);
 		}
