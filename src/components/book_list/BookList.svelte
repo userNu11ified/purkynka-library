@@ -20,7 +20,7 @@
 
 	const item_mapper = ({ string_id, is_large, name, author, udc, discard_date }: DatabaseBook): BookListMappedItem => {
 		const borrow = $DATABASE.borrows.find((v) => v.book === +string_id - 1);
-		const reader = borrow ? map_or_null<DatabaseReader>($DATABASE, 'readers', borrow.reader) : null;
+		const reader = borrow ? $DATABASE.readers.find((v) => v.id === borrow.reader) : null;
 		const class_name = reader ? map_or_null<string>($DATABASE, 'reader_classes', reader.class_name) : null;
 
 		return {
