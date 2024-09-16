@@ -95,7 +95,7 @@
 
 	// SORTING
 
-	export let sorters: Sorter<V>[];
+	export let sorters: (Sorter<V> | Sorter<V>[])[];
 
 	const [sorted_by, sorted_by_unsubscriber] = setup_synced_store<SortedBy>(`${local_storage_key}-sorted-by`, [
 		0,
@@ -163,9 +163,17 @@
 		[sorted_by_column_index, sort_ascending]: SortedBy,
 		[searched_by_column_index, search_query]: SearchedBy
 	) => {
-		let new_items = structuredClone(items)
-			.map((v, i) => [i, item_mapper(v, i)] as ListItem<V>)
-			.sort((left, right) => sorters[sorted_by_column_index](left, right) * (sort_ascending ? 1 : -1));
+		let new_items = structuredClone(items).map((v, i) => [i, item_mapper(v, i)] as ListItem<V>);
+
+		const current_sorter = sorters[sorted_by_column_index];
+
+		if (Array.isArray(current_sorter)) {
+			current_sorter.forEach((sorter) =>
+				new_items.sort((left, right) => sorter(left, right) * (sort_ascending ? 1 : -1))
+			);
+		} else {
+			new_items.sort((left, right) => current_sorter(left, right) * (sort_ascending ? 1 : -1));
+		}
 
 		if (item_filter !== null) {
 			new_items = item_filter(new_items);
@@ -215,11 +223,20 @@
 		if (e.code === 'Escape') selected_items = [];
 		else if (e.ctrlKey && e.code === 'KeyC') {
 			const [sorted_by_column_index, sort_ascending] = $sorted_by;
-			const copied_items = copy_transformer(
-				selected_items
-					.map((id) => current_items.find(([item_id, item_value]) => item_id === id) as ListItem<V>)
-					.sort((left, right) => sorters[sorted_by_column_index](left, right) * (sort_ascending ? 1 : -1))
+			const mapped_selected_items = selected_items.map(
+				(id) => current_items.find(([item_id, item_value]) => item_id === id) as ListItem<V>
 			);
+
+			const current_sorter = sorters[sorted_by_column_index];
+			if (Array.isArray(current_sorter)) {
+				current_sorter.forEach((sorter) =>
+					mapped_selected_items.sort((left, right) => sorter(left, right) * (sort_ascending ? 1 : -1))
+				);
+			} else {
+				mapped_selected_items.sort((left, right) => current_sorter(left, right) * (sort_ascending ? 1 : -1));
+			}
+
+			const copied_items = copy_transformer(mapped_selected_items);
 			navigator.clipboard.writeText(`${headers.join('\t')}\n${copied_items}`);
 			selected_items = [];
 		}
