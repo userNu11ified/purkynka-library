@@ -28,7 +28,7 @@
 	export let class_name: Nullable<string> = null;
 
 	if (edit_type === 'Upravit čtenáře') {
-		const reader = $DATABASE.readers[reader_id];
+		const reader = $DATABASE.readers.find((v) => v.id === reader_id)!;
 		name = reader.name;
 		class_name = map_or_null<string>($DATABASE, 'reader_classes', reader.class_name);
 	}
@@ -76,7 +76,7 @@
 		const res = await put_request(`${window.origin}/api/v1/readers/${reader_id}`, reader_editor_context);
 
 		if (res.ok) {
-			$DATABASE.readers[reader_id] = reader_editor_context;
+			$DATABASE.readers[$DATABASE.readers.findIndex((v) => v.id === reader_id)] = reader_editor_context;
 			submit(reader_id);
 		}
 	};

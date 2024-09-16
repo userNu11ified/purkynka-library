@@ -81,7 +81,7 @@
 	<Reader slot="item" let:list_item {list_item} let:even {even} let:searched {searched} let:selected {selected} />
 	<svelte:fragment slot="options" let:item>
 		{@const has_borrow = $DATABASE.borrows.findIndex((v) => v.reader === item[1].id) !== -1}
-		<ListOption icon_type="edit" on:click={() => on_click_edit_reader(item[0])}>Upravit</ListOption>
+		<ListOption icon_type="edit" on:click={() => on_click_edit_reader(item[1].id)}>Upravit</ListOption>
 		<ListOption
 			icon_type="remove"
 			red
