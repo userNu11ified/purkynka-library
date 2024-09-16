@@ -31,7 +31,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	DATABASE.update((v) => {
 		v.borrows.push(value);
 
-		const reader = v.readers[value.reader];
+		const reader = v.readers.find((v) => v.id === value.reader)!;
 
 		borrow_history = {
 			book_id: value.book,
