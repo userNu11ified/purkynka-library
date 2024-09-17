@@ -72,7 +72,7 @@
 	const on_option_selected_reader = (value: Nullable<number | string>) => {
 		if (typeof value === 'number') {
 			class_input.update_string_value(
-				map_or_null<string>($DATABASE, 'reader_classes', $DATABASE.readers[value].class_name)
+				map_or_null<string>($DATABASE, 'reader_classes', $DATABASE.readers.find((v) => v.id === value)!.class_name)
 			);
 		}
 	};
@@ -154,7 +154,7 @@
 
 	const cancel_reader_editor = () => ($CURRENTLY_EDITING_READER = null);
 	const submit_reader_editor = async (id: number) => {
-		reader = $DATABASE.readers[id];
+		reader = $DATABASE.readers.find((v) => v.id === id)!;
 		reader_class = $DATABASE.reader_classes[reader.class_name];
 
 		class_input.update_string_value(reader_class);
