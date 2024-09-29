@@ -20,6 +20,7 @@
 	let string_value = value === null ? '' : item_stringifier(value);
 	export const update_string_value = (value: Nullable<T>) => {
 		string_value = value === null ? '' : item_stringifier(value);
+		update_context(string_value);
 	};
 	$: update_string_value(value);
 
@@ -27,18 +28,17 @@
 	export let sorter: (left: [number, T], right: [number, T]) => number;
 	export let filter: (lowercase_query: string, item: T) => boolean = (lowercase_query, item) =>
 		item_stringifier(item).trim().toLocaleLowerCase('cs').includes(lowercase_query);
-	export let id_mapper = (lowercase_query: string) =>
+	export let id_mapper = (items: T[], lowercase_query: string) =>
 		items.findIndex((v) => lowercase_query === item_stringifier(v).trim().toLocaleLowerCase('cs'));
 
+	export let base_item_id_mapper: (item: T, index: number) => [number, T] = (item, index) => [index, item];
 	export let items: T[];
-	$: base_items = structuredClone(items)
-		.map((v, i) => [i, v] as [number, T])
-		.sort(sorter);
+	$: base_items = structuredClone(items).map(base_item_id_mapper).sort(sorter);
 
 	export let option_filter: (item: [number, T]) => boolean = () => true;
 
 	const get_items = (items: [number, T][], option_filter: (item: [number, T]) => boolean) =>
-		structuredClone(base_items).filter(option_filter);
+		structuredClone(items).filter(option_filter);
 
 	$: current_items = get_items(base_items, option_filter);
 
@@ -76,6 +76,7 @@
 	$: search_results = get_search_results(current_items, string_value);
 
 	const on_click_search_result = (id: number) => {
+		update_context(id);
 		string_value = item_stringifier(current_items.find(([item_id, item_value]) => item_id === id)![1]);
 		focused = false;
 	};
@@ -98,21 +99,26 @@
 	export let context_field: Nullable<string> = null;
 	const editor_context = get_editor_context<EditorContext>();
 
-	const update_context = (string_value: string) => {
+	const update_context = (string_value: string | number) => {
 		if (context_field === null) return;
 
 		editor_context.update((v) => {
-			const found_id = id_mapper(string_value.trim().toLocaleLowerCase('cs'));
-			const value = found_id === -1 ? (string_value === '' ? null : string_value.trim()) : found_id;
+			if (typeof string_value === 'string') {
+				const found_id = id_mapper(items, string_value.trim().toLocaleLowerCase('cs'));
+				console.log(found_id);
 
-			v[context_field] = value;
-			if (on_option_selected !== null) on_option_selected(value);
+				const value = found_id === -1 ? (string_value === '' ? null : string_value.trim()) : found_id;
+
+				v[context_field] = value;
+				if (on_option_selected !== null) on_option_selected(value);
+			} else {
+				v[context_field] = string_value;
+				if (on_option_selected !== null) on_option_selected(string_value);
+			}
 
 			return v;
 		});
 	};
-
-	$: update_context(string_value);
 
 	// POST INPUT ACTION
 	export let after_input: Nullable<() => void> = null;
@@ -159,7 +165,7 @@
 
 	const special_adder_submit = (id: number) => {
 		current_items = get_items(base_items, option_filter);
-
+		update_context(id);
 		string_value = item_stringifier(current_items.find(([item_id, item]) => item_id === id)![1]);
 		special_adder_open = false;
 	};
@@ -207,6 +213,7 @@
 		{placeholder}
 		on:focusin={on_focus_in}
 		on:focusout={on_focus_out}
+		on:input={() => update_context(string_value)}
 		{after_input}
 	></EditorTextField>
 	<div class="extra-buttons">

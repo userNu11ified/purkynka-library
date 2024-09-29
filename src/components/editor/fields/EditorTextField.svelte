@@ -136,6 +136,7 @@
 			on:focusin={on_focus_in}
 			on:focusout={on_focus_out}
 			on:input={on_input}
+			on:input
 		/>
 	{:else if input_type === 'password'}
 		<input

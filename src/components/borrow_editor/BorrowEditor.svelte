@@ -64,6 +64,7 @@
 				reader = readers_in_class[0];
 			}
 		} else {
+			reader_class = null;
 			reader = null;
 			reader_input?.update_string_value(reader);
 		}
@@ -125,7 +126,7 @@
 			}
 		}
 
-		const reader = $DATABASE.readers[editor_context['reader']];
+		const reader = $DATABASE.readers.find((v) => v.id === editor_context['reader'])!;
 
 		let borrow: DatabaseBorrow = {
 			id: $DATABASE.borrow_history.length,
@@ -222,8 +223,11 @@
 								: map_or_null($DATABASE, 'reader_classes', $DATABASE.readers[id].class_name) === reader_class}
 						context_field="reader"
 						value={reader}
+						base_item_id_mapper={(v, i) => [v.id, v]}
 						items={$DATABASE.readers}
 						item_stringifier={(item) => item.name}
+						id_mapper={(items, lowercase_query) =>
+							items.find((v) => lowercase_query === v.name.trim().toLocaleLowerCase('cs'))?.id ?? -1}
 						filter={reader_filter}
 						sorter={([left_id, left_item], [right_id, right_item]) => string_compare(left_item.name, right_item.name)}
 						error_checkers={[REQUIRED_CHECKER]}
