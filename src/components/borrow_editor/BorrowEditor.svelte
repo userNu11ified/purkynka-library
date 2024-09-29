@@ -58,10 +58,11 @@
 	const on_option_selected_class_name = (value: Nullable<number | string>) => {
 		if (typeof value === 'number') {
 			reader_class = map_or_null<string>($DATABASE, 'reader_classes', value as ID);
-
 			const readers_in_class = $DATABASE.readers.filter((v) => v.class_name === value);
+
 			if (readers_in_class.length === 1 && !/[0-9]/g.test(reader_class!)) {
-				reader = readers_in_class[0];
+				$editor_context['reader'] = readers_in_class[0].id;
+				reader_input.update_string_value(readers_in_class[0], false);
 			}
 		} else {
 			reader_class = null;

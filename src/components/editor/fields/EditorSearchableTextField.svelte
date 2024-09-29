@@ -18,9 +18,9 @@
 	export let item_stringifier = (item: T) => `${item}`;
 
 	let string_value = value === null ? '' : item_stringifier(value);
-	export const update_string_value = (value: Nullable<T>) => {
+	export const update_string_value = (value: Nullable<T>, should_update_context = true) => {
 		string_value = value === null ? '' : item_stringifier(value);
-		update_context(string_value);
+		if (should_update_context) update_context(string_value);
 	};
 	$: update_string_value(value);
 
@@ -105,8 +105,6 @@
 		editor_context.update((v) => {
 			if (typeof string_value === 'string') {
 				const found_id = id_mapper(items, string_value.trim().toLocaleLowerCase('cs'));
-				console.log(found_id);
-
 				const value = found_id === -1 ? (string_value === '' ? null : string_value.trim()) : found_id;
 
 				v[context_field] = value;
