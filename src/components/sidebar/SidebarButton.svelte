@@ -18,7 +18,7 @@
 
 <button
 	class="sidebar-button button"
-	class:shifted-button={$CURRENT_PAGE_OPENED === page || is_shifted}
+	class:enabled={$CURRENT_PAGE_OPENED === page || is_shifted}
 	{disabled}
 	on:click={on_click}
 >
@@ -49,6 +49,10 @@
 		&:disabled {
 			color: var(--subtext-color);
 			cursor: not-allowed;
+		}
+
+		&.enabled {
+			color: var(--tertiary-900);
 		}
 
 		& > div {
