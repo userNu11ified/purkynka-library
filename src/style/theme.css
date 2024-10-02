@@ -135,8 +135,8 @@
 	--warning-300: rgb(250, 236, 199);
 	--warning-400: rgb(247, 222, 156);
 	--warning-500: rgb(243, 208, 114);
-	--warning-600: rgb(219, 187, 103);
-	--warning-700: rgb(182, 156, 86);
+	--warning-600: hsl(43, 100%, 70%);
+	--warning-700: hsl(44, 60%, 53%);
 	--warning-800: rgb(146, 125, 68);
 	--warning-900: rgb(119, 102, 56);
 
@@ -239,9 +239,9 @@
 	--error-highlighted-surface: var(--error-600);
 	--error-active-surface: var(--error-700);
 
-	--available-color: var(--success-600);
-	--permanent-color: var(--warning-600);
-	--borrowed-color: var(--error-600);
+	--available-color: var(--success-800);
+	--permanent-color: var(--warning-700);
+	--borrowed-color: var(--error-800);
 }
 
 .app-mount.light-theme {
@@ -284,6 +284,6 @@
 	--error-active-surface: var(--error-700);
 
 	--available-color: var(--success-800);
-	--permanent-color: var(--warning-800);
-	--borrowed-color: var(--error-800);
+	--permanent-color: var(--warning-600);
+	--borrowed-color: var(--error-500);
 }

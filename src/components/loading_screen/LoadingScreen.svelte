@@ -3,17 +3,20 @@
 	import { percent } from '$client/style/css';
 	import DashboardText from '$components/dashboard/DashboardText.svelte';
 	import Icon from '$components/icon/Icon.svelte';
+	import type { Nullable } from '$shared/common_types';
 	import { fade } from 'svelte/transition';
 
 	const quote = get_quote();
 
 	export let current_step: number;
 	export let total_steps: number;
+
+	export let is_student: Nullable<boolean> = null;
 </script>
 
 <div class="loading-screen" transition:fade>
 	<div class="dashboard-text-container">
-		<DashboardText></DashboardText>
+		<DashboardText {is_student}></DashboardText>
 		<div class="quote-container">
 			<Icon type="quote" size={128}></Icon>
 			<q class="quote-text">{quote[0]}</q>
@@ -26,6 +29,11 @@
 			</div>
 			<div class="loading-progress">{current_step}/{total_steps}</div>
 		</div>
+
+		{#if is_student}
+		<div class="student-icon">
+		</div>
+		{/if}
 	</div>
 </div>
 

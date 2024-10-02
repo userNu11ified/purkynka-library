@@ -76,14 +76,16 @@
 	}
 
 	.red:not(:is(.searched, .selected)) {
-		color: var(--borrowed-color);
+		background-color: var(--borrowed-color);
+		color: white;
 	}
 
 	.yellow:not(:is(.searched, .selected)) {
-		color: var(--permanent-color);
+		background-color: var(--permanent-color);
 	}
 
 	.green:not(:is(.searched, .selected)) {
-		color: var(--available-color);
+		background-color: var(--available-color);
+		color: white;
 	}
 </style>

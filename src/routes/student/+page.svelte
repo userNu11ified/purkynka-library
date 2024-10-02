@@ -136,6 +136,7 @@
 </script>
 
 <svelte:head>
+	<title>Knihovna - Čtenáři</title>
 	{#if $DARK_THEME}
 		<link rel="icon" href="/favicon-dark.svg" />
 	{:else}
@@ -157,7 +158,7 @@
 	class:light-theme={!$DARK_THEME}
 >
 	{#await load_student()}
-		<LoadingScreen current_step={$STUDENT_CURRENT_STEP} total_steps={STUDENT_TOTAL_STEPS}></LoadingScreen>
+		<LoadingScreen current_step={$STUDENT_CURRENT_STEP} total_steps={STUDENT_TOTAL_STEPS} is_student></LoadingScreen>
 	{:then}
 		{#if $INFO_OPENED}
 			<StudentInfo></StudentInfo>

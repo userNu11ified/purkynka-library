@@ -29,4 +29,5 @@ export type IconType =
 	| 'settings'
 	| 'password-viewer'
 	| 'password-hider'
-	| 'info';
+	| 'info'
+	| 'student';

@@ -52,7 +52,7 @@
 		}
 
 		&.enabled {
-			color: var(--tertiary-900);
+			color: var(--primary-600);
 		}
 
 		& > div {

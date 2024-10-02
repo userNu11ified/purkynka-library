@@ -30,5 +30,5 @@ export const load_student = async (getter_function: (endpoint: string) => Promis
 			requests.map((v, i) => [STUDENT_DATABASE_ENDPOINTS[i].replaceAll('-', '_'), v])
 		) as StudentDatabase
 	);
-	await new Promise((res) => setTimeout(res, 1000));
+	await new Promise((res) => setTimeout(res, 5000));
 };

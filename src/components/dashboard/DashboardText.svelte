@@ -1,8 +1,16 @@
 <script lang="ts">
 	import Icon from '$components/icon/Icon.svelte';
+	import type { Nullable } from '$shared/common_types';
+
+	export let is_student: Nullable<boolean> = null;
 </script>
 
 <div class="dashboard-text">
+	{#if is_student}
+		<div class="student-icon">
+			<Icon type="student" size={128} />
+		</div>
+	{/if}
 	<Icon type="purkynka" size={256} />
 	<div class="title">Školní knihovna</div>
 	<div class="subtitle">SŠ Purkyňova</div>
@@ -34,5 +42,10 @@
 	.subtitle,
 	.address {
 		color: var(--subtext-color);
+	}
+
+	.student-icon {
+		margin-bottom: 32px;
+		color: var(--text-color);
 	}
 </style>

@@ -33,5 +33,5 @@ const get_endpoint = (endpoint: string) => {
 export const load = async () => {
 	const requests = await Promise.all(DATABASE_ENDPOINTS.map((v) => get_endpoint(v)));
 	DATABASE.set(Object.fromEntries(requests.map((v, i) => [DATABASE_ENDPOINTS[i].replaceAll('-', '_'), v])) as Database);
-	await new Promise((res) => setTimeout(res, 1000));
+	await new Promise((res) => setTimeout(res, 5000));
 };

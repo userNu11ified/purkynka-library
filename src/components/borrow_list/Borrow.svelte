@@ -67,7 +67,7 @@
 	}
 
 	.red {
-		color: var(--error-600);
-		font-weight: bold;
+		background-color: var(--borrowed-color);
+		color: white;
 	}
 </style>
