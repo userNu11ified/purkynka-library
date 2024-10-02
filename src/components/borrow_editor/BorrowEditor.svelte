@@ -214,6 +214,7 @@
 						error_left
 						placeholder="Třída..."
 						on_option_selected={on_option_selected_class_name}
+						search_result_max_count={null}
 					></EditorSearchableTextField>
 
 					<EditorSearchableTextField

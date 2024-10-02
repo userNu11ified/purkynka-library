@@ -30,7 +30,7 @@
 		item_stringifier(item).trim().toLocaleLowerCase('cs').includes(lowercase_query);
 	export let id_mapper = (items: T[], lowercase_query: string) =>
 		items.findIndex((v) => lowercase_query === item_stringifier(v).trim().toLocaleLowerCase('cs'));
-
+	export let search_result_max_count: Nullable<number> = 10;
 	export let base_item_id_mapper: (item: T, index: number) => [number, T] = (item, index) => [index, item];
 	export let items: T[];
 	$: base_items = structuredClone(items).map(base_item_id_mapper).sort(sorter);
@@ -65,7 +65,7 @@
 
 		for (let i = 0; i < current_items.length; i++) {
 			if (filter(lowercase_query, current_items[i][1])) found_items.push(current_items[i]);
-			if (found_items.length === 10) break;
+			if (found_items.length === search_result_max_count) break;
 		}
 
 		return found_items;
