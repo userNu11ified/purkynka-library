@@ -208,6 +208,7 @@
 						value={reader_class}
 						items={$DATABASE.reader_classes}
 						sorter={([left_id, left_item], [right_id, right_item]) => string_compare(left_item, right_item)}
+						filter={(lowercase_query, item) => item.toLocaleLowerCase('cs').trim().startsWith(lowercase_query)}
 						error_checkers={[REQUIRED_CHECKER]}
 						center
 						width={pixels(128)}
