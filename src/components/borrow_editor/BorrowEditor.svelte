@@ -55,6 +55,12 @@
 			.toLocaleLowerCase('cs')
 			.includes(lowercase_query);
 
+	const class_sorter = ([left_id, left_item]: [number, string], [right_id, right_item]: [number, string]) => {
+		const is_class_order = +/[0-9]/.test(left_item) - +/[0-9]/.test(right_item);
+		if (is_class_order === 0) return string_compare(left_item, right_item);
+		else return is_class_order;
+	};
+
 	const on_option_selected_class_name = (value: Nullable<number | string>) => {
 		if (typeof value === 'number') {
 			reader_class = map_or_null<string>($DATABASE, 'reader_classes', value as ID);
@@ -207,7 +213,7 @@
 						context_field="reader_class"
 						value={reader_class}
 						items={$DATABASE.reader_classes}
-						sorter={([left_id, left_item], [right_id, right_item]) => string_compare(left_item, right_item)}
+						sorter={class_sorter}
 						filter={(lowercase_query, item) => item.toLocaleLowerCase('cs').trim().startsWith(lowercase_query)}
 						error_checkers={[REQUIRED_CHECKER]}
 						center
