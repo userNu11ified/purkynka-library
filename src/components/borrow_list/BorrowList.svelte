@@ -103,6 +103,9 @@
 
 				return v;
 			});
+			
+			list.close_options();
+			list.set_search("", 0);
 		}
 	};
 
