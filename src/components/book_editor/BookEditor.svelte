@@ -119,17 +119,19 @@
 		book_editor_context['add_date'] = deformat_date(book_editor_context['add_date'])?.toISOString() ?? null;
 		book_editor_context['discard_date'] = deformat_date(book_editor_context['discard_date'])?.toISOString() ?? null;
 
-		NEEDS_POSTING.forEach(async ([book_field, database_field]) => {
-			const value = book_editor_context[book_field];
-			if (value === null || typeof value === 'number') return;
+		await Promise.all(
+			NEEDS_POSTING.map(async ([book_field, database_field]) => {
+				const value = book_editor_context[book_field];
+				if (value === null || typeof value === 'number') return;
 
-			const res = await post_request(`${window.origin}/api/v1/${database_field.replaceAll('_', '-')}`, value);
+				const res = await post_request(`${window.origin}/api/v1/${database_field.replaceAll('_', '-')}`, value);
 
-			if (res.ok) {
-				const id = $DATABASE[database_field].push(value as any) - 1;
-				book_editor_context[book_field] = id;
-			}
-		});
+				if (res.ok) {
+					const id = $DATABASE[database_field].push(value as any) - 1;
+					book_editor_context[book_field] = id;
+				}
+			})
+		);
 
 		return book_editor_context as DatabaseBook;
 	};
