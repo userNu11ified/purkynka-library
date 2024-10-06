@@ -147,12 +147,12 @@
 >
 	<Book slot="item" let:list_item {list_item} let:even {even} let:searched {searched} let:selected {selected} />
 	<svelte:fragment slot="options" let:item>
-		<ListOption icon_type="book-edit" on:click={() => on_click_edit_book(item[0])}>Upravit</ListOption>
 		{#if item[1].borrowed !== null}
-			<ListOption icon_type="book-return" on:click={() => on_click_return_book(item[0])}>Vrátit</ListOption>
-		{:else}
-			<ListOption icon_type="book-borrow" on:click={() => on_click_borrow_book(item[0])}>Půjčit</ListOption>
-		{/if}
+		<ListOption icon_type="book-return" on:click={() => on_click_return_book(item[0])}>Vrátit</ListOption>
+	{:else}
+		<ListOption icon_type="book-borrow" on:click={() => on_click_borrow_book(item[0])}>Půjčit</ListOption>
+	{/if}
+		<ListOption icon_type="book-edit" on:click={() => on_click_edit_book(item[0])}>Upravit</ListOption>
 		{#if item[1].discard_date !== null}
 			<ListOption icon_type="book-return-discard" on:click={() => on_click_cancel_discard_book(item[0])}>
 				Zrušit vyřazení
