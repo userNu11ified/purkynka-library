@@ -242,6 +242,8 @@
 	--available-color: var(--success-800);
 	--permanent-color: var(--warning-700);
 	--borrowed-color: var(--error-800);
+
+	--highlighted-search-field: var(--primary-900);
 }
 
 .app-mount.light-theme {
@@ -286,4 +288,6 @@
 	--available-color: var(--success-800);
 	--permanent-color: var(--warning-600);
 	--borrowed-color: var(--error-500);
+
+	--highlighted-search-field: var(--primary-100);
 }

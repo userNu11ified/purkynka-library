@@ -327,6 +327,7 @@
 			<div class="search-bar-container">
 				<input
 					class="search-bar input"
+					class:highlighted={$searched_by[0] === i && $searched_by[1] !== ''}
 					type="text"
 					placeholder={get_placeholder(header)}
 					bind:this={search_bars[i]}
@@ -652,5 +653,9 @@
 
 	.right {
 		justify-content: end;
+	}
+
+	.highlighted {
+		background-color: var(--highlighted-search-field);
 	}
 </style>
