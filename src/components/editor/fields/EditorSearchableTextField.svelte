@@ -12,6 +12,7 @@
 	import Icon from '$components/icon/Icon.svelte';
 	import type { ID, Nullable } from '$shared/common_types';
 	import EditorTextField from './EditorTextField.svelte';
+	import { tick } from 'svelte';
 
 	// VALUE
 	export let value: Nullable<T>;
@@ -161,7 +162,8 @@
 
 	const on_click_special_adder = () => (special_adder_open = true);
 
-	const special_adder_submit = (id: number) => {
+	const special_adder_submit = async (id: number) => {
+		await tick();
 		current_items = get_items(base_items, option_filter);
 		update_context(id);
 		string_value = item_stringifier(current_items.find(([item_id, item]) => item_id === id)![1]);

@@ -64,6 +64,7 @@
 	const on_option_selected_class_name = (value: Nullable<number | string>) => {
 		if (typeof value === 'number') {
 			reader_class = map_or_null<string>($DATABASE, 'reader_classes', value as ID);
+			reader_input.recalculate_items();
 			const readers_in_class = $DATABASE.readers.filter((v) => v.class_name === value);
 
 			if (readers_in_class.length === 1 && !/[0-9]/g.test(reader_class!)) {
@@ -183,6 +184,12 @@
 	onDestroy(() => {
 		editor_error_context_unsubscriber();
 	});
+
+	const option_filter_reader = ([id, item]: [number, DatabaseReader]) => {
+		return reader_class === null
+								? true
+								: map_or_null($DATABASE, 'reader_classes', $DATABASE.readers.find((v) => v.id === id)!.class_name) === reader_class;
+	}
 </script>
 
 <Editor bind:this={editor} editor_width={pixels(1024)}>
@@ -226,10 +233,7 @@
 
 					<EditorSearchableTextField
 						bind:this={reader_input}
-						option_filter={([id, item]) =>
-							reader_class === null
-								? true
-								: map_or_null($DATABASE, 'reader_classes', $DATABASE.readers[id].class_name) === reader_class}
+						option_filter={option_filter_reader}
 						context_field="reader"
 						value={reader}
 						base_item_id_mapper={(v, i) => [v.id, v]}
