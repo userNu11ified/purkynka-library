@@ -62,9 +62,9 @@
 
 	const sorters: Sorter<StudentBookListMappedItem>[] = [
 		([left_id, left_item], [right_id, right_item]) => {
-			if (left_item.permanent || right_item.permanent) return +left_item.permanent - +right_item.permanent;
 			if (left_item.return_date === null || right_item.return_date === null)
 				return +(left_item.return_date === null) - +(right_item.return_date === null);
+			if (left_item.permanent || right_item.permanent) return +left_item.permanent - +right_item.permanent;
 			return date_compare(left_item.return_date, right_item.return_date);
 		},
 		([left_id, left_item], [right_id, right_item]) => +left_item.book_id - +right_item.book_id,
