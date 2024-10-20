@@ -269,6 +269,13 @@
 		}
 	});
 
+	const on_click_search_bar = (index: number) => {
+		if (search_bars[index].value === '') return;
+
+		search_bars[index].value = '';
+		on_input_search_bar(index);
+	};
+
 	onMount(() => {
 		if ($searched_by[0] !== null) search_bars[$searched_by[0]].value = $searched_by[1];
 	});
@@ -332,6 +339,7 @@
 					placeholder={get_placeholder(header)}
 					bind:this={search_bars[i]}
 					on:input={() => on_input_search_bar(i)}
+					on:click={() => on_click_search_bar(i)}
 				/>
 				<div class="debounce-bar" bind:this={debounce_bars[i]} />
 			</div>
