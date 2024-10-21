@@ -37,6 +37,7 @@
 	import VirtualList from 'svelte-tiny-virtual-list';
 	import ListAction from './ListAction.svelte';
 	import { tick } from 'svelte';
+	import CopyPartEditor from './CopyPartEditor.svelte';
 
 	export let local_storage_key: string;
 	export let headers: string[];
@@ -219,27 +220,29 @@
 
 	const on_mouse_up_list_item = () => (selecting = false);
 
+	const copy_selected_items = () => {
+		const [sorted_by_column_index, sort_ascending] = $sorted_by;
+		const mapped_selected_items = selected_items.map(
+			(id) => current_items.find(([item_id, item_value]) => item_id === id) as ListItem<V>
+		);
+
+		const current_sorter = sorters[sorted_by_column_index];
+		if (Array.isArray(current_sorter)) {
+			current_sorter.forEach((sorter) =>
+				mapped_selected_items.sort((left, right) => sorter(left, right) * (sort_ascending ? 1 : -1))
+			);
+		} else {
+			mapped_selected_items.sort((left, right) => current_sorter(left, right) * (sort_ascending ? 1 : -1));
+		}
+
+		const copied_items = copy_transformer(mapped_selected_items);
+		navigator.clipboard.writeText(`${headers.join('\t')}\n${copied_items}`);
+		selected_items = [];
+	};
+
 	const on_key_down_copy = (e: KeyboardEvent) => {
 		if (e.code === 'Escape') selected_items = [];
-		else if (e.ctrlKey && e.code === 'KeyC') {
-			const [sorted_by_column_index, sort_ascending] = $sorted_by;
-			const mapped_selected_items = selected_items.map(
-				(id) => current_items.find(([item_id, item_value]) => item_id === id) as ListItem<V>
-			);
-
-			const current_sorter = sorters[sorted_by_column_index];
-			if (Array.isArray(current_sorter)) {
-				current_sorter.forEach((sorter) =>
-					mapped_selected_items.sort((left, right) => sorter(left, right) * (sort_ascending ? 1 : -1))
-				);
-			} else {
-				mapped_selected_items.sort((left, right) => current_sorter(left, right) * (sort_ascending ? 1 : -1));
-			}
-
-			const copied_items = copy_transformer(mapped_selected_items);
-			navigator.clipboard.writeText(`${headers.join('\t')}\n${copied_items}`);
-			selected_items = [];
-		}
+		else if (e.ctrlKey && e.code === 'KeyC') copy_selected_items();
 	};
 
 	// OPTIONS
@@ -258,6 +261,15 @@
 		const rect = button.getBoundingClientRect();
 
 		return rect.bottom - HEADER_HEIGHT - SEARCH_BAR_HEIGHT > list_height / 2;
+	};
+
+	let copy_part_editor_visible = false;
+	const on_click_copy_part = () => (copy_part_editor_visible = true);
+	const cancel_copy_part = () => (copy_part_editor_visible = false);
+	const submit_copy_part = (ids: number[]) => {
+		selected_items = ids;
+		copy_selected_items();
+		copy_part_editor_visible = false;
 	};
 
 	// FORCE UPDATE
@@ -296,6 +308,10 @@
 	on:mousemove={on_mouse_move_resizer}
 	on:keydown={on_key_down_copy}
 />
+
+{#if copy_part_editor_visible}
+	<CopyPartEditor cancel={cancel_copy_part} submit={submit_copy_part}></CopyPartEditor>
+{/if}
 
 <div
 	class="list"
@@ -417,6 +433,7 @@
 			<slot name="action-bar"></slot>
 		</div>
 		<div class="right">
+			<ListAction icon_type="copy" icon_size={24} on:click={on_click_copy_part}>Zkopírovat část</ListAction>
 			<ListAction icon_type="arrow-up" on:click={() => go_to_index(0)}>Zpátky nahoru</ListAction>
 		</div>
 	</div>
@@ -525,10 +542,6 @@
 		height: var(--border-width);
 
 		background-color: var(--primary-600);
-	}
-
-	.action-bar {
-		background-color: var(--base-surface);
 	}
 
 	.list-container {
@@ -649,9 +662,13 @@
 
 		padding-inline: 8px;
 
+		background-color: var(--base-surface);
+
 		& > div {
 			display: flex;
 			align-items: center;
+
+			gap: 16px;
 		}
 	}
 

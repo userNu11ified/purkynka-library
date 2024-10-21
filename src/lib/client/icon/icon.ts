@@ -30,4 +30,5 @@ export type IconType =
 	| 'password-viewer'
 	| 'password-hider'
 	| 'info'
-	| 'student';
+	| 'student'
+	| 'copy';

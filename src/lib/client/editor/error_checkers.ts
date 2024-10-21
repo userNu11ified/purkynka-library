@@ -43,3 +43,7 @@ export const PASSWORD_CHECKER: ErrorChecker = (snapshot) => {
 	if (/[^a-zA-Z0-9\.\-\_\:]/g.test(snapshot.string_value)) return 'Heslo může obsahovat jen: a-Z 0-9 . - _ :';
 	return null;
 };
+
+export const NUMBER_CHECKER: ErrorChecker = (snapshot) => {
+	return isNaN(+snapshot.context_value) ? 'Položka musí být číslo!' : null;
+};
