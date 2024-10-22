@@ -78,10 +78,13 @@
 
 	const copy_transformer: CopyTransformer<BookListMappedItem> = (items) =>
 		items
-			.map(
-				([id, item]) =>
-					`${item.string_id}\t${item.is_large ? 'V' : 'm'}\t${item.name ?? ''}\t${item.author}\t${item.udc?.short_name ?? ''}\t\t${item.discard_date ? format_date(item.discard_date) : ''}`
-			)
+			.map(([id, item]) => {
+				const borrow = $DATABASE.borrows.find((v) => v.book === id);
+				const reader = borrow ? $DATABASE.readers.find((v) => v.id === borrow.reader) : null;
+				const class_name = reader ? map_or_null<string>($DATABASE, 'reader_classes', reader.class_name) : null;
+
+				return `${item.string_id}\t${item.is_large ? 'V' : 'm'}\t${item.name ?? ''}\t${item.author}\t${item.udc?.short_name ?? ''}\t${class_name ? class_name : ''}\t${item.discard_date ? format_date(item.discard_date) : ''}`;
+			})
 			.join('\n');
 
 	const on_click_edit_book = (book_id: number) => {
@@ -148,10 +151,10 @@
 	<Book slot="item" let:list_item {list_item} let:even {even} let:searched {searched} let:selected {selected} />
 	<svelte:fragment slot="options" let:item>
 		{#if item[1].borrowed !== null}
-		<ListOption icon_type="book-return" on:click={() => on_click_return_book(item[0])}>Vrátit</ListOption>
-	{:else}
-		<ListOption icon_type="book-borrow" on:click={() => on_click_borrow_book(item[0])}>Půjčit</ListOption>
-	{/if}
+			<ListOption icon_type="book-return" on:click={() => on_click_return_book(item[0])}>Vrátit</ListOption>
+		{:else}
+			<ListOption icon_type="book-borrow" on:click={() => on_click_borrow_book(item[0])}>Půjčit</ListOption>
+		{/if}
 		<ListOption icon_type="book-edit" on:click={() => on_click_edit_book(item[0])}>Upravit</ListOption>
 		{#if item[1].discard_date !== null}
 			<ListOption icon_type="book-return-discard" on:click={() => on_click_cancel_discard_book(item[0])}>
