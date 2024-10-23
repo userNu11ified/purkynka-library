@@ -3,6 +3,7 @@ import type { RequestHandler } from '@sveltejs/kit';
 import { get } from 'svelte/store';
 import { TDatabase } from '$shared/database_types';
 import { isLeft } from 'fp-ts/Either';
+import { is_authenticated } from '$server/request/request';
 
 export const GET: RequestHandler = () => {
 	const database = JSON.stringify(get(DATABASE));
@@ -17,6 +18,9 @@ export const GET: RequestHandler = () => {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
+	const authenticated = is_authenticated(request);
+	if (authenticated !== null) return authenticated;
+
 	const new_database = JSON.parse(new TextDecoder().decode(await request.arrayBuffer()));
 	const validation = TDatabase.decode(new_database);
 	if (isLeft(validation)) {
