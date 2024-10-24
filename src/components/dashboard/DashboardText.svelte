@@ -13,8 +13,8 @@
 	{/if}
 	<Icon type="purkynka" size={256} />
 	<div class="title">Školní knihovna</div>
-	<div class="subtitle">SŠ Purkyňova</div>
-	<div class="address">Brno, Purkyňova 97</div>
+	<div class="subtitle">Střední průmyslová škola Brno,</div>
+	<div class="address">Purkyňova, příspěvková organizace</div>
 </div>
 
 <style>
