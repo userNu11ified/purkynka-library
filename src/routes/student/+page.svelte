@@ -138,9 +138,9 @@
 <svelte:head>
 	<title>Knihovna - Čtenáři</title>
 	{#if $DARK_THEME}
-		<link rel="icon" href="/favicon-dark.svg" />
+		<link rel="icon" href="../favicon-dark.svg" />
 	{:else}
-		<link rel="icon" href="/favicon-light.svg" />
+		<link rel="icon" href="../favicon-light.svg" />
 	{/if}
 </svelte:head>
 
