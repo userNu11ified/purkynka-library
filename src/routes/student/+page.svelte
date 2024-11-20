@@ -107,7 +107,7 @@
 					(item.book_udc?.short_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query) ||
 					(item.book_udc?.long_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)
 			),
-		(items) => items
+		(items, lowercase_query) => items.filter(([id, item]) => item.annotation?.toLocaleLowerCase('cs').includes(lowercase_query))
 	];
 
 	const copy_transformer: CopyTransformer<StudentBookListMappedItem> = (items) =>
