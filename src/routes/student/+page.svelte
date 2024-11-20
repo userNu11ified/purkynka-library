@@ -74,7 +74,7 @@
 		([left_id, left_item], [right_id, right_item]) =>
 			string_compare(left_item.book_udc?.short_name, right_item.book_udc?.short_name),
 		([left_id, left_item], [right_id, right_item]) =>
-			+(left_item.annotation !== null) - +(left_item.annotation !== null)
+			+(left_item.annotation !== null) - +(right_item.annotation !== null)
 	];
 
 	const filters: Filter<StudentBookListMappedItem>[] = [
