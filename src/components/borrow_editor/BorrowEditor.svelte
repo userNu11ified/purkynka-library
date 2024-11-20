@@ -178,7 +178,7 @@
 		editor_error_context_unsubscriber = editor.editor_error_context.subscribe(
 			(v: BorrowEditorErrorContext) => (has_errors = Object.values(v).findIndex((v) => v.size !== 0) !== -1)
 		);
-		class_input.focus();
+		reader_input.focus();
 	});
 
 	onDestroy(() => {
