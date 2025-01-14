@@ -171,6 +171,7 @@
 			bind:this={list}
 			local_storage_key="student-list"
 			headers={['Půjčeno', 'Přír. č.', '', 'Název knihy', 'Autor', 'MDT', 'Anotace']}
+			placeholders={[null, null, null, 'Zde zadejte název knihy', 'Zde zadejte autora', null, null]}
 			items={$STUDENT_DATABASE.books}
 			{item_mapper}
 			{sorters}

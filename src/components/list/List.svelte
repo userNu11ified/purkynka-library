@@ -73,6 +73,8 @@
 
 	export let sync_to_local_storage = true;
 
+	export let placeholders: Nullable<Nullable<string>[]> = null;
+
 	// RESIZING
 
 	const minimum_column_sizes = get_minimum_column_sizes(headers);
@@ -359,7 +361,7 @@
 					class="search-bar input"
 					class:highlighted={$searched_by[0] === i && $searched_by[1] !== ''}
 					type="text"
-					placeholder={get_placeholder(header)}
+					placeholder={placeholders !== null && placeholders[i] !== null ? placeholders[i] : get_placeholder(header)}
 					bind:this={search_bars[i]}
 					on:input={() => on_input_search_bar(i)}
 					on:click={() => on_click_search_bar(i)}
