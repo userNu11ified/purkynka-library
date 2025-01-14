@@ -327,6 +327,7 @@
 							item.long_name.trim().toLocaleLowerCase('cs').includes(lowercase_query)}
 						sorter={(left, right) => string_compare(left[1].short_name, right[1].short_name)}
 						error_checkers={[SPECIAL_ADDER_CHECKER]}
+						search_result_max_count={null}
 					>
 						<UdcEditor slot="special-adder" let:cancel {cancel} let:submit {submit}></UdcEditor>
 						<svelte:fragment slot="search-result" let:item>
