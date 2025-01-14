@@ -7,6 +7,7 @@ export type BookListMappedItem = {
 	name: Nullable<string>;
 	author: string;
 	udc: Nullable<Shorthand>;
-	borrowed: Nullable<string>;
+	borrowed_to_class: Nullable<string>;
+	borrowed_to_name: Nullable<string>;
 	discard_date: Nullable<Date>;
 };

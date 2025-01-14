@@ -18,8 +18,8 @@
 <div class="part center" class:even class:searched class:selected title={item.udc?.long_name ?? ''}>
 	<span>{item.udc?.short_name ?? ''}</span>
 </div>
-<div class="part center" class:even class:searched class:selected>
-	{item.borrowed ?? ''}
+<div class="part center" class:even class:searched class:selected title={item.borrowed_to_name ?? ''}>
+	<span>{item.borrowed_to_class ?? ''}</span>
 </div>
 <div class="part center" class:even class:searched class:selected>
 	{item.discard_date ? format_date(item.discard_date) : ''}

@@ -29,7 +29,8 @@
 			name: map_or_null<string>($DATABASE, 'book_names', name),
 			author: concat_authors(map_authors($DATABASE, author)),
 			udc: map_or_null<Shorthand>($DATABASE, 'udc', udc),
-			borrowed: class_name,
+			borrowed_to_class: class_name,
+			borrowed_to_name: reader?.name ?? null,
 			discard_date: map_date_or_null(discard_date)
 		};
 	};
@@ -41,7 +42,8 @@
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.author, right_item.author),
 		([left_id, left_item], [right_id, right_item]) =>
 			string_compare(left_item.udc?.short_name, right_item.udc?.short_name),
-		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.borrowed, right_item.borrowed),
+		([left_id, left_item], [right_id, right_item]) =>
+			string_compare(left_item.borrowed_to_class, right_item.borrowed_to_class),
 		([left_id, left_item], [right_id, right_item]) => date_compare(left_item.discard_date, right_item.discard_date)
 	];
 
@@ -70,7 +72,7 @@
 			),
 		(items, lowercase_query) =>
 			items.filter(([id, item]) =>
-				item.borrowed ? item.borrowed.toLocaleLowerCase('cs').includes(lowercase_query) : false
+				item.borrowed_to_class ? item.borrowed_to_class.toLocaleLowerCase('cs').includes(lowercase_query) : false
 			),
 		(items, lowercase_query) =>
 			items.filter(([id, item]) => item.discard_date && format_date(item.discard_date).includes(lowercase_query))
@@ -150,7 +152,7 @@
 >
 	<Book slot="item" let:list_item {list_item} let:even {even} let:searched {searched} let:selected {selected} />
 	<svelte:fragment slot="options" let:item>
-		{#if item[1].borrowed !== null}
+		{#if item[1].borrowed_to_class !== null}
 			<ListOption icon_type="book-return" on:click={() => on_click_return_book(item[0])}>Vrátit</ListOption>
 		{:else}
 			<ListOption icon_type="book-borrow" on:click={() => on_click_borrow_book(item[0])}>Půjčit</ListOption>
