@@ -12,24 +12,27 @@
 			Pokud tohle čtete, tak jste navštívili naší školní knihovnu, ale i tak jste skončili před počítačem a otevřeli
 			jste si <b>Program evidence knih a výpůjček</b>.
 		</div>
-		<div class="title">Informace</div>
-		<div>
+		<div class="indent">
 			Jeho výhodou je, že je <b>pro vás přístupný</b>, takže si můžete kdykoliv zjistit, zda máme vámi žádanou knihu v
-			knihovně, případně si zjistit, jaké knihy v knihovně jsou celkově. Podle přírůstkového čísla knihy, kterou jste si
-			půjčili ze školní knihovny, si můžete kdykoliv zjistit, kdy nejpozději (do 1 měsíce od půjčení) ji máte vrátit.
+			knihovně, případně si zjistit, jaké knihy v knihovně jsou celkově. Knihy půjčujeme na měsíc, s možností
+			prodloužení pokud by to bylo potřeba, například pokud je knížka větší.
 		</div>
 		<div class="title">Jak se v programu orientovat</div>
-		<div>Vyhledávat jde třemi způsoby:</div>
+		<div>Vyhledávat můžete následujícími způsoby:</div>
 		<ol>
 			<li>
 				Podle názvu (pokud zadáte jen několik písmen z názvu, ukážou se vám všechny knihy, které mají tuto skupinu
-				písmen v názvu - příklad: matemat = Matematika…., Matema-tické…, Základy matematiky… s matematikou ….atd)
+				písmen v názvu - příklad: matemat = Matematika…., Matematické…, Základy matematiky… s matematikou ….atd)
 			</li>
-			<li>Podle autora - opět stačí zadat několik písmen a nabídnou se možnosti</li>
+			<li>Podle autora - opět stačí zadat několik písmen a nabídnou se možnosti.</li>
 			<li>
 				Podle MDT = mezinárodního desetinného třídění - knihy jsou zařazeny do určitých skupin podle zaměření, např.
 				počítače, ekonomika, hudba, právo, angličtina atd. (seznam okruhů s příslušným číslem najdete opět v nabídce
-				programu dole pod zkratkou MDT) U některých knih je i anotace, kde je stručná informace o knize
+				programu dole pod zkratkou MDT).
+			</li>
+			<li>
+				Podle anotace - Obsahuje stručné informace o knize, napíšete-li sem MČ, ukážou se všechny knihy maturitní četby,
+				které máme v knihovně.
 			</li>
 		</ol>
 		<div>
@@ -38,15 +41,10 @@
 			kabinetě). U požadované <b>volné</b> knihy si napište její přírůstkové číslo i s písmenkem za ním a dojděte si pro
 			knihu do knihovny.
 		</div>
-		<div>
-			Pokud zadáte přírůstkové číslo knihy, kterou máte půjčenou, najdete úplně vlevo datum, do kdy ji máte nejpozději
-			vrátit.
-		</div>
-		<div class="title">Pro 🤓</div>
-		<div>
-			Celý zdrojový kód lze najít na <a href="https://github.com/userNu11ified/purkynka-library">GitHubu</a>. <br />
-			Made with <span title="...and lots of screaming at TypeScript...">❤️</span> by
-			<a href="https://github.com/userNu11ified">null</a>.
+		<div class="indent">
+			Pokud již máte knihu půjčenou a napíšete do kolonky <b>Přír. č...</b> její přírustkové číslo (jde o spodní číslo
+			na štítku, nalepeném dole na hřbetu knihy), najdete zde úplně nalevo datum,
+			<b>do kdy máte knihu nejpozději vrátit.</b>
 		</div>
 	</div>
 	<svelte:fragment slot="action-bar">
@@ -57,6 +55,11 @@
 <style>
 	.greeting {
 		font-size: var(--font-size-huge);
+		font-weight: 900;
+	}
+
+	b {
+		font-weight: 900;
 	}
 
 	.info {
@@ -65,11 +68,16 @@
 			width: 100%;
 			margin-bottom: 12px;
 			line-height: 1.5;
+			text-wrap: pretty;
 		}
 	}
 
 	.title {
 		font-size: var(--font-size-large);
 		font-weight: bold;
+	}
+
+	.indent {
+		text-indent: 4ch;
 	}
 </style>
