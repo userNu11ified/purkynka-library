@@ -107,7 +107,8 @@
 					(item.book_udc?.short_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query) ||
 					(item.book_udc?.long_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)
 			),
-		(items, lowercase_query) => items.filter(([id, item]) => item.annotation?.toLocaleLowerCase('cs').includes(lowercase_query))
+		(items, lowercase_query) =>
+			items.filter(([id, item]) => item.annotation?.toLocaleLowerCase('cs').includes(lowercase_query))
 	];
 
 	const copy_transformer: CopyTransformer<StudentBookListMappedItem> = (items) =>
@@ -177,6 +178,7 @@
 			{copy_transformer}
 			has_options={false}
 			has_sidebar={false}
+			sync_to_local_storage={false}
 		>
 			<StudentBook slot="item" let:list_item {list_item} let:even {even} let:searched {searched} let:selected {selected}
 			></StudentBook>

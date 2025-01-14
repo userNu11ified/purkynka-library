@@ -1,4 +1,6 @@
 <script lang="ts" generics="T, V">
+	import { writable } from 'svelte/store';
+
 	import { STUDENT_DATABASE } from '$client/student/student';
 
 	import Icon from '$components/icon/Icon.svelte';
@@ -69,13 +71,20 @@
 	const has_border = (current_items: ListItem<V>[]) => current_items.length <= visible_items;
 	$: last_has_border = has_border(current_items);
 
+	export let sync_to_local_storage = true;
+
 	// RESIZING
 
 	const minimum_column_sizes = get_minimum_column_sizes(headers);
-	const [column_sizes, column_sizes_unsubscriber] = setup_synced_store(
-		`${local_storage_key}-columns`,
-		get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers)
-	);
+	const [column_sizes, column_sizes_unsubscriber] = sync_to_local_storage
+		? setup_synced_store(
+				`${local_storage_key}-columns`,
+				get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers)
+			)
+		: [
+				writable(get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers)),
+				null
+			];
 	$: usable_width = get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar);
 	$: grid_layout = `${$column_sizes.map((v) => pixels(v)).join(' ')} ${has_options ? pixels(ITEM_SIZE) : ''}`;
 
@@ -98,10 +107,9 @@
 
 	export let sorters: (Sorter<V> | Sorter<V>[])[];
 
-	const [sorted_by, sorted_by_unsubscriber] = setup_synced_store<SortedBy>(`${local_storage_key}-sorted-by`, [
-		0,
-		false
-	]);
+	const [sorted_by, sorted_by_unsubscriber] = sync_to_local_storage
+		? setup_synced_store<SortedBy>(`${local_storage_key}-sorted-by`, [0, false])
+		: [writable<SortedBy>([0, false]), null];
 
 	const on_click_header = (e: MouseEvent, index: number) => {
 		if ($sorted_by[0] === index) $sorted_by[1] = !$sorted_by[1];
@@ -114,10 +122,9 @@
 
 	export let filters: Filter<V>[];
 
-	const [searched_by, searched_by_unsubscriber] = setup_synced_store<SearchedBy>(`${local_storage_key}-searched-by`, [
-		null,
-		''
-	]);
+	const [searched_by, searched_by_unsubscriber] = sync_to_local_storage
+		? setup_synced_store<SearchedBy>(`${local_storage_key}-searched-by`, [null, ''])
+		: [writable<SearchedBy>([null, '']), null];
 
 	let search_bars: HTMLInputElement[] = [];
 	let debounce_bars: HTMLDivElement[] = [];
@@ -293,9 +300,9 @@
 	});
 
 	onDestroy(() => {
-		column_sizes_unsubscriber();
-		sorted_by_unsubscriber();
-		searched_by_unsubscriber();
+		if (column_sizes_unsubscriber !== null) column_sizes_unsubscriber();
+		if (sorted_by_unsubscriber !== null) sorted_by_unsubscriber();
+		if (searched_by_unsubscriber !== null) searched_by_unsubscriber();
 		force_update_unsubscriber();
 	});
 </script>
