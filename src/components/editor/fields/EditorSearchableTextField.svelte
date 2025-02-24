@@ -11,6 +11,7 @@
 	import { WINDOW_HEIGHT } from '$client/window/window';
 	import Icon from '$components/icon/Icon.svelte';
 	import type { ID, Nullable } from '$shared/common_types';
+	import { fade } from 'svelte/transition';
 	import EditorTextField from './EditorTextField.svelte';
 	import { tick } from 'svelte';
 
@@ -75,6 +76,21 @@
 	let editor_searchable_text_field_container: HTMLDivElement;
 	let search_results_container: HTMLDivElement;
 	$: search_results = get_search_results(current_items, string_value);
+
+	// HIDE NOTHING FOUND AFTER 2 SECONDS
+	let hide_nothing_found: boolean = false;
+	let hide_nothing_found_timeout: number | undefined = undefined;
+
+	const check_search_results = (search_results: [number, T][]) => {
+		clearTimeout(hide_nothing_found_timeout);
+		hide_nothing_found = false;
+
+		if (search_results.length === 0) {
+			hide_nothing_found_timeout = setTimeout(() => (hide_nothing_found = true), 2000) as any;
+		}
+	}
+
+	$: check_search_results(search_results);
 
 	const on_click_search_result = (id: number) => {
 		update_context(id);
@@ -239,8 +255,8 @@
 			</div>
 		</div>
 	{/if}
-	{#if focused}
-		<div class="search-results" class:up={is_up()} bind:this={search_results_container}>
+	{#if focused && hide_nothing_found !== true}
+		<div class="search-results" class:up={is_up()} bind:this={search_results_container} transition:fade={{ duration: 250 }}>
 			{#each string_value === '' && preselected_search_results !== undefined ? preselected_search_results : search_results as [id, item] (get_option_key( [id, item] ))}
 				<button
 					class="button search-result"
