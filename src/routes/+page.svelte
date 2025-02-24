@@ -1,58 +1,155 @@
 <script lang="ts">
-	import { CURRENTLY_EDITING_BOOK } from '$client/editors/book_editor';
-	import { CURRENTLY_EDITING_BORROW } from '$client/editors/borrow_editor';
-	import { CURRENTLY_EDITING_READER } from '$client/editors/reader_editor';
-	import { CURRENT_STEP, load, TOTAL_STEPS } from '$client/loading_screen/loading_screen';
-	import { PASSWORD, PASSWORD_UNSUBSCRIBER } from '$client/password/password';
-	import { CURRENT_PAGE_OPENED, SIDEBAR_OPENED } from '$client/sidebar/sidebar';
-	import { pixels } from '$client/style/css';
-	import {
-		BORDER_WIDTH,
-		DARK_THEME,
-		DARK_THEME_UNSUBSCRIBER,
-		FONT_SIZE_HUGE,
-		FONT_SIZE_LARGE,
-		FONT_SIZE_MASSIVE,
-		FONT_SIZE_REGULAR,
-		SCROLLBAR_WIDTH,
-		SIDEBAR_CLOSED_WIDTH,
-		SIDEBAR_OPENED_WIDTH
-	} from '$client/style/theme';
-	import { WINDOW_HEIGHT, WINDOW_WIDTH } from '$client/window/window';
-	import BookEditor from '$components/book_editor/BookEditor.svelte';
-	import BookList from '$components/book_list/BookList.svelte';
-	import BorrowEditor from '$components/borrow_editor/BorrowEditor.svelte';
-	import BorrowHistoryList from '$components/borrow_history_list/BorrowHistoryList.svelte';
-	import BorrowList from '$components/borrow_list/BorrowList.svelte';
-	import Dashboard from '$components/dashboard/Dashboard.svelte';
-	import DiscardedBookList from '$components/discarded_book_list/DiscardedBookList.svelte';
-	import LoadingScreen from '$components/loading_screen/LoadingScreen.svelte';
-	import PasswordPrompt from '$components/password_prompt/PasswordPrompt.svelte';
-	import PermanentBorrowList from '$components/permanent_borrow_list/PermanentBorrowList.svelte';
-	import ReaderList from '$components/reader_list/ReaderList.svelte';
-	import Sidebar from '$components/sidebar/Sidebar.svelte';
-	import UdcList from '$components/udc_list/UDCList.svelte';
 	import '$style/app.css';
 	import '$style/theme.css';
-	import { onDestroy } from 'svelte';
 
-	const on_key_down = (e: KeyboardEvent) => {
-		if (e.altKey && e.code === 'KeyT') $DARK_THEME = !$DARK_THEME;
+	import type { CopyTransformer, Filter, Sorter } from '$client/list/list';
+	import type { StudentBookListMappedItem } from '$client/lists/student_book_list';
+	import { INFO_OPENED, UDC_LIST_OPENED, STUDENT_DATABASE, LIST_SORT_BY_UDC } from '$client/student/student';
+	import { pixels } from '$client/style/css';
+	import {
+		DARK_THEME,
+		BORDER_WIDTH,
+		FONT_SIZE_REGULAR,
+		FONT_SIZE_LARGE,
+		FONT_SIZE_HUGE,
+		FONT_SIZE_MASSIVE,
+		SIDEBAR_CLOSED_WIDTH,
+		SIDEBAR_OPENED_WIDTH,
+		SCROLLBAR_WIDTH
+	} from '$client/style/theme';
+	import List from '$components/list/List.svelte';
+	import ListAction from '$components/list/ListAction.svelte';
+	import StudentBook from '$components/student_book_list/StudentBook.svelte';
+	import type { DatabaseBook, Shorthand } from '$shared/book_types';
+	import { concat_authors, format_date, map_authors, map_or_null } from '$shared/book_util';
+	import { date_compare, string_compare } from '$shared/common_util';
+	import type { Database } from '$shared/database_types';
+	import { get_return_date } from '$shared/borrow_util';
+	import StudentInfo from '$components/student_info/StudentInfo.svelte';
+	import StudentUdcList from '$components/student_udc_list/StudentUDCList.svelte';
+	import { onMount } from 'svelte';
+	import {
+		get_endpoint_reload,
+		load_student,
+		STUDENT_CURRENT_STEP,
+		STUDENT_TOTAL_STEPS
+	} from '$client/student_loading_screen/student_loading_screen';
+	import LoadingScreen from '$components/loading_screen/LoadingScreen.svelte';
+
+	let list: List<DatabaseBook, StudentBookListMappedItem>;
+
+	const item_mapper = (
+		{ string_id, is_large, name, author, udc, annotation }: DatabaseBook,
+		index: number
+	): StudentBookListMappedItem => {
+		const book_id = index;
+
+		const borrow = $STUDENT_DATABASE.borrows.find((v) => v.book === book_id);
+		const borrow_date = borrow ? get_return_date(new Date(borrow.borrow_date), borrow.times_extended) : null;
+		const permanent = borrow ? borrow.permanent : false;
+
+		return {
+			return_date: borrow_date,
+			permanent,
+			book_id: string_id,
+			is_large,
+			book_name: map_or_null<string>($STUDENT_DATABASE as Database, 'book_names', name)!,
+			book_author: concat_authors(map_authors($STUDENT_DATABASE as Database, author)),
+			book_udc: structuredClone(map_or_null<Shorthand>($STUDENT_DATABASE as Database, 'udc', udc)),
+			annotation
+		};
 	};
 
-	onDestroy(() => {
-		DARK_THEME_UNSUBSCRIBER();
-		PASSWORD_UNSUBSCRIBER();
+	const sorters: Sorter<StudentBookListMappedItem>[] = [
+		([left_id, left_item], [right_id, right_item]) => {
+			if (left_item.return_date === null || right_item.return_date === null)
+				return +(left_item.return_date === null) - +(right_item.return_date === null);
+			if (left_item.permanent || right_item.permanent) return +left_item.permanent - +right_item.permanent;
+			return date_compare(left_item.return_date, right_item.return_date);
+		},
+		([left_id, left_item], [right_id, right_item]) => +left_item.book_id - +right_item.book_id,
+		([left_id, left_item], [right_id, right_item]) => +left_item.is_large - +right_item.is_large,
+		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.book_name, right_item.book_name),
+		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.book_author, right_item.book_author),
+		([left_id, left_item], [right_id, right_item]) =>
+			string_compare(left_item.book_udc?.short_name, right_item.book_udc?.short_name),
+		([left_id, left_item], [right_id, right_item]) =>
+			+(left_item.annotation !== null) - +(right_item.annotation !== null)
+	];
+
+	const filters: Filter<StudentBookListMappedItem>[] = [
+		(items, lowercase_query) =>
+			items.filter(
+				([id, item]) =>
+					(item.permanent && lowercase_query === 'trvale') ||
+					(item.return_date === null && lowercase_query === 'volné') ||
+					(!item.permanent && item.return_date && format_date(item.return_date!).includes(lowercase_query))
+			),
+		(items, lowercase_query) => {
+			if (list === undefined) return null;
+
+			let found_index = items.findIndex(([id, item]) => item.book_id === lowercase_query);
+			list.go_to_index(found_index === -1 ? undefined : found_index, true);
+
+			return null;
+		},
+		(items, lowercase_query) =>
+			items.filter(
+				([id, item]) => (item.is_large && lowercase_query === 'v') || (!item.is_large && lowercase_query === 'm')
+			),
+		(items, lowercase_query) =>
+			items.filter(([id, item]) => (item.book_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)),
+		(items, lowercase_query) =>
+			items.filter(([id, item]) => (item.book_author ?? '').toLocaleLowerCase('cs').includes(lowercase_query)),
+		(items, lowercase_query) =>
+			items.filter(
+				([id, item]) =>
+					(item.book_udc?.short_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query) ||
+					(item.book_udc?.long_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)
+			),
+		(items, lowercase_query) =>
+			items.filter(([id, item]) => item.annotation?.toLocaleLowerCase('cs').includes(lowercase_query))
+	];
+
+	const copy_transformer: CopyTransformer<StudentBookListMappedItem> = (items) =>
+		items
+			.map(
+				([id, item]) =>
+					`${item.permanent ? 'Trvale' : item.return_date ? format_date(item.return_date) : 'Volné'}\t${item.book_id}\t${item.is_large ? 'V' : 'm'}\t${item.book_name}\t${item.annotation}\t${item.book_udc?.short_name ?? ''}\t${item.annotation}`
+			)
+			.join('\n');
+
+	const on_click_info = () => ($INFO_OPENED = true);
+	const on_click_udc_list = () => ($UDC_LIST_OPENED = true);
+	const on_click_theme_switcher = () => ($DARK_THEME = !$DARK_THEME);
+
+	const subscribe_to_updates = () => {
+		const event = new EventSource(`${window.origin}/api/v1/event/database-update`);
+		event.onmessage = async () => await load_student(get_endpoint_reload);
+		return () => event.close();
+	};
+
+	LIST_SORT_BY_UDC.subscribe((v) => {
+		if (v !== null) list.set_search(v!, 5);
+	});
+
+	onMount(() => {
+		subscribe_to_updates();
+
+		setInterval(() => {
+			list.reset();
+			$UDC_LIST_OPENED = false;
+			$INFO_OPENED = true;
+		}, 2 * 60 * 1000);
 	});
 </script>
 
-<svelte:window bind:innerWidth={$WINDOW_WIDTH} bind:innerHeight={$WINDOW_HEIGHT} on:keydown={on_key_down} />
-
 <svelte:head>
+	<title>Knihovna - Čtenáři</title>
 	{#if $DARK_THEME}
-		<link rel="icon" href="/favicon-dark.svg" />
+		<link rel="icon" href="../favicon-dark.svg" />
 	{:else}
-		<link rel="icon" href="/favicon-light.svg" />
+		<link rel="icon" href="../favicon-light.svg" />
 	{/if}
 </svelte:head>
 
@@ -69,42 +166,44 @@
 	class:dark-theme={$DARK_THEME}
 	class:light-theme={!$DARK_THEME}
 >
-	{#if $PASSWORD === null}
-		<PasswordPrompt />
-	{:else}
-		{#await load()}
-			<LoadingScreen current_step={$CURRENT_STEP} total_steps={TOTAL_STEPS} />
-		{:then}
-			<Sidebar></Sidebar>
-			<div class="content" class:opened={$SIDEBAR_OPENED}>
-				{#if $CURRENTLY_EDITING_BOOK !== null}
-					<BookEditor />
-				{/if}
+	{#await load_student()}
+		<LoadingScreen current_step={$STUDENT_CURRENT_STEP} total_steps={STUDENT_TOTAL_STEPS} is_student></LoadingScreen>
+	{:then}
+		{#if $INFO_OPENED}
+			<StudentInfo></StudentInfo>
+		{:else if $UDC_LIST_OPENED}
+			<StudentUdcList></StudentUdcList>
+		{/if}
 
-				{#if $CURRENTLY_EDITING_BORROW !== null}
-					<BorrowEditor />
-				{/if}
-
-				{#if $SIDEBAR_OPENED}
-					<Dashboard />
-				{:else if $CURRENT_PAGE_OPENED === 'Seznam'}
-					<BookList />
-				{:else if $CURRENT_PAGE_OPENED === 'Výpůjčky'}
-					<BorrowList />
-				{:else if $CURRENT_PAGE_OPENED === 'Trvalé'}
-					<PermanentBorrowList />
-				{:else if $CURRENT_PAGE_OPENED === 'Vyřazené'}
-					<DiscardedBookList />
-				{:else if $CURRENT_PAGE_OPENED === 'Historie'}
-					<BorrowHistoryList />
-				{:else if $CURRENT_PAGE_OPENED === 'Čtenáři'}
-					<ReaderList />
-				{:else if $CURRENT_PAGE_OPENED === 'MDT'}
-					<UdcList />
-				{/if}
-			</div>
-		{/await}
-	{/if}
+		<List
+			bind:this={list}
+			local_storage_key="student-list"
+			headers={['Půjčeno', 'Přír. č.', '', 'Název knihy', 'Autor', 'MDT', 'Anotace']}
+			placeholders={[null, null, null, 'Zde zadejte název knihy', 'Zde zadejte autora', null, null]}
+			items={$STUDENT_DATABASE.books}
+			{item_mapper}
+			{sorters}
+			{filters}
+			{copy_transformer}
+			has_options={false}
+			has_sidebar={false}
+			sync_to_local_storage={false}
+		>
+			<StudentBook slot="item" let:list_item {list_item} let:even {even} let:searched {searched} let:selected {selected}
+			></StudentBook>
+			<svelte:fragment slot="action-bar">
+				<ListAction icon_type="info" on:click={on_click_info}>Informace</ListAction>
+				<div class="divider"></div>
+				<ListAction icon_type="list" on:click={on_click_udc_list}>Seznam MDT</ListAction>
+				<div class="divider"></div>
+				<ListAction
+					icon_type={$DARK_THEME ? 'dark-theme' : 'light-theme'}
+					icon_size={26}
+					on:click={on_click_theme_switcher}
+				></ListAction>
+			</svelte:fragment>
+		</List>
+	{/await}
 </div>
 
 <style>
@@ -112,27 +211,18 @@
 		--scrollbar-thumb-color: var(--border-color);
 
 		position: absolute;
-		left: 0;
-		top: 0;
-
-		width: 100dvw;
-		height: 100dvh;
-
-		background-color: var(--base-surface);
+		inset: 0;
 
 		transition: var(--variable-transitions);
 	}
 
-	.content {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		right: 0;
+	.divider {
+		height: 50%;
+		width: 4px;
 
-		width: calc(100% - var(--sidebar-closed-width));
-	}
+		margin-inline: 16px;
+		border-radius: var(--border-radius-regular);
 
-	.opened {
-		width: calc(100% - var(--sidebar-opened-width));
+		background-color: var(--border-color);
 	}
 </style>
