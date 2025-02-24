@@ -297,6 +297,18 @@
 		on_input_search_bar(index);
 	};
 
+	// RESET
+	export const reset = () => {
+		close_options();
+
+		search_bars.forEach((search_bar) => search_bar.value = "");
+		$searched_by = [null, ''];
+
+		$sorted_by = [0, false];
+
+		$column_sizes = get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers);
+	}
+
 	onMount(() => {
 		if ($searched_by[0] !== null) search_bars[$searched_by[0]].value = $searched_by[1];
 	});
