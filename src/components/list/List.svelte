@@ -71,15 +71,15 @@
 	const has_border = (current_items: ListItem<V>[]) => current_items.length <= visible_items;
 	$: last_has_border = has_border(current_items);
 
-	export let sync_to_local_storage = true;
-
 	export let placeholders: Nullable<Nullable<string>[]> = null;
 
 	// RESIZING
 
 	export let fractions: Nullable<number[]> = null;
 	const minimum_column_sizes = get_minimum_column_sizes(headers);
-	const [column_sizes, column_sizes_unsubscriber] = sync_to_local_storage
+
+	export let sync_column_sizes_to_local_storage = true;
+	const [column_sizes, column_sizes_unsubscriber] = sync_column_sizes_to_local_storage
 		? setup_synced_store(
 				`${local_storage_key}-columns`,
 				get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers, fractions)
@@ -111,7 +111,8 @@
 
 	export let sorters: (Sorter<V> | Sorter<V>[])[];
 
-	const [sorted_by, sorted_by_unsubscriber] = sync_to_local_storage
+	export let sync_sorted_by_to_local_storage = true;
+	const [sorted_by, sorted_by_unsubscriber] = sync_sorted_by_to_local_storage
 		? setup_synced_store<SortedBy>(`${local_storage_key}-sorted-by`, [0, false])
 		: [writable<SortedBy>([0, false]), null];
 
@@ -126,7 +127,8 @@
 
 	export let filters: Filter<V>[];
 
-	const [searched_by, searched_by_unsubscriber] = sync_to_local_storage
+	export let sync_searched_by_to_local_storage = true;
+	const [searched_by, searched_by_unsubscriber] = sync_searched_by_to_local_storage
 		? setup_synced_store<SearchedBy>(`${local_storage_key}-searched-by`, [null, ''])
 		: [writable<SearchedBy>([null, '']), null];
 
