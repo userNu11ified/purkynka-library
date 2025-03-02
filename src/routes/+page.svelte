@@ -173,6 +173,7 @@
 		<List
 			bind:this={list}
 			local_storage_key="student-list"
+			fractions={[1, 1, 1, 4, 3, 1, 2]}
 			headers={['Půjčeno', 'Přír. č.', '', 'Název knihy', 'Autor', 'MDT', 'Anotace']}
 			placeholders={[null, null, null, 'Zde zadejte název knihy', 'Zde zadejte autora', null, null]}
 			items={$STUDENT_DATABASE.books}
