@@ -135,8 +135,8 @@
 
 	onMount(() => {
 		subscribe_to_updates();
-			$INFO_OPENED = true;
-			});
+		$INFO_OPENED = true;
+	});
 </script>
 
 <svelte:head>
@@ -183,7 +183,8 @@
 			{copy_transformer}
 			has_options={false}
 			has_sidebar={false}
-			sync_to_local_storage={false}
+			sync_searched_by_to_local_storage={false}
+			sync_sorted_by_to_local_storage={false}
 		>
 			<StudentBook slot="item" let:list_item {list_item} let:even {even} let:searched {searched} let:selected {selected}
 			></StudentBook>
