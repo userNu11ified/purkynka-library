@@ -44,7 +44,7 @@
 				<li>
 					Pokud by jste o knize chtěli vědět více, můžete použít například stránku
 					<a href="https://www.databazeknih.cz/">Databáze Knih</a>, kde si vpravo nahoře můžete zadat název knihy,
-					vybrat ji ze seznamu a o knize se dozvědět více.
+					vybrat ji ze seznamu a o knize se dozvědět více. (Neplatí pro čistě odbornou literaturu.)
 				</li>
 			</ul>
 		</ol>
