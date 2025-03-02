@@ -25,13 +25,24 @@ export const get_minimum_column_sizes = (headers: string[]) => {
 	return calculated_sizes;
 };
 
-export const get_default_column_sizes = (usable_width: number, headers: string[]) => {
+export const get_default_column_sizes = (
+	usable_width: number,
+	headers: string[],
+	fractions: number[] | null = null
+) => {
 	const set_sizing = headers.filter((header) => header === '');
 
 	const distribute_among = headers.filter((header) => header !== '');
-	const fraction = (usable_width - set_sizing.length * ITEM_SIZE) / distribute_among.length;
+	const fraction =
+		(usable_width - set_sizing.length * ITEM_SIZE) /
+		(fractions !== null ? sum(fractions) - 1 : distribute_among.length);
 
-	const calculated_sizes = headers.map((header) => (header === '' ? ITEM_SIZE : fraction));
+	const calculated_sizes = headers.map((header, i) => {
+		if (header === '') return ITEM_SIZE;
+		if (fractions !== null) return fraction * fractions[i];
+
+		return fraction;
+	});
 
 	return calculated_sizes;
 };

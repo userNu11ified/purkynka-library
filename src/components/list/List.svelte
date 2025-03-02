@@ -77,14 +77,15 @@
 
 	// RESIZING
 
+	export let fractions: Nullable<number[]> = null;
 	const minimum_column_sizes = get_minimum_column_sizes(headers);
 	const [column_sizes, column_sizes_unsubscriber] = sync_to_local_storage
 		? setup_synced_store(
 				`${local_storage_key}-columns`,
-				get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers)
+				get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers, fractions)
 			)
 		: [
-				writable(get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers)),
+				writable(get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers, fractions)),
 				null
 			];
 	$: usable_width = get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar);
@@ -102,7 +103,8 @@
 	const reset_column_sizes = () =>
 		($column_sizes = get_default_column_sizes(
 			get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar),
-			headers
+			headers,
+			fractions
 		));
 
 	// SORTING
