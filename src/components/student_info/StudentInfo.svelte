@@ -19,21 +19,34 @@
 		</div>
 		<div class="title">Jak se v programu orientovat</div>
 		<div>Vyhledávat můžete následujícími způsoby:</div>
-		<ol>
+		<ol class="searching">
 			<li>
-				Podle názvu (pokud zadáte jen několik písmen z názvu, ukážou se vám všechny knihy, které mají tuto skupinu
-				písmen v názvu - příklad: matemat = Matematika…., Matematické…, Základy matematiky… s matematikou ….atd)
+				<b>Podle názvu</b> - stačí zadat pár začátečních písmen a ukáží se všechny knížky s podobným názvem.
+				<ul>
+					<li>Například pokud zadáte mat, vyhledá se jak Matematika v kostce, tak Základy numismatiky.</li>
+				</ul>
 			</li>
-			<li>Podle autora - opět stačí zadat několik písmen a nabídnou se možnosti.</li>
+			<li><b>Podle autora</b> - funguje stejně jako podle názvu, jen s autorem.</li>
 			<li>
-				Podle MDT = mezinárodního desetinného třídění - knihy jsou zařazeny do určitých skupin podle zaměření, např.
-				počítače, ekonomika, hudba, právo, angličtina atd. (seznam okruhů s příslušným číslem najdete opět v nabídce
-				programu dole pod zkratkou MDT).
+				<b>Podle MDT</b> = mezinárodního desetinného třídění - knihy jsou zařazeny do určitých skupin podle zaměření, např.
+				počítače, ekonomika, hudba, právo, angličtina atd.
+				<ul>
+					<li>Seznam okruhů s příslušným číslem se nachází dole uprostřed na této stránce, hned vedle tlačítka pro informace.</li>
+				</ul>
 			</li>
 			<li>
-				Podle anotace - Obsahuje stručné informace o knize, napíšete-li sem MČ, ukážou se všechny knihy maturitní četby,
-				které máme v knihovně.
+				<b>Podle anotace</b> - napíšete-li sem MČ, ukážou se všechny knihy maturitní četby, které v knihovně máme
 			</li>
+			<ul>
+				<li>
+					Anotace většinou bývá stručný obsah, zaměření nebo hodnocení čtenářů, ale v naší knihovně většinou najdete jen označení pro MČ.
+				</li>
+				<li>
+					Pokud by jste o knize chtěli vědět více, můžete použít například stránku
+					<a href="https://www.databazeknih.cz/">Databáze Knih</a>, kde si vpravo nahoře můžete zadat název knihy,
+					vybrat ji ze seznamu a o knize se dozvědět více.
+				</li>
+			</ul>
 		</ol>
 		<div>
 			<b>Pokud si nějakou knihu vyberete</b>, úplně vlevo uvidíte, zda je kniha volná, půjčená (pak je tam datum, kdy se
@@ -64,7 +77,7 @@
 
 	.info {
 		font-size: var(--font-size-regular);
-		& > :is(div, ol):not(:last-child) {
+		& > :is(div, ol, li):not(:last-child) {
 			width: 100%;
 			margin-bottom: 12px;
 			line-height: 1.5;
@@ -79,5 +92,9 @@
 
 	.indent {
 		text-indent: 4ch;
+	}
+
+	.searching > li {
+		line-height: 1.75;
 	}
 </style>

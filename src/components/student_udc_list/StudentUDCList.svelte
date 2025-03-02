@@ -14,7 +14,7 @@
 	<svelte:fragment slot="title">Seznam MDT</svelte:fragment>
 	<div slot="content">
 		<div class="info">
-			Ve vyhledávání můžete použít jak číslo, tak název - <b>stačí i kliknout na vybraný řádek ve zdejším seznamu.</b>
+			Ve vyhledávání můžete použít jak číslo, tak název, popřípadě <b>stačí i kliknout na vybraný řádek ve zdejším seznamu</b> a MDT se vyhledá.
 		</div>
 		<div class="list">
 			{#each structuredClone($STUDENT_DATABASE.udc).sort((a, b) => string_compare(a.short_name, b.short_name)) as udc}
