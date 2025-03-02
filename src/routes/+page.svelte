@@ -135,13 +135,8 @@
 
 	onMount(() => {
 		subscribe_to_updates();
-
-		setInterval(() => {
-			list.reset();
-			$UDC_LIST_OPENED = false;
 			$INFO_OPENED = true;
-		}, 2 * 60 * 1000);
-	});
+			});
 </script>
 
 <svelte:head>
