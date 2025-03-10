@@ -1,8 +1,6 @@
 <script lang="ts" generics="T, V">
 	import { writable } from 'svelte/store';
 
-	import { STUDENT_DATABASE } from '$client/student/student';
-
 	import Icon from '$components/icon/Icon.svelte';
 
 	import { sum } from '$client/math/math';
@@ -85,7 +83,13 @@
 				get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers, fractions)
 			)
 		: [
-				writable(get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers, fractions)),
+				writable(
+					get_default_column_sizes(
+						get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar),
+						headers,
+						fractions
+					)
+				),
 				null
 			];
 	$: usable_width = get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar);
@@ -100,21 +104,16 @@
 	};
 	const on_mouse_up_resizer = () => (resizing = null);
 
-	const reset_column_sizes = () =>
-		($column_sizes = get_default_column_sizes(
-			get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar),
-			headers,
-			fractions
-		));
-
 	// SORTING
 
 	export let sorters: (Sorter<V> | Sorter<V>[])[];
 
+	export let default_sorted_by: [number, boolean] = [0, false];
+
 	export let sync_sorted_by_to_local_storage = true;
 	const [sorted_by, sorted_by_unsubscriber] = sync_sorted_by_to_local_storage
-		? setup_synced_store<SortedBy>(`${local_storage_key}-sorted-by`, [0, false])
-		: [writable<SortedBy>([0, false]), null];
+		? setup_synced_store<SortedBy>(`${local_storage_key}-sorted-by`, default_sorted_by)
+		: [writable<SortedBy>(default_sorted_by), null];
 
 	const on_click_header = (e: MouseEvent, index: number) => {
 		if ($sorted_by[0] === index) $sorted_by[1] = !$sorted_by[1];
@@ -302,16 +301,21 @@
 	};
 
 	// RESET
-	export const reset = () => {
-		close_options();
-
-		search_bars.forEach((search_bar) => search_bar.value = "");
+	export const reset_search_bars = () => {
+		search_bars.forEach((search_bar) => (search_bar.value = ''));
 		$searched_by = [null, ''];
+	};
 
-		$sorted_by = [0, false];
+	export const reset_sorted_by = () => {
+		$sorted_by = default_sorted_by;
+	};
 
-		$column_sizes = get_default_column_sizes(get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar), headers);
-	}
+	export const reset_column_sizes = () => {
+		$column_sizes = get_default_column_sizes(
+			get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar),
+			headers
+		);
+	};
 
 	onMount(() => {
 		if ($searched_by[0] !== null) search_bars[$searched_by[0]].value = $searched_by[1];
