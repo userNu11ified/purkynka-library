@@ -83,12 +83,13 @@
 
 	const check_search_results = (search_results: [number, T][]) => {
 		clearTimeout(hide_nothing_found_timeout);
-		hide_nothing_found = false;
 
 		if (search_results.length === 0) {
 			hide_nothing_found_timeout = setTimeout(() => (hide_nothing_found = true), 2000) as any;
+		} else {
+			hide_nothing_found = false;
 		}
-	}
+	};
 
 	$: check_search_results(search_results);
 
@@ -256,7 +257,12 @@
 		</div>
 	{/if}
 	{#if focused && hide_nothing_found !== true}
-		<div class="search-results" class:up={is_up()} bind:this={search_results_container} transition:fade={{ duration: 250 }}>
+		<div
+			class="search-results"
+			class:up={is_up()}
+			bind:this={search_results_container}
+			transition:fade={{ duration: 250 }}
+		>
 			{#each string_value === '' && preselected_search_results !== undefined ? preselected_search_results : search_results as [id, item] (get_option_key( [id, item] ))}
 				<button
 					class="button search-result"
