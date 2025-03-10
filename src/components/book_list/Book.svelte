@@ -18,6 +18,9 @@
 <div class="part center" class:even class:searched class:selected title={item.udc?.long_name ?? ''}>
 	<span>{item.udc?.short_name ?? ''}</span>
 </div>
+<div class="part" class:even class:searched class:selected title={item.annotation ?? ''}>
+	<span>{item.annotation ?? ''}</span>
+</div>
 <div class="part center" class:even class:searched class:selected title={item.borrowed_to_name ?? ''}>
 	<span>{item.borrowed_to_class ?? ''}</span>
 </div>

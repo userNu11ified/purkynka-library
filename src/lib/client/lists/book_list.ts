@@ -10,4 +10,5 @@ export type BookListMappedItem = {
 	borrowed_to_class: Nullable<string>;
 	borrowed_to_name: Nullable<string>;
 	discard_date: Nullable<Date>;
+	annotation: Nullable<string>;
 };

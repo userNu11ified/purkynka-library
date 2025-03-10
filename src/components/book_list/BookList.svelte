@@ -18,7 +18,15 @@
 	let list: List<DatabaseBook, BookListMappedItem>;
 	let current_items: ListItem<BookListMappedItem>[] = [];
 
-	const item_mapper = ({ string_id, is_large, name, author, udc, discard_date }: DatabaseBook): BookListMappedItem => {
+	const item_mapper = ({
+		string_id,
+		is_large,
+		name,
+		author,
+		udc,
+		discard_date,
+		annotation
+	}: DatabaseBook): BookListMappedItem => {
 		const borrow = $DATABASE.borrows.find((v) => v.book === +string_id - 1);
 		const reader = borrow ? $DATABASE.readers.find((v) => v.id === borrow.reader) : null;
 		const class_name = reader ? map_or_null<string>($DATABASE, 'reader_classes', reader.class_name) : null;
@@ -31,7 +39,8 @@
 			udc: map_or_null<Shorthand>($DATABASE, 'udc', udc),
 			borrowed_to_class: class_name,
 			borrowed_to_name: reader?.name ?? null,
-			discard_date: map_date_or_null(discard_date)
+			discard_date: map_date_or_null(discard_date),
+			annotation
 		};
 	};
 
@@ -42,6 +51,7 @@
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.author, right_item.author),
 		([left_id, left_item], [right_id, right_item]) =>
 			string_compare(left_item.udc?.short_name, right_item.udc?.short_name),
+		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.annotation, right_item.annotation),
 		([left_id, left_item], [right_id, right_item]) =>
 			string_compare(left_item.borrowed_to_class, right_item.borrowed_to_class),
 		([left_id, left_item], [right_id, right_item]) => date_compare(left_item.discard_date, right_item.discard_date)
@@ -71,6 +81,8 @@
 					(item.udc?.long_name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)
 			),
 		(items, lowercase_query) =>
+			items.filter(([id, item]) => (item.annotation ?? '').toLocaleLowerCase('cs').includes(lowercase_query)),
+		(items, lowercase_query) =>
 			items.filter(([id, item]) =>
 				item.borrowed_to_class ? item.borrowed_to_class.toLocaleLowerCase('cs').includes(lowercase_query) : false
 			),
@@ -85,7 +97,7 @@
 				const reader = borrow ? $DATABASE.readers.find((v) => v.id === borrow.reader) : null;
 				const class_name = reader ? map_or_null<string>($DATABASE, 'reader_classes', reader.class_name) : null;
 
-				return `${item.string_id}\t${item.is_large ? 'V' : 'm'}\t${item.name ?? ''}\t${item.author}\t${item.udc?.short_name ?? ''}\t${class_name ? class_name : ''}\t${item.discard_date ? format_date(item.discard_date) : ''}`;
+				return `${item.string_id}\t${item.is_large ? 'V' : 'm'}\t${item.name ?? ''}\t${item.author}\t${item.udc?.short_name ?? ''}\t${item.annotation ? item.annotation : ''}\t${class_name ? class_name : ''}\t${item.discard_date ? format_date(item.discard_date) : ''}`;
 			})
 			.join('\n');
 
@@ -143,7 +155,7 @@
 	bind:this={list}
 	bind:current_items
 	local_storage_key="book-list"
-	headers={['Přír. č.', '', 'Název knihy', 'Autor', 'MDT', 'Půjčeno', 'Vyřazeno']}
+	headers={['Přír. č.', '', 'Název knihy', 'Autor', 'MDT', 'Anotace', 'Půjčeno', 'Vyřazeno']}
 	items={$DATABASE.books}
 	{item_mapper}
 	{sorters}
