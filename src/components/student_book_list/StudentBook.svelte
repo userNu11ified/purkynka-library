@@ -14,6 +14,15 @@
 	export let selected: boolean;
 
 	$: borrowed = item?.permanent ? 'Trvale' : item?.return_date ? `Do ${format_date(item.return_date)}` : 'Volné';
+
+	const parse_annotation = (annotation: string) => {
+		return annotation.replaceAll(
+			/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
+			`<a href="$&">$&</a>`
+		);
+	};
+
+	$: annotation = item.annotation ? parse_annotation(item.annotation) : '';
 </script>
 
 <div
@@ -35,7 +44,9 @@
 <div class="part center" class:even class:searched class:selected title={item.book_udc?.long_name ?? ''}>
 	<span>{item.book_udc?.short_name ?? ''}</span>
 </div>
-<div class="part center" class:even class:searched class:selected title={item.annotation}><span>{item.annotation ?? ""}</span></div>
+<div class="part center" class:even class:searched class:selected title={item.annotation}>
+	<span>{@html annotation}</span>
+</div>
 
 <style>
 	.part {
