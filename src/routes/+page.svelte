@@ -137,12 +137,15 @@
 		subscribe_to_updates();
 		$INFO_OPENED = true;
 
-		setInterval(() => {
-			list.reset_search_bars();
-			list.reset_sorted_by();
+		setInterval(
+			() => {
+				list.reset_search_bars();
+				list.reset_sorted_by();
 
-			$UDC_LIST_OPENED = false;
-		}, 1000);
+				$UDC_LIST_OPENED = false;
+			},
+			2 * 60 * 1000
+		);
 	});
 </script>
 
