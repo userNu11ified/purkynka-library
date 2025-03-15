@@ -14,50 +14,50 @@
 		</div>
 		<div class="indent">
 			Jeho výhodou je, že je <b>pro vás přístupný</b>, takže si můžete kdykoliv zjistit, zda máme vámi žádanou knihu v
-			knihovně, případně si zjistit, jaké knihy v knihovně jsou celkově. Knihy půjčujeme na měsíc, s možností
-			prodloužení pokud by to bylo potřeba, například pokud je knížka větší.
+			knihovně, případně si zjistit, jaké knihy v knihovně jsou celkově. Knihy půjčujeme na měsíc s možností prodloužení
+			výpůjčky.
 		</div>
 		<div class="title">Jak se v programu orientovat</div>
 		<div>Vyhledávat můžete následujícími způsoby:</div>
 		<ol class="searching">
 			<li>
-				<b>Podle názvu</b> - stačí zadat pár začátečních písmen a ukáží se všechny knížky s podobným názvem.
-				<ul>
-					<li>Například pokud zadáte mat, vyhledá se jak Matematika v kostce, tak Základy numismatiky.</li>
-				</ul>
+				<b>Podle názvu</b> - pokud zadáte jen několik písmen z názvu, ukážou se vám všechny knihy, které mají v názvu tuto
+				skupinu písmen - příklad: matema = Matematika…., Matematické…, Základy matematiky…, s matematikou….atd.
 			</li>
-			<li><b>Podle autora</b> - funguje stejně jako podle názvu, jen s autorem.</li>
+			<li><b>Podle autora</b> - opět stačí zadat několik písmen a nabídnou se možnosti</li>
 			<li>
-				<b>Podle MDT</b> = mezinárodního desetinného třídění - knihy jsou zařazeny do určitých skupin podle zaměření, např.
-				počítače, ekonomika, hudba, právo, angličtina atd.
-				<ul>
-					<li>Seznam okruhů s příslušným číslem se nachází dole uprostřed na této stránce, hned vedle tlačítka pro informace.</li>
-				</ul>
-			</li>
-			<li>
-				<b>Podle anotace</b> - napíšete-li sem MČ, ukážou se všechny knihy maturitní četby, které v knihovně máme
+				<b>Podle MDT</b> = mezinárodního desetinného třídění
 			</li>
 			<ul>
 				<li>
-					Anotace většinou bývá stručný obsah, zaměření nebo hodnocení čtenářů, ale v naší knihovně většinou najdete jen označení pro MČ.
+					knihy jsou zařazeny do určitých skupin podle zaměření, např. počítače, ekonomika, hudba, právo, angličtina
+					atd. Seznam okruhů s příslušným číslem se nachází dole na této stránce pod zkratkou MDT, hned vedle tlačítka
+					pro informace.
 				</li>
+			</ul>
+			<li>
+				<b>Podle anotace</b> = informace o knize (stručný obsah, zaměření, hodnocení čtenáři...)
+			</li>
+			<ul>
+				<li>napíšete-li sem MČ, ukážou se všechny knihy maturitní četby, které máme v knihovně</li>
 				<li>
-					Pokud by jste o knize chtěli vědět více, můžete použít například stránku
-					<a href="https://www.databazeknih.cz/">Databáze Knih</a>, kde si vpravo nahoře můžete zadat název knihy,
-					vybrat ji ze seznamu a o knize se dozvědět více. (Neplatí pro čistě odbornou literaturu.)
+					informace o dalších knihách v naší knihovně najdete na
+					<a href="https://www.databazeknih.cz/">https://www.databazeknih.cz/</a> (= Databáze knih), kde si vpravo nahoře
+					zadáte název knihy, vyberete si ji z nabídnutého seznamu a dozvíte se o knize více. (Neplatí to pro čistě odbornou
+					literaturu.)
 				</li>
 			</ul>
 		</ol>
 		<div>
 			<b>Pokud si nějakou knihu vyberete</b>, úplně vlevo uvidíte, zda je kniha volná, půjčená (pak je tam datum, kdy se
 			má nejpozději vrátit do knihovny) nebo půjčená trvale (pak ji má některý vyučující ve své příruční knihovně v
-			kabinetě). U požadované <b>volné</b> knihy si napište její přírůstkové číslo i s písmenkem za ním a dojděte si pro
-			knihu do knihovny.
+			kabinetě). U požadované <b>volné</b> knihy si napište její přírůstkové číslo (Přír.č.) i s písmenkem za ním a dojděte
+			si pro knihu do knihovny.
 		</div>
 		<div class="indent">
-			Pokud již máte knihu půjčenou a napíšete do kolonky <b>Přír. č...</b> její přírustkové číslo (jde o spodní číslo
-			na štítku, nalepeném dole na hřbetu knihy), najdete zde úplně nalevo datum,
-			<b>do kdy máte knihu nejpozději vrátit.</b>
+			Pokud již máte knihu půjčenou a napíšete do kolonky <b>Přír.č.</b> její přírůstkové číslo (jde o spodní číslo na
+			štítku, nalepeném dole na hřbetu knihy), najdete zde úplně nalevo datum,
+			<b>do kdy máte knihu nejpozději vrátit</b>.
 		</div>
 	</div>
 	<svelte:fragment slot="action-bar">
