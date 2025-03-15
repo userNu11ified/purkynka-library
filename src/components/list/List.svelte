@@ -313,7 +313,8 @@
 	export const reset_column_sizes = () => {
 		$column_sizes = get_default_column_sizes(
 			get_usable_width($WINDOW_WIDTH, headers, has_options, has_sidebar),
-			headers
+			headers,
+			fractions
 		);
 	};
 
