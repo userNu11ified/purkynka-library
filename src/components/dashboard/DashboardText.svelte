@@ -3,14 +3,22 @@
 	import type { Nullable } from '$shared/common_types';
 
 	export let is_student: Nullable<boolean> = null;
+	export let is_local: Nullable<boolean> = null;
 </script>
 
 <div class="dashboard-text">
-	{#if is_student}
-		<div class="student-icon">
-			<Icon type="student" size={128} />
-		</div>
-	{/if}
+	<div class="icons">
+		{#if is_student}
+			<div class="student-icon">
+				<Icon type="student" size={128} />
+			</div>
+		{/if}
+		{#if is_local}
+			<div class="local-icon">
+				<Icon type="local" size={128} />
+			</div>
+		{/if}
+	</div>
 	<Icon type="purkynka" size={256} />
 	<div class="title">Školní knihovna</div>
 	<div class="subtitle">Střední průmyslová škola Brno,</div>
@@ -44,8 +52,18 @@
 		color: var(--subtext-color);
 	}
 
-	.student-icon {
+	.icons {
+		display: flex;
+		gap: 32px;
+
 		margin-bottom: 32px;
-		color: var(--text-color);
+		color: var(--subtext-color);
+	}
+
+	.icons > div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

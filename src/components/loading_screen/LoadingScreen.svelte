@@ -16,7 +16,7 @@
 
 <div class="loading-screen" transition:fade>
 	<div class="dashboard-text-container">
-		<DashboardText {is_student}></DashboardText>
+		<DashboardText {is_student} is_local={window.origin.includes('localhost')} />
 		<div class="quote-container">
 			<Icon type="quote" size={128}></Icon>
 			<q class="quote-text">{quote[0]}</q>
@@ -31,8 +31,7 @@
 		</div>
 
 		{#if is_student}
-		<div class="student-icon">
-		</div>
+			<div class="student-icon"></div>
 		{/if}
 	</div>
 </div>

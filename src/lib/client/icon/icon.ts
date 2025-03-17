@@ -31,4 +31,5 @@ export type IconType =
 	| 'password-hider'
 	| 'info'
 	| 'student'
-	| 'copy';
+	| 'copy'
+	| 'local';

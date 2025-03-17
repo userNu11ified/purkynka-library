@@ -24,7 +24,7 @@
 	<button class="settings action-button button" on:click={on_click_settings}>
 		<Icon type="settings"></Icon>
 	</button>
-	<DashboardText />
+	<DashboardText is_local={window.origin.includes('localhost')} />
 	<Credits></Credits>
 </div>
 
