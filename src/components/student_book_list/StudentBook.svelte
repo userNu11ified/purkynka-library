@@ -17,8 +17,8 @@
 
 	const parse_annotation = (annotation: string) => {
 		return annotation.replaceAll(
-			/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
-			`<a href="$&">$&</a>`
+			/(http(s)?:\/\/)[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
+			`<a href="$&" target="_blank">$&</a>`
 		);
 	};
 
