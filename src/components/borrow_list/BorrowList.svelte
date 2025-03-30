@@ -46,12 +46,11 @@
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.book_name, right_item.book_name),
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.reader_name, right_item.reader_name),
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.reader_class, right_item.reader_class),
-		[
-			([left_id, left_item], [right_id, right_item]) => date_compare(left_item.borrow_date, right_item.borrow_date),
-			([left_id, left_item], [right_id, right_item]) =>
-				$DATABASE.borrows.findIndex((v) => v.book === left_item.book_id) -
-				$DATABASE.borrows.findIndex((v) => v.book === right_item.book_id)
-		],
+		([left_id, left_item], [right_id, right_item]) => {
+			const date_sort = date_compare(left_item.borrow_date, right_item.borrow_date);
+			if (date_sort === 0) return left_item.book_id - right_item.book_id;
+			return date_sort;
+		},
 		([left_id, left_item], [right_id, right_item]) => left_item.times_extended - right_item.times_extended,
 		([left_id, left_item], [right_id, right_item]) => date_compare(left_item.return_date, right_item.return_date)
 	];
@@ -103,9 +102,9 @@
 
 				return v;
 			});
-			
+
 			list.close_options();
-			list.set_search("", 0);
+			list.set_search('', 0);
 		}
 	};
 
