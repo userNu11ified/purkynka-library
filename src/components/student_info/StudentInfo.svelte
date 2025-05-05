@@ -42,9 +42,9 @@
 				<li>napíšete-li sem MČ, ukážou se všechny knihy maturitní četby, které máme v knihovně</li>
 				<li>
 					informace o dalších knihách v naší knihovně najdete na
-					<a href="https://www.databazeknih.cz/">https://www.databazeknih.cz/</a> (= Databáze knih), kde si pak vpravo nahoře
-					zadáte název knihy, vyberete si ji z nabídnutého seznamu a dozvíte se o knize více. (Neplatí to pro čistě odbornou
-					literaturu.)
+					<a href="https://www.databazeknih.cz/" target="_blank">https://www.databazeknih.cz/</a> (= Databáze knih), kde
+					si pak vpravo nahoře zadáte název knihy, vyberete si ji z nabídnutého seznamu a dozvíte se o knize více. (Neplatí
+					to pro čistě odbornou literaturu.)
 				</li>
 			</ul>
 		</ol>
