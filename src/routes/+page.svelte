@@ -139,8 +139,11 @@
 
 		setInterval(
 			() => {
+				if (list === undefined) return;
+
 				list.reset_search_bars();
 				list.reset_sorted_by();
+				list.reset_selected();
 
 				$UDC_LIST_OPENED = false;
 			},

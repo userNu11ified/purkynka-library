@@ -318,6 +318,10 @@
 		);
 	};
 
+	export const reset_selected = () => {
+		selected_items = [];
+	};
+
 	onMount(() => {
 		if ($searched_by[0] !== null) search_bars[$searched_by[0]].value = $searched_by[1];
 	});
