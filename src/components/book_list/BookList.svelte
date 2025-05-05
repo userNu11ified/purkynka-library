@@ -134,16 +134,19 @@
 	const on_click_discard_book = (book_id: number) => {
 		$CURRENTLY_EDITING_BOOK = ['Vyřadit knihu', book_id as ID];
 		list.close_options();
+		list.reset_selected();
 	};
 
 	const on_click_cancel_discard_book = (book_id: number) => {
 		$CURRENTLY_EDITING_BOOK = ['Zrušit vyřazení knihy', book_id as ID];
 		list.close_options();
+		list.reset_selected();
 	};
 
 	const on_click_add_again_book = (book_id: number) => {
 		$CURRENTLY_EDITING_BOOK = ['Vytvořit knihu', book_id as ID];
 		list.close_options();
+		list.reset_selected();
 	};
 
 	onMount(() => {

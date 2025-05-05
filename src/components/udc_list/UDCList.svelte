@@ -30,11 +30,13 @@
 	const on_click_add_udc = () => {
 		$CURRENTLY_EDITING_UDC = ['Přidat MDT', null];
 		list.close_options();
+		list.reset_selected();
 	};
 
 	const on_click_edit_udc = (udc_index: number) => {
 		$CURRENTLY_EDITING_UDC = ['Upravit MDT', udc_index];
 		list.close_options();
+		list.reset_selected();
 	};
 
 	const cancel = () => ($CURRENTLY_EDITING_UDC = null);

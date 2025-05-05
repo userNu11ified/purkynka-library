@@ -88,6 +88,7 @@
 			});
 
 			list.close_options();
+			list.reset_selected();
 		}
 	};
 </script>

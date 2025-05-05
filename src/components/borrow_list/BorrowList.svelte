@@ -105,6 +105,7 @@
 
 			list.close_options();
 			list.set_search('', 0);
+			list.reset_selected();
 		}
 	};
 
@@ -124,6 +125,7 @@
 			});
 
 			list.close_options();
+			list.reset_selected();
 		}
 	};
 
@@ -143,6 +145,7 @@
 			});
 
 			list.close_options();
+			list.reset_selected();
 		}
 	};
 </script>

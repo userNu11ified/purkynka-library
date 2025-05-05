@@ -24,6 +24,7 @@
 	const on_click_edit_reader = (id: number) => {
 		$CURRENTLY_EDITING_READER = ['Upravit čtenáře', id];
 		list.close_options();
+		list.reset_selected();
 	};
 
 	const on_click_remove_reader = async (id: number) => {
@@ -33,6 +34,7 @@
 				v.readers.splice(id, 1);
 				return v;
 			});
+			list.reset_selected();
 		}
 	};
 

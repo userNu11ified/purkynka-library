@@ -121,6 +121,8 @@
 				v.books[book_index] = book;
 				return v;
 			});
+
+			list.reset_selected();
 		}
 	};
 </script>
