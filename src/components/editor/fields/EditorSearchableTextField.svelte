@@ -259,6 +259,7 @@
 	{#if focused && hide_nothing_found !== true}
 		<div
 			class="search-results"
+			class:hide-border={string_value !== '' && search_results.length === 0}
 			class:up={is_up()}
 			bind:this={search_results_container}
 			transition:fade={{ duration: 250 }}
@@ -274,8 +275,6 @@
 						{item_stringifier(item)}
 					</slot>
 				</button>
-			{:else}
-				<div class="search-result">Nic nenalezeno!</div>
 			{/each}
 		</div>
 	{/if}
@@ -337,6 +336,10 @@
 		&::-webkit-scrollbar-thumb {
 			background: var(--scrollbar-thumb-color);
 		}
+	}
+
+	.hide-border {
+		border: none;
 	}
 
 	.search-result {
