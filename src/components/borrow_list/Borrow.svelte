@@ -9,6 +9,16 @@
 	export let even: boolean;
 	export let searched: boolean;
 	export let selected: boolean;
+
+	let overdue = false;
+	$: overdue = new Date().getTime() >= item.return_date.getTime();
+
+	let overdue_long = false;
+	$: {
+		const return_date = new Date(item.return_date);
+		return_date.setMonth(return_date.getMonth() + 1);
+		overdue_long = new Date().getTime() >= return_date.getTime();
+	}
 </script>
 
 <div class="part center" class:even class:searched class:selected>{item.book_id + 1}</div>
@@ -18,13 +28,7 @@
 <div class="part center" class:even class:searched class:selected>{item.reader_class}</div>
 <div class="part center" class:even class:searched class:selected>{format_date(item.borrow_date)}</div>
 <div class="part center" class:even class:searched class:selected>{item.times_extended}x</div>
-<div
-	class="part center"
-	class:red={new Date().getTime() >= item.return_date.getTime()}
-	class:even
-	class:searched
-	class:selected
->
+<div class="part center" class:red={overdue} class:purple={overdue_long} class:even class:searched class:selected>
 	{format_date(item.return_date)}
 </div>
 
@@ -68,6 +72,11 @@
 
 	.red {
 		background-color: var(--borrowed-color);
+		color: white;
+	}
+
+	.purple {
+		background-color: var(--primary-700);
 		color: white;
 	}
 </style>
