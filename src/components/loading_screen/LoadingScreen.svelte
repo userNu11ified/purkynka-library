@@ -12,15 +12,32 @@
 	export let total_steps: number;
 
 	export let is_student: Nullable<boolean> = null;
+
+	export let book_count: Nullable<number> = null;
+	export let borrow_count: Nullable<number> = null;
 </script>
 
 <div class="loading-screen" transition:fade>
 	<div class="dashboard-text-container">
 		<DashboardText {is_student} is_local={window.origin.includes('localhost')} />
-		<div class="quote-container">
-			<Icon type="quote" size={128}></Icon>
-			<q class="quote-text">{quote[0]}</q>
-			<div class="quote-author">{quote[1]}</div>
+		<div class="side-container">
+			<div class="quote-container">
+				<Icon type="quote" size={128}></Icon>
+				<q class="quote-text">{quote[0]}</q>
+				<div class="quote-author">{quote[1]}</div>
+			</div>
+			{#if book_count && borrow_count}
+				<div class="statistic-container">
+					<div class="statistic">
+						<div class="statistic-title">Počet knížek</div>
+						<div class="statistic-number">{book_count}</div>
+					</div>
+					<div class="statistic">
+						<div class="statistic-title">Právě půjčeno</div>
+						<div class="statistic-number">{borrow_count}</div>
+					</div>
+				</div>
+			{/if}
 		</div>
 
 		<div class="loading-bar-container">
@@ -57,14 +74,22 @@
 		position: relative;
 	}
 
-	.quote-container {
+	.side-container {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		gap: 16px;
 
 		position: absolute;
 		top: 50%;
 		left: -512px;
+
+		transform: translateY(-50%);
+	}
+
+	.quote-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 
 		width: 40ch;
 
@@ -73,8 +98,6 @@
 		border-radius: var(--border-radius-regular);
 
 		color: var(--subtext-color);
-
-		transform: translateY(-50%);
 	}
 
 	.quote-text {
@@ -114,5 +137,34 @@
 
 		color: var(--subtext-color);
 		text-align: center;
+	}
+
+	.statistic-container {
+		display: flex;
+		gap: 16px;
+	}
+
+	.statistic {
+		flex: 1 1 auto;
+
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		padding: 16px;
+		border: var(--border);
+		border-radius: var(--border-radius-regular);
+
+		color: var(--subtext-color);
+	}
+
+	.statistic-title {
+		color: var(--text-color);
+		font-weight: bold;
+		font-size: 20px;
+	}
+
+	.statistic-number {
+		font-size: 24px;
 	}
 </style>

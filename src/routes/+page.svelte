@@ -36,6 +36,9 @@
 	} from '$client/student_loading_screen/student_loading_screen';
 	import LoadingScreen from '$components/loading_screen/LoadingScreen.svelte';
 
+	export let data;
+	const { book_count, borrow_count } = data;
+
 	let list: List<DatabaseBook, StudentBookListMappedItem>;
 
 	const item_mapper = (
@@ -175,7 +178,13 @@
 	class:light-theme={!$DARK_THEME}
 >
 	{#await load_student()}
-		<LoadingScreen current_step={$STUDENT_CURRENT_STEP} total_steps={STUDENT_TOTAL_STEPS} is_student></LoadingScreen>
+		<LoadingScreen
+			current_step={$STUDENT_CURRENT_STEP}
+			total_steps={STUDENT_TOTAL_STEPS}
+			is_student
+			{book_count}
+			{borrow_count}
+		></LoadingScreen>
 	{:then}
 		{#if $INFO_OPENED}
 			<StudentInfo></StudentInfo>
