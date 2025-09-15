@@ -14,7 +14,7 @@
 	export let has_title: Nullable<boolean> = null;
 
 	export let value: Nullable<string>;
-	value ??= '';
+	$: value ??= '';
 
 	export const set_value = (new_value: string) => (value = new_value);
 
@@ -25,7 +25,7 @@
 		if (context_field === null) return;
 
 		editor_context.update((v) => {
-			v[context_field] = value === '' ? null : value.trim();
+			v[context_field] = value === '' || value === null ? null : value.trim();
 			return v;
 		});
 	};

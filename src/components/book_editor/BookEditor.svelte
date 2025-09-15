@@ -16,7 +16,7 @@
 	import EditorToggleList from '$components/editor/fields/EditorToggleList.svelte';
 	import DoubleColumn from '$components/editor/layouts/DoubleColumn.svelte';
 	import Horizontal from '$components/editor/layouts/Horizontal.svelte';
-	import { create_empty_mapped_book, format_date, map_id_book } from '$shared/book_util';
+	import { create_empty_mapped_book, format_date, map_database_book, map_id_book } from '$shared/book_util';
 	import { deformat_date, string_compare } from '$shared/common_util';
 	import { onDestroy, onMount } from 'svelte';
 	import UdcEditor from '../udc_editor/UDCEditor.svelte';
@@ -35,7 +35,7 @@
 
 	const [edit_type, edited_book_id] = $CURRENTLY_EDITING_BOOK!;
 	const NEW_BOOK = edited_book_id === $DATABASE.books.length;
-	const book = NEW_BOOK ? create_empty_mapped_book($DATABASE, edited_book_id) : map_id_book($DATABASE, edited_book_id);
+	let book = NEW_BOOK ? create_empty_mapped_book($DATABASE, edited_book_id) : map_id_book($DATABASE, edited_book_id);
 
 	if (!NEW_BOOK && edit_type === 'Vytvořit knihu') {
 		book.string_id = `${$DATABASE.books.length + 1}`;
@@ -74,6 +74,24 @@
 
 		const new_value = `${value.slice(0, last_number + 1)}.${value.slice(last_number + 1)}`;
 		edition_input.set_value(new_value);
+	};
+
+	const book_name_after_input = () => {
+		if (!NEW_BOOK) return;
+
+		const value = get(editor.editor_context)['name'] as Nullable<number>;
+		if (typeof value !== 'number') return;
+
+		const books_with_name = $DATABASE.books
+			.filter((book) => book.name === value)
+			.sort((a, b) => +b.string_id - +a.string_id);
+
+		if (books_with_name.length === 0) return;
+
+		const book_copy = map_database_book($DATABASE, books_with_name[0]);
+		book_copy.string_id = `${edited_book_id + 1}`;
+
+		book = book_copy;
 	};
 
 	const on_click_cancel = () => ($CURRENTLY_EDITING_BOOK = null);
@@ -222,6 +240,7 @@
 						items={$DATABASE.book_names}
 						sorter={(left, right) => string_compare(left[1], right[1])}
 						error_checkers={[REQUIRED_CHECKER]}
+						after_input={book_name_after_input}
 					></EditorSearchableTextField>
 				</svelte:fragment>
 			</EditorFieldGroup>
