@@ -9,6 +9,15 @@
 	export let even: boolean;
 	export let searched: boolean;
 	export let selected: boolean;
+
+	const parse_annotation = (annotation: string) => {
+		return annotation.replaceAll(
+			/(http(s)?:\/\/)[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
+			`<a href="$&" target="_blank">$&</a>`
+		);
+	};
+
+	$: annotation = item.annotation ? parse_annotation(item.annotation) : '';
 </script>
 
 <div class="part center" class:even class:searched class:selected>{item.string_id}</div>
@@ -16,7 +25,7 @@
 <div class="part" class:even class:searched class:selected title={item.name ?? ''}><span>{item.name ?? ''}</span></div>
 <div class="part" class:even class:searched class:selected title={item.author}><span>{item.author}</span></div>
 <div class="part" class:even class:searched class:selected title={item.annotation ?? ''}>
-	<span>{item.annotation ?? ''}</span>
+	<span>{@html annotation}</span>
 </div>
 <div class="part center" class:even class:searched class:selected title={item.udc?.long_name ?? ''}>
 	<span>{item.udc?.short_name ?? ''}</span>
