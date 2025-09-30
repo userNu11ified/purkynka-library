@@ -150,7 +150,7 @@
 
 				$UDC_LIST_OPENED = false;
 			},
-			2 * 60 * 1000
+			5 * 60 * 1000
 		);
 	});
 </script>
