@@ -16,6 +16,11 @@
 	let list: List<DatabaseReader, ReaderListMappedItem>;
 
 	const cancel = () => ($CURRENTLY_EDITING_READER = null);
+	const submit = () => {
+		cancel();
+		list.refresh_items();
+	};
+
 	const on_click_add_reader = () => {
 		$CURRENTLY_EDITING_READER = ['Přidat čtenáře', get_lowest_missing_id($DATABASE.readers)];
 		list.close_options();
@@ -66,7 +71,7 @@
 
 {#if $CURRENTLY_EDITING_READER !== null}
 	{#if $CURRENTLY_EDITING_READER[0] !== 'Vymazat čtenáře'}
-		<ReaderEditor {cancel} submit={cancel} />
+		<ReaderEditor {cancel} {submit} />
 	{/if}
 {/if}
 
