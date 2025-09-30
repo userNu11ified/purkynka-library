@@ -20,6 +20,7 @@
 	} from '$client/style/theme';
 	import { WINDOW_HEIGHT, WINDOW_WIDTH } from '$client/window/window';
 	import BookEditor from '$components/book_editor/BookEditor.svelte';
+	import BookInfoList from '$components/book_info_list/BookInfoList.svelte';
 	import BookList from '$components/book_list/BookList.svelte';
 	import BorrowEditor from '$components/borrow_editor/BorrowEditor.svelte';
 	import BorrowHistoryList from '$components/borrow_history_list/BorrowHistoryList.svelte';
@@ -89,6 +90,8 @@
 					<Dashboard />
 				{:else if $CURRENT_PAGE_OPENED === 'Seznam'}
 					<BookList />
+				{:else if $CURRENT_PAGE_OPENED === 'Seznam informací'}
+					<BookInfoList />
 				{:else if $CURRENT_PAGE_OPENED === 'Výpůjčky'}
 					<BorrowList />
 				{:else if $CURRENT_PAGE_OPENED === 'Trvalé'}

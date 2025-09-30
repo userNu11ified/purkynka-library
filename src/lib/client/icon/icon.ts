@@ -7,6 +7,7 @@ export type IconType =
 	| 'book-edit'
 	| 'book-return-discard'
 	| 'book-return'
+	| 'book-info'
 	| 'history'
 	| 'list'
 	| 'purkynka'

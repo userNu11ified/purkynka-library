@@ -23,6 +23,8 @@
 			is_shifted={$CURRENTLY_EDITING_BOOK !== null}
 			on_click={on_click_add_book}
 		/>
+		<div class="divider"></div>
+		<SidebarButton icon="book-info" page="Seznam informací" />
 	</div>
 	<div class="section">
 		<SidebarButton icon="book-borrow" page="Výpůjčky" />
