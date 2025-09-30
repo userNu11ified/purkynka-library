@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { DATABASE } from '$client/database/database';
-	import { REQUIRED_CHECKER } from '$client/editor/error_checkers';
+	import { REQUIRED_CHECKER, UNIQUE_READER_CHECKER } from '$client/editor/error_checkers';
 	import { pixels } from '$client/style/css';
 	import Editor from '$components/editor/Editor.svelte';
 	import EditorAction from '$components/editor/EditorAction.svelte';
@@ -107,7 +107,8 @@
 		<EditorFieldGroup>
 			<svelte:fragment slot="name">Jméno</svelte:fragment>
 			<svelte:fragment slot="fields">
-				<EditorTextField context_field="name" value={name} error_checkers={[REQUIRED_CHECKER]}></EditorTextField>
+				<EditorTextField context_field="name" value={name} error_checkers={[REQUIRED_CHECKER, UNIQUE_READER_CHECKER]}
+				></EditorTextField>
 			</svelte:fragment>
 		</EditorFieldGroup>
 
@@ -117,7 +118,7 @@
 				<EditorSearchableTextField
 					context_field="class_name"
 					value={class_name}
-					error_checkers={[REQUIRED_CHECKER]}
+					error_checkers={[REQUIRED_CHECKER, UNIQUE_READER_CHECKER]}
 					items={$DATABASE.reader_classes}
 					sorter={(left, right) => string_compare(left[1], right[1])}
 				></EditorSearchableTextField>

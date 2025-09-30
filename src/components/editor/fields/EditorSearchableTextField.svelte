@@ -150,6 +150,7 @@
 			const errors = new Set<string>();
 
 			const snapshot: InputSnapshot = {
+				editor_context,
 				context_value: editor_context[context_field],
 				string_value,
 				special_adder: $$slots['special-adder']
