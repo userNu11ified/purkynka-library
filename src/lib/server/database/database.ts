@@ -46,10 +46,20 @@ const get_database = async (): Promise<Database> => {
 	return create_empty_database();
 };
 
+const update_database = (database: Database) => {
+	database.readers.forEach((reader) => {
+		if (reader.added_date != undefined) return;
+
+		(reader.added_date = new Date().toISOString()), (reader.last_modified_date = new Date().toISOString());
+	});
+
+	return database;
+};
+
 export const initialize_database = async (): Promise<void> => {
 	await fs.mkdir('./data', { recursive: true });
 
-	const database = await get_database();
+	const database = update_database(await get_database());
 
 	DATABASE.subscribe((v) => {
 		if (v) fs.writeFile('./data/database.json', JSON.stringify(v));

@@ -1,7 +1,13 @@
 import type { ID, Nullable } from '$shared/common_types';
 import { writable, type Writable } from 'svelte/store';
 
-export type ReaderEditorContext = { id: ID; name: string; class_name: ID };
+export type ReaderEditorContext = {
+	id: ID;
+	name: string;
+	class_name: ID;
+	added_date: string;
+	last_modified_date: string;
+};
 export type ReaderEditorErrorContext = {
 	name: Set<string>;
 	class_name: Set<string>;

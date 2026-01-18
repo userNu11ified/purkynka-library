@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { ListItem } from '$client/list/list';
 	import type { ReaderListMappedItem } from '$client/lists/reader_list';
+	import { format_date } from '$shared/book_util';
 
 	export let list_item: ListItem<ReaderListMappedItem>;
 	$: item = list_item[1];
@@ -13,6 +14,8 @@
 <div class="part center" class:even class:searched class:selected>{item.id}</div>
 <div class="part center" class:even class:searched class:selected>{item.name}</div>
 <div class="part center" class:even class:searched class:selected>{item.class_name}</div>
+<div class="part center" class:even class:searched class:selected>{format_date(item.added_date)}</div>
+<div class="part center" class:even class:searched class:selected>{format_date(item.last_modifed_date)}</div>
 
 <style>
 	.part {

@@ -8,9 +8,9 @@
 	import ListAction from '$components/list/ListAction.svelte';
 	import ListOption from '$components/list/ListOption.svelte';
 	import ReaderEditor from '$components/reader_editor/ReaderEditor.svelte';
-	import { map_or_null } from '$shared/book_util';
+	import { format_date, map_or_null } from '$shared/book_util';
 	import type { DatabaseReader } from '$shared/borrow_types';
-	import { get_lowest_missing_id, string_compare } from '$shared/common_util';
+	import { date_compare, get_lowest_missing_id, string_compare } from '$shared/common_util';
 	import Reader from './Reader.svelte';
 
 	let list: List<DatabaseReader, ReaderListMappedItem>;
@@ -43,18 +43,29 @@
 		}
 	};
 
-	const item_mapper: ItemMapper<DatabaseReader, ReaderListMappedItem> = ({ id, name, class_name }) => {
+	const item_mapper: ItemMapper<DatabaseReader, ReaderListMappedItem> = ({
+		id,
+		name,
+		class_name,
+		added_date,
+		last_modified_date
+	}) => {
 		return {
 			id,
 			name,
-			class_name: map_or_null<string>($DATABASE, 'reader_classes', class_name)!
+			class_name: map_or_null<string>($DATABASE, 'reader_classes', class_name)!,
+			added_date: new Date(added_date),
+			last_modifed_date: new Date(last_modified_date)
 		};
 	};
 
 	const sorters: Sorter<ReaderListMappedItem>[] = [
 		([left_index, left_item], [right_index, right_item]) => left_item.id - right_item.id,
 		([left_index, left_item], [right_index, right_item]) => string_compare(left_item.name, right_item.name),
-		([left_index, left_item], [right_index, right_item]) => string_compare(left_item.class_name, right_item.class_name)
+		([left_index, left_item], [right_index, right_item]) => string_compare(left_item.class_name, right_item.class_name),
+		([left_index, left_item], [right_index, right_item]) => date_compare(left_item.added_date, right_item.added_date),
+		([left_index, left_item], [right_index, right_item]) =>
+			date_compare(left_item.last_modifed_date, right_item.last_modifed_date)
 	];
 
 	const filters: Filter<ReaderListMappedItem>[] = [
@@ -62,11 +73,19 @@
 		(items, lowercase_query) =>
 			items.filter(([index, item]) => item.name.toLocaleLowerCase('cs').includes(lowercase_query)),
 		(items, lowercase_query) =>
-			items.filter(([index, item]) => item.class_name.toLocaleLowerCase('cs').includes(lowercase_query))
+			items.filter(([index, item]) => item.class_name.toLocaleLowerCase('cs').includes(lowercase_query)),
+		(items, lowercase_query) => items.filter(([index, item]) => format_date(item.added_date).includes(lowercase_query)),
+		(items, lowercase_query) =>
+			items.filter(([index, item]) => format_date(item.last_modifed_date).includes(lowercase_query))
 	];
 
 	const copy_transformer: CopyTransformer<ReaderListMappedItem> = (items) =>
-		items.map(([index, item]) => `${item.id}\t${item.name}\t${item.class_name}`).join('\n');
+		items
+			.map(
+				([index, item]) =>
+					`${item.id}\t${item.name}\t${item.class_name}\t${format_date(item.added_date)}\t${format_date(item.last_modifed_date)}`
+			)
+			.join('\n');
 </script>
 
 {#if $CURRENTLY_EDITING_READER !== null}
@@ -78,7 +97,7 @@
 <List
 	bind:this={list}
 	local_storage_key="reader-list"
-	headers={['ID čtenáře', 'Jméno', 'Třída']}
+	headers={['ID čtenáře', 'Jméno', 'Třída', 'Přidán', 'Naposled upraven']}
 	items={$DATABASE.readers}
 	{item_mapper}
 	{sorters}

@@ -20,6 +20,7 @@ import type { ID } from '$shared/common_types';
 import fs from 'fs/promises';
 import type { DatabaseReader } from '$shared/borrow_types';
 import { parse } from 'path';
+import { format_date } from '$shared/book_util';
 
 const get_tables = async (): Promise<TransferTables> => {
 	const connection = await mysql.createConnection({
@@ -145,7 +146,9 @@ export const transfer_old_database = async () => {
 		const reader: DatabaseReader = {
 			id: i as ID,
 			name: `${last_name} ${first_name}`,
-			class_name: class_id
+			class_name: class_id,
+			added_date: new Date().toISOString(),
+			last_modified_date: new Date().toISOString()
 		};
 
 		database.readers.push(reader);

@@ -27,12 +27,6 @@
 	export let name: Nullable<string> = null;
 	export let class_name: Nullable<string> = null;
 
-	if (edit_type === 'Upravit čtenáře') {
-		const reader = $DATABASE.readers.find((v) => v.id === reader_id)!;
-		name = reader.name;
-		class_name = map_or_null<string>($DATABASE, 'reader_classes', reader.class_name);
-	}
-
 	let editor_error_context_unsubscriber: Unsubscriber;
 	let has_errors = false;
 
@@ -81,12 +75,22 @@
 		}
 	};
 
-	onMount(
-		() =>
-			(editor_error_context_unsubscriber = editor.editor_error_context.subscribe(
-				(v: ReaderEditorErrorContext) => (has_errors = Object.values(v).findIndex((v) => v.size !== 0) !== -1)
-			))
-	);
+	onMount(() => {
+		editor_error_context_unsubscriber = editor.editor_error_context.subscribe(
+			(v: ReaderEditorErrorContext) => (has_errors = Object.values(v).findIndex((v) => v.size !== 0) !== -1)
+		);
+
+		if (edit_type === 'Upravit čtenáře') {
+			const reader = $DATABASE.readers.find((v) => v.id === reader_id)!;
+
+			name = reader.name;
+			class_name = map_or_null<string>($DATABASE, 'reader_classes', reader.class_name);
+
+			const reader_editor_context = get(editor.editor_context) as ReaderEditorContext;
+			reader_editor_context.added_date = reader.added_date;
+			reader_editor_context.last_modified_date = new Date().toISOString();
+		}
+	});
 
 	onDestroy(() => {
 		editor_error_context_unsubscriber();

@@ -2,17 +2,22 @@ import * as t from 'io-ts';
 import { TMappedBook } from './book_types';
 import { TDate, TID, TNullable, TPositiveInteger } from './common_types';
 
-export const TReader = <ClassNameType extends t.Mixed>(class_name_type: ClassNameType) =>
+export const TReader = <ClassNameType extends t.Mixed, DateType extends t.Mixed>(
+	class_name_type: ClassNameType,
+	date_type: DateType
+) =>
 	t.type({
 		id: TID,
 		name: t.string,
-		class_name: class_name_type
+		class_name: class_name_type,
+		added_date: date_type,
+		last_modified_date: date_type
 	});
 
-export const TDatabaseReader = TReader(TID);
+export const TDatabaseReader = TReader(TID, t.string);
 export type DatabaseReader = t.TypeOf<typeof TDatabaseReader>;
 
-export const TMappedReader = TReader(t.string);
+export const TMappedReader = TReader(t.string, TDate);
 export type MappedReader = t.TypeOf<typeof TMappedReader>;
 
 export const TBorrow = <BookType extends t.Mixed, BorrowerType extends t.Mixed, DateType extends t.Mixed>(

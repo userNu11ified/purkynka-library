@@ -124,7 +124,9 @@
 			const reader: DatabaseReader = {
 				id: get_lowest_missing_id($DATABASE.readers) as ID,
 				name: editor_context['reader'],
-				class_name: editor_context['reader_class']
+				class_name: editor_context['reader_class'],
+				added_date: new Date().toISOString(),
+				last_modified_date: new Date().toISOString()
 			};
 
 			const reader_res = await post_request(`${window.origin}/api/v1/readers`, reader);
@@ -187,9 +189,10 @@
 
 	const option_filter_reader = ([id, item]: [number, DatabaseReader]) => {
 		return reader_class === null
-								? true
-								: map_or_null($DATABASE, 'reader_classes', $DATABASE.readers.find((v) => v.id === id)!.class_name) === reader_class;
-	}
+			? true
+			: map_or_null($DATABASE, 'reader_classes', $DATABASE.readers.find((v) => v.id === id)!.class_name) ===
+					reader_class;
+	};
 </script>
 
 <Editor bind:this={editor} editor_width={pixels(1024)}>
