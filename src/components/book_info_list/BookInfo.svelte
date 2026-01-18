@@ -11,6 +11,7 @@
 </script>
 
 <div class="part center" class:even class:searched class:selected>{item.string_id}</div>
+<div class="part center" class:even class:searched class:selected>{item.is_large ? 'V' : 'm'}</div>
 <div class="part" class:even class:searched class:selected title={item.name ?? ''}><span>{item.name ?? ''}</span></div>
 <div class="part center" class:even class:searched class:selected title={item.publisher ?? ''}>
 	<span>{item.publisher ?? ''}</span>

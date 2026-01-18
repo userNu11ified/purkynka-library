@@ -21,6 +21,7 @@
 
 	const item_mapper = ({
 		string_id,
+		is_large,
 		name,
 		publisher,
 		place_of_publishing,
@@ -33,6 +34,7 @@
 	}: DatabaseBook): BookInfoListMappedItem => {
 		return {
 			string_id,
+			is_large,
 			name: map_or_null<string>($DATABASE, 'book_names', name),
 			publisher: map_or_null<string>($DATABASE, 'publishers', publisher),
 			place_of_publishing: map_or_null<string>($DATABASE, 'places_of_publishing', place_of_publishing),
@@ -47,6 +49,7 @@
 
 	const sorters: Sorter<BookInfoListMappedItem>[] = [
 		([left_id, left_item], [right_id, right_item]) => left_id - right_id,
+		([left_id, left_item], [right_id, right_item]) => +left_item.is_large - +right_item.is_large,
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.name, right_item.name),
 		([left_id, left_item], [right_id, right_item]) => string_compare(left_item.publisher, right_item.publisher),
 		([left_id, left_item], [right_id, right_item]) =>
@@ -70,6 +73,10 @@
 
 			return null;
 		},
+		(items, lowercase_query) =>
+			items.filter(
+				([id, item]) => (item.is_large && lowercase_query === 'v') || (!item.is_large && lowercase_query === 'm')
+			),
 		(items, lowercase_query) =>
 			items.filter(([id, item]) => (item.name ?? '').toLocaleLowerCase('cs').includes(lowercase_query)),
 		(items, lowercase_query) =>
@@ -97,7 +104,7 @@
 	const copy_transformer: CopyTransformer<BookInfoListMappedItem> = (items) =>
 		items
 			.map(([id, item]) => {
-				return `${item.string_id}\t${item.name ?? ''}\t${item.publisher ?? ''}\t${item.place_of_publishing ?? ''}\t${item.year_of_publishing ?? ''}\t${item.edition ?? ''}\t${item.page_count ?? ''}\t${item.literature_type?.short_name ?? ''}\t${item.price ?? ''}\t${item.giver ?? ''}`;
+				return `${item.string_id}\t${item.is_large ? 'V' : 'm'}\t${item.name ?? ''}\t${item.publisher ?? ''}\t${item.place_of_publishing ?? ''}\t${item.year_of_publishing ?? ''}\t${item.edition ?? ''}\t${item.page_count ?? ''}\t${item.literature_type?.short_name ?? ''}\t${item.price ?? ''}\t${item.giver ?? ''}`;
 			})
 			.join('\n');
 
@@ -115,7 +122,7 @@
 	bind:this={list}
 	bind:current_items
 	local_storage_key="book-list"
-	headers={['Přír. č.', 'Název knihy', 'Naklad.', 'Místo', 'Rok', 'Číslo', 'Str.', 'Typ', 'Cena', 'Od']}
+	headers={['Přír. č.', '', 'Název knihy', 'Naklad.', 'Místo', 'Rok', 'Číslo', 'Str.', 'Typ', 'Cena', 'Od']}
 	items={$DATABASE.books}
 	{item_mapper}
 	{sorters}
@@ -123,6 +130,7 @@
 	{copy_transformer}
 >
 	<BookInfo slot="item" let:list_item {list_item} let:even {even} let:searched {searched} let:selected {selected} />
+
 	<svelte:fragment slot="options" let:item>
 		<ListOption icon_type="book-edit" on:click={() => on_click_edit_book(item[0])}>Upravit</ListOption>
 	</svelte:fragment>

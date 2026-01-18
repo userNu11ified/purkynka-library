@@ -3,6 +3,7 @@ import type { Nullable } from '$shared/common_types';
 
 export type BookInfoListMappedItem = {
 	string_id: string;
+	is_large: boolean;
 	name: Nullable<string>;
 	publisher: Nullable<string>;
 	place_of_publishing: Nullable<string>;
