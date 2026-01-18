@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { DATABASE } from '$client/database/database';
 	import { CURRENTLY_EDITING_READER } from '$client/editors/reader_editor';
 	import type { CopyTransformer, Filter, ItemMapper, Sorter } from '$client/list/list';
@@ -70,8 +71,22 @@
 
 	const filters: Filter<ReaderListMappedItem>[] = [
 		(items, lowercase_query) => items.filter(([index, item]) => `${item.id}`.includes(lowercase_query)),
-		(items, lowercase_query) =>
-			items.filter(([index, item]) => item.name.toLocaleLowerCase('cs').includes(lowercase_query)),
+		(items, lowercase_query) => {
+			if (list === undefined) return null;
+
+			let found_items = items.filter(([index, item]) => item.name.toLocaleLowerCase('cs').includes(lowercase_query));
+			found_items.sort((a, b) => b[0] - a[0]);
+
+			if (found_items.length === 0) return null;
+
+			let go_to = found_items[0][0];
+			list.go_to_index(
+				items.findIndex(([index, item]) => index === go_to),
+				true
+			);
+
+			return null;
+		},
 		(items, lowercase_query) =>
 			items.filter(([index, item]) => item.class_name.toLocaleLowerCase('cs').includes(lowercase_query)),
 		(items, lowercase_query) => items.filter(([index, item]) => format_date(item.added_date).includes(lowercase_query)),
