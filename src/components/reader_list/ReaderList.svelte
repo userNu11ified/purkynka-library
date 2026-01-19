@@ -70,20 +70,39 @@
 	];
 
 	const filters: Filter<ReaderListMappedItem>[] = [
-		(items, lowercase_query) => items.filter(([index, item]) => `${item.id}`.includes(lowercase_query)),
 		(items, lowercase_query) => {
 			if (list === undefined) return null;
 
+			if (lowercase_query.length === 0) {
+				list.go_to_index(undefined, true);
+				return null;
+			}
+
+			let found_index = items.findIndex(([index, item]) => item.id === +lowercase_query);
+			list.go_to_index(found_index, true);
+
+			return null;
+		},
+		(items, lowercase_query) => {
+			if (list === undefined) return null;
+
+			if (lowercase_query.length === 0) {
+				list.go_to_index(undefined, true);
+				return null;
+			}
+
 			let found_items = items.filter(([index, item]) => item.name.toLocaleLowerCase('cs').includes(lowercase_query));
+			if (found_items.length === 0) {
+				list.go_to_index(undefined, true);
+				return null;
+			}
+
 			found_items.sort((a, b) => b[0] - a[0]);
 
-			if (found_items.length === 0) return null;
-
 			let go_to = found_items[0][0];
-			list.go_to_index(
-				items.findIndex(([index, item]) => index === go_to),
-				true
-			);
+			let found_index = items.findIndex(([index, item]) => index === go_to);
+
+			list.go_to_index(found_index === -1 ? undefined : found_index, true);
 
 			return null;
 		},
