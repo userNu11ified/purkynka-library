@@ -53,6 +53,11 @@ const update_database = (database: Database) => {
 		(reader.added_date = new Date().toISOString()), (reader.last_modified_date = new Date().toISOString());
 	});
 
+	database.readers.forEach((reader) => {
+		reader.added_date = null;
+		reader.last_modified_date = null;
+	});
+
 	return database;
 };
 

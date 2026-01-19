@@ -55,8 +55,8 @@
 			id,
 			name,
 			class_name: map_or_null<string>($DATABASE, 'reader_classes', class_name)!,
-			added_date: new Date(added_date),
-			last_modifed_date: new Date(last_modified_date)
+			added_date: added_date ? new Date(added_date) : null,
+			last_modifed_date: last_modified_date ? new Date(last_modified_date) : null
 		};
 	};
 
@@ -89,16 +89,21 @@
 		},
 		(items, lowercase_query) =>
 			items.filter(([index, item]) => item.class_name.toLocaleLowerCase('cs').includes(lowercase_query)),
-		(items, lowercase_query) => items.filter(([index, item]) => format_date(item.added_date).includes(lowercase_query)),
 		(items, lowercase_query) =>
-			items.filter(([index, item]) => format_date(item.last_modifed_date).includes(lowercase_query))
+			items.filter(([index, item]) =>
+				item.added_date ? format_date(item.added_date).includes(lowercase_query) : false
+			),
+		(items, lowercase_query) =>
+			items.filter(([index, item]) =>
+				item.last_modifed_date ? format_date(item.last_modifed_date).includes(lowercase_query) : false
+			)
 	];
 
 	const copy_transformer: CopyTransformer<ReaderListMappedItem> = (items) =>
 		items
 			.map(
 				([index, item]) =>
-					`${item.id}\t${item.name}\t${item.class_name}\t${format_date(item.added_date)}\t${format_date(item.last_modifed_date)}`
+					`${item.id}\t${item.name}\t${item.class_name}\t${item.added_date ? format_date(item.added_date) : ''}\t${item.last_modifed_date ? format_date(item.last_modifed_date) : ''}`
 			)
 			.join('\n');
 </script>

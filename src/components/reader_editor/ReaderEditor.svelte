@@ -54,6 +54,8 @@
 		if (has_errors) return;
 
 		const reader_editor_context = (await parse_context_data()) as ReaderEditorContext;
+		reader_editor_context.added_date = new Date().toISOString();
+		reader_editor_context.last_modified_date = new Date().toISOString();
 
 		const res = await post_request(`${window.origin}/api/v1/readers`, reader_editor_context);
 
@@ -65,7 +67,11 @@
 	const on_click_save = async () => {
 		if (has_errors) return;
 
+		const reader = $DATABASE.readers.find((v) => v.id === reader_id)!;
+
 		const reader_editor_context = (await parse_context_data()) as ReaderEditorContext;
+		reader_editor_context.added_date = reader.added_date;
+		reader_editor_context.last_modified_date = new Date().toISOString();
 
 		const res = await put_request(`${window.origin}/api/v1/readers/${reader_id}`, reader_editor_context);
 
@@ -87,6 +93,7 @@
 			class_name = map_or_null<string>($DATABASE, 'reader_classes', reader.class_name);
 
 			const reader_editor_context = get(editor.editor_context) as ReaderEditorContext;
+			console.log(reader_editor_context);
 			reader_editor_context.added_date = reader.added_date;
 			reader_editor_context.last_modified_date = new Date().toISOString();
 		}

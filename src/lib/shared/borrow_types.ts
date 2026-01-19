@@ -10,8 +10,8 @@ export const TReader = <ClassNameType extends t.Mixed, DateType extends t.Mixed>
 		id: TID,
 		name: t.string,
 		class_name: class_name_type,
-		added_date: date_type,
-		last_modified_date: date_type
+		added_date: TNullable(date_type),
+		last_modified_date: TNullable(date_type)
 	});
 
 export const TDatabaseReader = TReader(TID, t.string);

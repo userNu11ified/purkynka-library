@@ -14,8 +14,12 @@
 <div class="part center" class:even class:searched class:selected>{item.id}</div>
 <div class="part center" class:even class:searched class:selected>{item.name}</div>
 <div class="part center" class:even class:searched class:selected>{item.class_name}</div>
-<div class="part center" class:even class:searched class:selected>{format_date(item.added_date)}</div>
-<div class="part center" class:even class:searched class:selected>{format_date(item.last_modifed_date)}</div>
+<div class="part center" class:even class:searched class:selected>
+	{item.added_date ? format_date(item.added_date) : ''}
+</div>
+<div class="part center" class:even class:searched class:selected>
+	{item.last_modifed_date ? format_date(item.last_modifed_date) : ''}
+</div>
 
 <style>
 	.part {

@@ -5,9 +5,10 @@ export type ReaderEditorContext = {
 	id: ID;
 	name: string;
 	class_name: ID;
-	added_date: string;
-	last_modified_date: string;
+	added_date: Nullable<string>;
+	last_modified_date: Nullable<string>;
 };
+
 export type ReaderEditorErrorContext = {
 	name: Set<string>;
 	class_name: Set<string>;
