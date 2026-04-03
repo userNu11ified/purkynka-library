@@ -1,4 +1,4 @@
-import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { index, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { boolean, date, foreignKeyId, primaryKeyId, timestampColumns } from '../schema_utils';
 import {
 	bookNames,
@@ -9,33 +9,44 @@ import {
 } from './lookup_tables';
 import { literatureTypes, udc } from './shorthand_tables';
 
-export const books = sqliteTable('books', {
-	id: primaryKeyId(),
+export const books = sqliteTable(
+	'books',
+	{
+		id: primaryKeyId(),
 
-	isLarge: boolean().notNull().default(false),
-	bookNameId: foreignKeyId(bookNames.id),
+		isLarge: boolean().notNull().default(false),
+		bookNameId: foreignKeyId(bookNames.id),
 
-	publisherId: foreignKeyId(publishers.id),
-	placeOfPublishingId: foreignKeyId(placesOfPublishing.id),
-	yearOfPublishing: text(),
+		publisherId: foreignKeyId(publishers.id),
+		placeOfPublishingId: foreignKeyId(placesOfPublishing.id),
+		yearOfPublishing: text(),
 
-	edition: text(),
-	pageCount: text(),
+		edition: text(),
+		pageCount: text(),
 
-	literatureTypeId: foreignKeyId(literatureTypes.id),
-	udcId: foreignKeyId(udc.id),
+		literatureTypeId: foreignKeyId(literatureTypes.id),
+		udcId: foreignKeyId(udc.id),
 
-	addDate: date(),
-	price: text(),
-	documentNumber: text(),
-	obtainedFromId: foreignKeyId(obtainedFrom.id),
+		addDate: date(),
+		price: text(),
+		documentNumber: text(),
+		obtainedFromId: foreignKeyId(obtainedFrom.id),
 
-	discardDate: date(),
-	discardReasonId: foreignKeyId(discardReasons.id),
-	discardDocument: text(),
+		discardDate: date(),
+		discardReasonId: foreignKeyId(discardReasons.id),
+		discardDocument: text(),
 
-	annotation: text(),
-	note: text(),
+		annotation: text(),
+		note: text(),
 
-	...timestampColumns()
-});
+		...timestampColumns()
+	},
+	(s) => [
+		index('bookNameFkIdx').on(s.bookNameId),
+		index('publisherFkIdx').on(s.publisherId),
+		index('placeOfPublishingFkIdx').on(s.placeOfPublishingId),
+		index('literatureTypeFkIdx').on(s.literatureTypeId),
+		index('udcFkIdx').on(s.udcId),
+		index('obtainedFromFkIdx').on(s.obtainedFromId)
+	]
+);
