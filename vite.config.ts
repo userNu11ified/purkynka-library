@@ -5,6 +5,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 export default defineConfig({
 	plugins: [sveltekit(), devtoolsJson()],
 	test: {
+		reporters: ['tree'],
 		expect: { requireAssertions: true },
 		projects: [
 			{
