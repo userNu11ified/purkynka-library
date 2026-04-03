@@ -20,10 +20,10 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$client: 'src/lib/client',
+			$style: 'src/lib/client/style',
+			$components: 'src/lib/client/components',
 			$server: 'src/lib/server',
-			$shared: 'src/lib/shared',
-			$style: 'src/style',
-			$components: 'src/components'
+			$shared: 'src/lib/shared'
 		}
 	}
 };
