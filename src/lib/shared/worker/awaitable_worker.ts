@@ -45,10 +45,10 @@ export class AwaitableWorker<Request = unknown, Response = unknown> {
 		return resolver;
 	}
 
-	public sendAsyncRequest(request: Request): Promise<Response> {
+	public sendAsyncRequest<R extends Response = Response>(request: Request): Promise<R> {
 		return new Promise((res) => {
 			const wrappedRequest = AwaitableWorker.wrapRequest(this.nextId++, request);
-			this.promiseResolvers.set(wrappedRequest.id, res);
+			this.promiseResolvers.set(wrappedRequest.id, res as (v: Response) => void);
 
 			this.worker.postMessage(wrappedRequest);
 		});
