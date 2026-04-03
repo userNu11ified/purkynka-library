@@ -2,6 +2,7 @@ import { env } from 'bun';
 import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
+import { databaseWorkerLogger } from './database_worker';
 
 const PRAGMAS = [
 	'synchronous = NORMAL', // Should already be enabled by WAL, increases performance
@@ -17,15 +18,15 @@ export const initializeDatabase = () => {
 
 	const sqlite = new Database(`data/${env.DB_FILE_NAME}`);
 	PRAGMAS.forEach((pragma) => sqlite.run(`PRAGMA ${pragma}`));
-	console.log('Created SQLite Client!');
+	databaseWorkerLogger.debug('Created SQLite Client!');
 
 	const db = drizzle({ client: sqlite, casing: 'camelCase' });
-	console.log('Created Drizzle Client!');
+	databaseWorkerLogger.debug('Created Drizzle Client!');
 
 	migrate(db, {
 		migrationsFolder: 'drizzle'
 	});
-	console.log('Applied Database Migrations!');
+	databaseWorkerLogger.debug('Applied Database Migrations!');
 
 	return db;
 };

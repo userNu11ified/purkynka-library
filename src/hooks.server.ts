@@ -1,3 +1,4 @@
+import { serverLogger } from '$server/server_loggers';
 import { DatabaseWorker } from '$server/worker/workers';
 
-await DatabaseWorker.initialized.then(() => console.log('DatabaseWorker Initialized!'));
+await DatabaseWorker.initialized.then(() => serverLogger.info('Database Worker Initialized!'));
