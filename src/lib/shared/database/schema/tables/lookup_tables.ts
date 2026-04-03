@@ -1,5 +1,5 @@
 import { SQLiteColumnBuilder, sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { primaryKeyId } from '../schema_utils';
+import { primaryKeyId, timestampColumns } from '../schema_utils';
 
 const createLookupTable = <
 	const TableName extends string,
@@ -10,7 +10,9 @@ const createLookupTable = <
 ) =>
 	sqliteTable(tableName, {
 		id: primaryKeyId(),
-		value: valueColumn
+		value: valueColumn,
+
+		...timestampColumns()
 	});
 
 const createStringLookupTable = <const TableName extends string>(tableName: TableName) =>

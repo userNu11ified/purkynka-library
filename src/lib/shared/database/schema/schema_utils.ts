@@ -7,3 +7,13 @@ export const foreignKeyId = <const ForeignColumn extends SQLiteColumn>(
 
 export const boolean = () => int({ mode: 'boolean' });
 export const date = () => int({ mode: 'timestamp' });
+
+export const timestampColumns = () => ({
+	createdOn: date()
+		.notNull()
+		.$default(() => new Date()),
+
+	updatedOn: date()
+		.notNull()
+		.$onUpdate(() => new Date())
+});

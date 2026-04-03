@@ -1,5 +1,5 @@
 import { sqliteTable, text, type SQLiteColumnBuilder } from 'drizzle-orm/sqlite-core';
-import { primaryKeyId } from '../schema_utils';
+import { primaryKeyId, timestampColumns } from '../schema_utils';
 
 const createShorthandTable = <
 	const TableName extends string,
@@ -13,7 +13,9 @@ const createShorthandTable = <
 	sqliteTable(tableName, {
 		id: primaryKeyId(),
 		shortName: shortNameColumn,
-		longName: longNameColumn
+		longName: longNameColumn,
+
+		...timestampColumns()
 	});
 
 const createStringShorthandTable = <const TableName extends string>(tableName: TableName) =>

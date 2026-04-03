@@ -1,0 +1,20 @@
+ALTER TABLE `authorNames` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `authorNames` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `bookNames` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `bookNames` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `discardReasons` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `discardReasons` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `obtainedFrom` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `obtainedFrom` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `placesOfPublishing` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `placesOfPublishing` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `publishers` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `publishers` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `literatureTypes` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `literatureTypes` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `udc` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `udc` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `books` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `books` ADD `updatedOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `authorToBook` ADD `createdOn` integer NOT NULL;--> statement-breakpoint
+ALTER TABLE `authorToBook` ADD `updatedOn` integer NOT NULL;

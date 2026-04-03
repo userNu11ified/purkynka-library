@@ -1,5 +1,5 @@
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { boolean, date, foreignKeyId, primaryKeyId } from '../schema_utils';
+import { boolean, date, foreignKeyId, primaryKeyId, timestampColumns } from '../schema_utils';
 import {
 	bookNames,
 	discardReasons,
@@ -35,5 +35,7 @@ export const books = sqliteTable('books', {
 	discardDocument: text(),
 
 	annotation: text(),
-	note: text()
+	note: text(),
+
+	...timestampColumns()
 });
