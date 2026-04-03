@@ -1,0 +1,28 @@
+:root {
+	--bg-primary: hsl(0, 0%, 8%);
+	--bg-hover: hsl(0, 0%, 12%);
+
+	--bg-primary-alt: hsl(0, 0%, 10%);
+	--bg-hover-alt: hsl(0, 0%, 14%);
+
+	--border-color: hsl(0, 0%, 15%);
+	--border-width: 1px;
+	--border-style: solid;
+	--border: var(--border-width) var(--border-style) var(--border-color);
+
+	--text-header: hsl(0, 0%, 100%);
+	--text-primary: hsl(0, 0%, 85%);
+	--text-muted: hsl(0, 0%, 70%);
+	--text-disabled: hsl(0, 0%, 50%);
+
+	--information-color: hsl(219, 85%, 66%);
+	--success-color: hsl(95, 69%, 62%);
+	--warning-color: hsl(49, 85%, 64%);
+	--error-color: hsl(3, 60%, 64%);
+
+	--text-link: var(--information-color);
+	--text-link-visited: #6a3cdd;
+
+	--scrollbar-color: hsl(0, 0%, 25%);
+	--scrollbar-width: 10px;
+}

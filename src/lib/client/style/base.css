@@ -1,0 +1,33 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+
+	margin: 0;
+	padding: 0;
+
+	color: inherit;
+	font-family: inherit;
+}
+
+div {
+	background-color: var(--bg-primary);
+	color: var(--text-primary);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: var(--text-title);
+}
+
+a {
+	color: var(--text-link);
+}
+
+a:visited {
+	color: var(--text-link-visited);
+}
