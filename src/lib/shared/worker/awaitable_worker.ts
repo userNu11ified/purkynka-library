@@ -87,10 +87,10 @@ export class AwaitableWorker<Request = unknown, Response = unknown> {
 
 	public static async setupWorker<Request, Response, Context = unknown>(
 		worker: Worker,
-		init: () => Promise<Context>,
+		createContext: () => Promise<Context>,
 		requestHandler: (context: Context, request: Request) => Promise<Response>
 	) {
-		const context = await init();
+		const context = await createContext();
 		worker.postMessage({ $type: 'initialized' } satisfies AwaitableWorkerInitialized);
 
 		worker.onmessage = async (e: MessageEvent<AwaitableWorkerRequest<Request>>) => {
