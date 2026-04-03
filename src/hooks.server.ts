@@ -1,4 +1,3 @@
-import db from '$server/db/db';
+import { DatabaseWorker } from '$server/worker/workers';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-db;
+await DatabaseWorker.initialized.then(() => console.log('DatabaseWorker Initialized!'));
