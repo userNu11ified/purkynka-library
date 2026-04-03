@@ -11,7 +11,7 @@ export default defineConfig({
 	dialect: 'sqlite',
 	out: 'drizzle',
 	casing: 'camelCase',
-	schema: 'src/lib/shared/database/schema/schema.ts',
+	schema: 'src/lib/shared/database/schema.ts',
 	dbCredentials: {
 		url: `data/${env.DB_FILE_NAME}`
 	}
