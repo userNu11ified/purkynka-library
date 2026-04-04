@@ -282,7 +282,6 @@ describe('Database Worker', async () => {
 
 				if (Result.isOk(updateResult)) {
 					const { values } = updateResult.value;
-					console.log(values);
 					expect(values[0]).toMatchObject(data.updateOneResult);
 				}
 			});
