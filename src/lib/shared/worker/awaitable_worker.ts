@@ -45,13 +45,16 @@ export class AwaitableWorker<Request = unknown, Response = unknown> {
 		return resolver;
 	}
 
-	public sendAsyncRequest<R extends Response = Response>(request: Request): Promise<R> {
-		return new Promise((res) => {
-			const wrappedRequest = AwaitableWorker.wrapRequest(this.nextId++, request);
-			this.promiseResolvers.set(wrappedRequest.id, res as (v: Response) => void);
+	public async sendAsyncRequest<R extends Response = Response>(request: Request): Promise<R> {
+		return this.initialized.then(
+			() =>
+				new Promise((res) => {
+					const wrappedRequest = AwaitableWorker.wrapRequest(this.nextId++, request);
+					this.promiseResolvers.set(wrappedRequest.id, res as (v: Response) => void);
 
-			this.worker.postMessage(wrappedRequest);
-		});
+					this.worker.postMessage(wrappedRequest);
+				})
+		);
 	}
 
 	public handleResponse(awaitableWorkerResponse: AwaitableWorkerResponse<Response>) {
