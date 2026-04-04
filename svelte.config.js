@@ -23,7 +23,8 @@ const config = {
 			$style: 'src/lib/client/style',
 			$components: 'src/lib/client/components',
 			$server: 'src/lib/server',
-			$shared: 'src/lib/shared'
+			$shared: 'src/lib/shared',
+			$test: 'src/test'
 		}
 	}
 };
