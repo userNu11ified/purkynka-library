@@ -1,5 +1,5 @@
+import { Option } from '$shared/types/option';
 import { describe, expect, it } from 'vitest';
-import { Option } from './option';
 
 describe('Option', () => {
 	const some = Option.some('Test');

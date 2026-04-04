@@ -1,5 +1,5 @@
+import { Result } from '$shared/types/result';
 import { describe, expect, it } from 'vitest';
-import { Result } from './result';
 
 describe('Result', () => {
 	const ok = Result.ok('Ok');
