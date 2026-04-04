@@ -22,4 +22,12 @@ describe('Result', () => {
 		expect(Result.isOk(error)).toBe(false);
 		expect(Result.isError(error)).toBe(true);
 	});
+
+	it('Flattens Result<T, E>', () => {
+		const flattenedOk = Result.flatten(Result.ok({ value: true }));
+		const flattenedError = Result.flatten(Result.error({ value: false }));
+
+		expect(flattenedOk).toMatchObject({ $type: 'ok', value: true });
+		expect(flattenedError).toMatchObject({ $type: 'error', value: false });
+	});
 });

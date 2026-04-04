@@ -22,4 +22,12 @@ describe('Option', () => {
 		expect(Option.isSome(none)).toBe(false);
 		expect(Option.isNone(none)).toBe(true);
 	});
+
+	it('Flattens Option<T>', () => {
+		const flattenedSome = Option.flatten(Option.some({ value: true }));
+		const flattenedNone = Option.flatten(Option.none());
+
+		expect(flattenedSome).toMatchObject({ $type: 'some', value: true });
+		expect(flattenedNone).toMatchObject({ $type: 'none' });
+	});
 });
