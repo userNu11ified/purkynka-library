@@ -34,10 +34,10 @@ export class Logger {
 	private namespaces: string[];
 	private namespacesString: string;
 
-	private static get MIN_LOG_LEVEL(): LogLevel {
+	public static get MIN_LOG_LEVEL(): LogLevel {
 		if (env.VITEST) return 'WARNING';
-		else if (env.DEV) return 'DEBUG';
-		else return 'INFO';
+		else if (env.PROD) return 'INFO';
+		else return 'DEBUG';
 	}
 
 	constructor(namespaces: string[]) {
