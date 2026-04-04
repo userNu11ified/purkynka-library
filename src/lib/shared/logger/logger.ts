@@ -1,9 +1,12 @@
 import { bold, cyan, dim, green, magenta, type Ansis } from 'ansis';
+import { env } from 'bun';
 
 const STRING_REGEX = /".*"/g;
 const BOOLEAN_REGEX = /true|false/g;
 
 export type LogLevel = 'DEBUG' | 'INFO' | 'WARNING' | 'ERROR' | 'FATAL';
+export const LogLevels: LogLevel[] = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'FATAL'];
+
 const COLORIZERS: { [Key in LogLevel]: { timestamp: Ansis; coloredLogLevel: string } } = {
 	DEBUG: {
 		timestamp: dim.blue,
@@ -31,6 +34,12 @@ export class Logger {
 	private namespaces: string[];
 	private namespacesString: string;
 
+	private static get MIN_LOG_LEVEL(): LogLevel {
+		if (env.VITEST) return 'WARNING';
+		else if (env.DEV) return 'DEBUG';
+		else return 'INFO';
+	}
+
 	constructor(namespaces: string[]) {
 		this.namespaces = namespaces;
 		this.namespacesString = cyan`[${this.namespaces.join(' / ')}]`;
@@ -56,6 +65,8 @@ export class Logger {
 		additionalData?: object,
 		logTo: (...data: unknown[]) => void = console.log
 	) {
+		if (LogLevels.indexOf(logLevel) < LogLevels.indexOf(Logger.MIN_LOG_LEVEL)) return;
+
 		const colorizer = COLORIZERS[logLevel];
 
 		const timestamp = colorizer.timestamp(this.getTimestamp());
