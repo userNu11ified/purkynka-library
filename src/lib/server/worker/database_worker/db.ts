@@ -15,6 +15,7 @@ export const getDatabaseFilePath = (databaseWorkerConfig: DatabaseWorkerConfig) 
 };
 
 const PRAGMAS = [
+	'journal_mode = WAL', // Enable WAL journal mode, improves performance
 	'synchronous = NORMAL', // Should already be enabled by WAL, increases performance
 	'cache_size = 8192', // Increase cache size to improve performance
 	'temp_store = MEMORY', // Store temporary tables in memory to improve performance
