@@ -37,6 +37,11 @@ const flatten = <T, E>(result: Result<T, E>): FlatResult<T, E> => ({
 	...result.value
 });
 
+const unwrap = <T, E>(result: Result<T, E>): T => {
+	if (isError(result)) throw new Error('Tried to unwrap a ResultError!');
+	return result.value;
+};
+
 export const Result = {
 	ok,
 	error,
@@ -45,5 +50,7 @@ export const Result = {
 
 	flatten,
 	isFlatOk,
-	isFlatError
+	isFlatError,
+
+	unwrap
 };

@@ -30,4 +30,9 @@ describe('Result', () => {
 		expect(flattenedOk).toMatchObject({ $type: 'ok', value: true });
 		expect(flattenedError).toMatchObject({ $type: 'error', value: false });
 	});
+
+	it('Unwraps Result<T, E>', () => {
+		expect(Result.unwrap(ok)).toBe('Ok');
+		expect(() => Result.unwrap(error)).toThrow();
+	});
 });

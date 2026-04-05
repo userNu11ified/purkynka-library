@@ -30,4 +30,9 @@ describe('Option', () => {
 		expect(flattenedSome).toMatchObject({ $type: 'some', value: true });
 		expect(flattenedNone).toMatchObject({ $type: 'none' });
 	});
+
+	it('Unwraps Option<T>', () => {
+		expect(Option.unwrap(some)).toBe('Test');
+		expect(() => Option.unwrap(none)).toThrow();
+	});
 });

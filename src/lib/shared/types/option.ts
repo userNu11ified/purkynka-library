@@ -32,6 +32,11 @@ const isFlatNone = <T>(flatOption: FlatOption<T>): flatOption is FlatOptionNone 
 const flatten = <T>(option: Option<T>): FlatOption<T> =>
 	isNone(option) ? option : { $type: 'some', ...option.value };
 
+const unwrap = <T>(option: Option<T>): T => {
+	if (isNone(option)) throw new Error('Tried to unwrap an OptionNone!');
+	return option.value;
+};
+
 export const Option = {
 	some,
 	none,
@@ -40,5 +45,7 @@ export const Option = {
 
 	flatten,
 	isFlatSome,
-	isFlatNone
+	isFlatNone,
+
+	unwrap
 };
