@@ -1,19 +1,30 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import type { Pathname } from '$app/types';
+	import { resolve as svelteResolve } from '$app/paths';
 	import type { Snippet } from 'svelte';
 	import Icon, { type IconType } from '../icon/Icon.svelte';
 	import { getSidebarExpanded } from './ViewWithSidebar.svelte';
 	import { page } from '$app/state';
+	import type { Pathname } from '$app/types';
+	import type { ResolvedPathname } from '$app/types';
 
-	let { href, iconType, children }: { href: Pathname; iconType: IconType; children: Snippet } =
-		$props();
+	let {
+		href,
+		iconType,
+		iconWidth = 28,
+		children
+	}: {
+		href: Pathname;
+		iconType: IconType;
+		iconWidth?: number;
+		children: Snippet;
+	} = $props();
 
 	const opened = $derived(page.url.pathname.startsWith(href));
+	const resolve = svelteResolve as (path: Pathname) => ResolvedPathname;
 </script>
 
 <a class="sidebar-link button-like center-flex flex-column" class:opened href={resolve(href)}>
-	<Icon {iconType} width={28} />
+	<Icon {iconType} width={iconWidth} />
 	{#if getSidebarExpanded()}
 		<span class="sidebar-link-text">{@render children()}</span>
 	{/if}
