@@ -1,0 +1,39 @@
+.fill-container {
+	width: 100%;
+	height: 100%;
+}
+
+.inverse-grid {
+	display: grid;
+	gap: var(--border-width);
+	background-color: var(--border-color);
+}
+
+.center-grid {
+	display: grid;
+	place-items: center;
+}
+
+.flex {
+	display: flex;
+}
+
+.center-flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.flex-column {
+	display: flex;
+	flex-direction: column;
+}
+
+a.button-like {
+	color: var(--text-muted);
+	text-decoration: none;
+}
+
+.button-like:hover {
+	background-color: var(--bg-hover);
+}

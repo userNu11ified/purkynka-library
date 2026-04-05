@@ -5,12 +5,14 @@
 
 	margin: 0;
 	padding: 0;
+	border: none;
 
 	color: inherit;
 	font-family: inherit;
 }
 
-div {
+div,
+button {
 	background-color: var(--bg-primary);
 	color: var(--text-primary);
 }
@@ -30,4 +32,12 @@ a {
 
 a:visited {
 	color: var(--text-link-visited);
+}
+
+button {
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: var(--bg-hover);
 }
