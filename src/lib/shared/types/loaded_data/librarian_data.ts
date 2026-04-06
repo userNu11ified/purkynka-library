@@ -16,6 +16,7 @@ import { createContext } from 'svelte';
 import { Result, type ResultError, type ResultOk } from '../result';
 import type { DatabaseWorkerError } from '$server/worker/database_worker/messages/error';
 import { TableData } from './table_data.svelte';
+import { JunctionTableData } from './junction_table_data.svelte';
 
 const [getLibrarianDataContext, setLibrarianDataContext] = createContext<LibrarianData>();
 
@@ -31,7 +32,7 @@ export class LibrarianData {
 	public udc: TableData<UDCSelect>;
 
 	public books: TableData<BookSelect>;
-	public authorToBook: TableData<AuthorToBookSelect>;
+	public authorToBook: JunctionTableData<AuthorToBookSelect, number, number>;
 
 	public loaded: Promise<void>;
 	private loadedResolver!: () => void;
@@ -48,7 +49,10 @@ export class LibrarianData {
 		this.udc = new TableData();
 
 		this.books = new TableData();
-		this.authorToBook = new TableData();
+		this.authorToBook = new JunctionTableData(
+			(v) => v.bookId,
+			(v) => v.authorId
+		);
 
 		this.loaded = new Promise((res) => (this.loadedResolver = res));
 	}

@@ -1,5 +1,5 @@
 export class TableData<Select> {
-	private array: Select[];
+	protected array: Select[];
 
 	constructor() {
 		this.array = $state([]);

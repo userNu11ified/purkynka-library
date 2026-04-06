@@ -1,5 +1,5 @@
 import { SendSelectRequest } from '$server/worker/database_worker/messages/select';
-import type { LibrarianLoadedData } from '$shared/types/loaded_data/loaded_data';
+import type { LoadedLibrarianData } from '$shared/types/loaded_data/librarian_data';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = () => {
@@ -17,6 +17,6 @@ export const load: LayoutServerLoad = () => {
 
 			books: SendSelectRequest('books'),
 			authorToBook: SendSelectRequest('authorToBook')
-		} satisfies LibrarianLoadedData
+		} satisfies LoadedLibrarianData
 	};
 };
