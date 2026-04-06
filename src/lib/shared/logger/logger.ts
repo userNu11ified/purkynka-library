@@ -70,11 +70,11 @@ export class Logger {
 			stringifiedObject = stringifiedObject.replaceAll(BOOLEAN_REGEX, magenta('$&'));
 
 			const lines = stringifiedObject.split('\n');
-			lines.forEach((line, i) =>
-				console.log(
+			const coloredLines = lines.map(
+				(line, i) =>
 					`${colorizer.timestamp(i === 0 ? '╭─' : i == lines.length - 1 ? '╰─' : '├─')} ${line}`
-				)
 			);
+			logTo(coloredLines.join('\n'));
 		}
 	}
 
