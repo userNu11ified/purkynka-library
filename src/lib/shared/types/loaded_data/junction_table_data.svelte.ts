@@ -13,23 +13,28 @@ export class JunctionTableData<Select, PrimaryKey, SecondaryKey> extends TableDa
 	) {
 		super();
 
-		this.byPrimaryKey = $derived(this.combineEntries(this.array, this.primaryKeyExtractor));
-		this.bySecondaryKey = $derived(this.combineEntries(this.array, this.secondaryKeyExtractor));
+		this.byPrimaryKey = new SvelteMap();
+		this.bySecondaryKey = new SvelteMap();
 	}
 
-	private combineEntries<const Key extends PrimaryKey | SecondaryKey>(
+	public initialize(arrayValues: Select[]) {
+		super.initialize(arrayValues);
+
+		this.initializeMap(this.byPrimaryKey, arrayValues, this.primaryKeyExtractor);
+		this.initializeMap(this.bySecondaryKey, arrayValues, this.secondaryKeyExtractor);
+	}
+
+	private initializeMap<const Key extends PrimaryKey | SecondaryKey>(
+		addTo: SvelteMap<Key, Select[]>,
 		values: Select[],
 		keyExtractor: KeyExtractor<Select, Key>
 	) {
-		const combinedEntries: SvelteMap<Key, Select[]> = new SvelteMap();
 		values.forEach((v) => {
 			const key = keyExtractor(v);
 
-			if (combinedEntries.has(key)) combinedEntries.get(key)!.push(v);
-			else combinedEntries.set(key, [v]);
+			if (addTo.has(key)) addTo.get(key)!.push(v);
+			else addTo.set(key, [v]);
 		});
-
-		return combinedEntries;
 	}
 
 	public getByPrimaryKey() {
