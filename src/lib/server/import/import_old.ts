@@ -135,7 +135,7 @@ const importBooks = async ({ books }: OldDatabase) => {
 			);
 
 			transformedBooks.push(transformedBook);
-			transformedAuthorsToBook.push(...transformedAuthorsToBook);
+			transformedAuthorToBook.push(...transformedAuthorsToBook);
 		}
 	);
 
