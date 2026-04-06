@@ -1,5 +1,4 @@
 import { bold, cyan, dim, green, magenta, type Ansis } from 'ansis';
-import { env } from 'bun';
 
 const STRING_REGEX = /".*"/g;
 const BOOLEAN_REGEX = /true|false/g;
@@ -34,12 +33,6 @@ export class Logger {
 	private namespaces: string[];
 	private namespacesString: string;
 
-	public static get MIN_LOG_LEVEL(): LogLevel {
-		if (env.VITEST) return 'WARNING';
-		else if (env.PROD) return 'INFO';
-		else return 'DEBUG';
-	}
-
 	constructor(namespaces: string[]) {
 		this.namespaces = namespaces;
 		this.namespacesString = cyan`[${this.namespaces.join(' / ')}]`;
@@ -65,8 +58,6 @@ export class Logger {
 		additionalData?: object,
 		logTo: (...data: unknown[]) => void = console.log
 	) {
-		if (LogLevels.indexOf(logLevel) < LogLevels.indexOf(Logger.MIN_LOG_LEVEL)) return;
-
 		const colorizer = COLORIZERS[logLevel];
 
 		const timestamp = colorizer.timestamp(this.getTimestamp());
