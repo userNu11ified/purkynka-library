@@ -7,8 +7,8 @@ import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 export const authorToBook = sqliteTable(
 	'authorToBook',
 	{
-		bookId: foreignKeyId(books.id),
-		authorId: foreignKeyId(authorNames.id),
+		bookId: foreignKeyId(books.id).notNull(),
+		authorId: foreignKeyId(authorNames.id).notNull(),
 
 		...timestampColumns()
 	},
