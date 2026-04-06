@@ -3,9 +3,20 @@
 	import SidebarLink from '$client/components/view_with_sidebar/SidebarLink.svelte';
 	import SidebarSeparator from '$client/components/view_with_sidebar/SidebarSeparator.svelte';
 	import ViewWithSidebar from '$client/components/view_with_sidebar/ViewWithSidebar.svelte';
+	import { LibrarianData } from '$shared/types/loaded_data/librarian_data';
 	import type { LayoutProps } from './$types';
+	import { clientLogger } from '$client/client_loggers';
+	import { onMount } from 'svelte';
 
-	let { children }: LayoutProps = $props();
+	let { children, data }: LayoutProps = $props();
+
+	const librarianData = LibrarianData.createContext();
+
+	onMount(() => {
+		librarianData
+			.initialize(data.librarianData)
+			.then(() => clientLogger.info('Librarian Data Loaded!'));
+	});
 </script>
 
 <div class="librarian fill-container inverse-grid">
