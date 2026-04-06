@@ -20,6 +20,15 @@ export const handleError = (e: unknown): DatabaseWorkerError => {
 		return DatabaseWorkerError.unknownDatabaseError();
 	}
 
+	if (e instanceof Error) {
+		databaseWorkerLogger.fatal('Unknown Error!', {
+			name: e.name,
+			message: e.message,
+			stack: e.stack ? e.stack.split('\n') : undefined
+		});
+		return DatabaseWorkerError.unknownDatabaseError();
+	}
+
 	databaseWorkerLogger.fatal('Unknown Error!', { e });
 	return DatabaseWorkerError.unknownDatabaseError();
 };
