@@ -2,6 +2,7 @@ import { primaryKey, sqliteTable } from 'drizzle-orm/sqlite-core';
 import { foreignKeyId, timestampColumns } from '../schema_utils';
 import { books } from './books_table';
 import { authorNames } from './lookup_tables';
+import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 
 export const authorToBook = sqliteTable(
 	'authorToBook',
@@ -17,3 +18,6 @@ export const authorToBook = sqliteTable(
 		})
 	]
 );
+
+export type AuthorToBookSelect = InferSelectModel<typeof authorToBook>;
+export type AuthorToBookInsert = InferInsertModel<typeof authorToBook>;

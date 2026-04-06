@@ -8,6 +8,7 @@ import {
 	publishers
 } from './lookup_tables';
 import { literatureTypes, udc } from './shorthand_tables';
+import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 
 export const books = sqliteTable(
 	'books',
@@ -50,3 +51,6 @@ export const books = sqliteTable(
 		index('obtainedFromFkIdx').on(s.obtainedFromId)
 	]
 );
+
+export type BookSelect = InferSelectModel<typeof books>;
+export type BookInsert = InferInsertModel<typeof books>;

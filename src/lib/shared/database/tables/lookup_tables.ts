@@ -1,5 +1,6 @@
 import { SQLiteColumnBuilder, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { primaryKeyId, timestampColumns } from '../schema_utils';
+import type { InferSelectModel } from 'drizzle-orm';
 
 const createLookupTable = <
 	const TableName extends string,
@@ -24,3 +25,19 @@ export const publishers = createStringLookupTable('publishers');
 export const placesOfPublishing = createStringLookupTable('placesOfPublishing');
 export const obtainedFrom = createStringLookupTable('obtainedFrom');
 export const discardReasons = createStringLookupTable('discardReasons');
+
+type StringLookupTableSelect = InferSelectModel<ReturnType<typeof createStringLookupTable>>;
+export type BookNameSelect = StringLookupTableSelect;
+export type AuthorNameSelect = StringLookupTableSelect;
+export type PublisherSelect = StringLookupTableSelect;
+export type PlaceOfPublishingSelect = StringLookupTableSelect;
+export type ObtainedFromSelect = StringLookupTableSelect;
+export type DiscardReasonSelect = StringLookupTableSelect;
+
+type StringLookupTableInsert = InferSelectModel<ReturnType<typeof createStringLookupTable>>;
+export type BookNameInsert = StringLookupTableInsert;
+export type AuthorNameInsert = StringLookupTableInsert;
+export type PublisherInsert = StringLookupTableInsert;
+export type PlaceOfPublishingInsert = StringLookupTableInsert;
+export type ObtainedFromInsert = StringLookupTableInsert;
+export type DiscardReasonInsert = StringLookupTableInsert;
