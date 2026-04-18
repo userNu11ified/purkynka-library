@@ -7,6 +7,7 @@
 	import { calculateDefaultSizes } from './logic/table_view_column_sizing';
 	import TableViewSorters from './header/TableViewSorters.svelte';
 	import TableViewFilters from './header/TableViewFilters.svelte';
+	import type { Nullable } from '$shared/types/util';
 
 	const {
 		renderAfterResolved,
@@ -27,6 +28,12 @@
 	let sortedBy: number = $state(0);
 	let sortedDescending: boolean = $state(true);
 
+	let filteredBy: Nullable<number> = $state(null);
+	let filterQuery: string = $state('');
+	const trimmedQuery = $derived(filterQuery.trim());
+	const lowercasedQuery = $derived(trimmedQuery.toLocaleLowerCase('cs'));
+	$inspect({ sortedBy, sortedDescending, filteredBy, trimmedQuery, lowercasedQuery });
+
 	onMount(() => {
 		columnSizes = calculateDefaultSizes(defaultColumnSizes, usableWidth);
 	});
@@ -40,7 +47,7 @@
 			<div class="table-view-content inverse-grid">
 				<div class="table-view-header inverse-grid">
 					<TableViewSorters {columns} bind:columnSizes bind:sortedBy bind:sortedDescending />
-					<TableViewFilters />
+					<TableViewFilters {columns} bind:filteredBy bind:filterQuery />
 				</div>
 				<TableViewList></TableViewList>
 			</div>
