@@ -150,7 +150,7 @@
 	}
 
 	.table-view-sorter:hover .table-view-sort-order-container.center {
-		visibility: hidden;
+		opacity: 0.25;
 	}
 
 	.table-view-column-name {
