@@ -4,9 +4,11 @@
 	import { sum, type Nullable } from '$shared/types/util';
 	import { TableViewColumnManager } from '../logic/table_view_column_manager.svelte';
 	import { MINIMUM_COLUMN_WIDTH } from '../logic/table_view_column_sizing';
+	import { TableViewFilterManager } from '../logic/table_view_filter_manager.svelte';
 	import { TableViewSortManager } from '../logic/table_view_sort_manager.svelte';
 
 	const tableViewColumnManager = TableViewColumnManager.context.get();
+	const tableViewFilterManager = TableViewFilterManager.context.get();
 	const tableViewSortManager = TableViewSortManager.context.get();
 
 	const columnNameWidths: number[] = $state([]);
@@ -26,6 +28,8 @@
 			tableViewSortManager.sortedBy = sorterIndex;
 			tableViewSortManager.sortedDescending = true;
 		}
+
+		if (tableViewFilterManager.jumpedTo !== null) tableViewFilterManager.resetFilter();
 	};
 
 	const KEYBOARD_NAVIGATION_INCREMENT = 32;
@@ -123,15 +127,16 @@
 			></button>
 		{/if}
 	{/each}
+	<div class="table-view-sorter-filler"></div>
 </div>
 
 <style>
 	.table-view-sorters {
+		grid-template-columns: var(--grid-layout) var(--scrollbar-width);
+
 		position: relative;
 
 		height: 48px;
-
-		grid-template-columns: var(--grid-layout);
 	}
 
 	.table-view-sorter {

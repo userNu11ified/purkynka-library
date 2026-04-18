@@ -28,4 +28,6 @@
 
 	--focus-outline-width: 2px;
 	--focus-outline-color: var(--information-color);
+
+	--bg-jumped-to: hsl(95, 50%, 30%);
 }

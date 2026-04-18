@@ -5,17 +5,19 @@
 	const tableViewColumnManager = TableViewColumnManager.context.get();
 	const tableViewFilterManager = TableViewFilterManager.context.get();
 
-	const currentQueries: string[] = $state(
-		Array.from({ length: tableViewColumnManager.columns.length }, () => '')
-	);
-
 	const onFilterInput = (filterIndex: number) => {
-		currentQueries.forEach((_, i) => {
-			if (i !== filterIndex) currentQueries[i] = '';
-		});
+		if (
+			tableViewFilterManager.filteredBy !== null &&
+			tableViewFilterManager.filteredBy !== filterIndex
+		)
+			tableViewFilterManager.currentQueries[tableViewFilterManager.filteredBy] = '';
 
-		const trimmedQuery = currentQueries[filterIndex].trim();
-		tableViewFilterManager.filteredBy = trimmedQuery.length === 0 ? null : filterIndex;
+		const trimmedQuery = tableViewFilterManager.currentQueries[filterIndex].trim();
+		const emptyQuery = trimmedQuery.length === 0;
+
+		if (tableViewFilterManager.filteredBy !== filterIndex || emptyQuery)
+			tableViewFilterManager.jumpedTo = null;
+		tableViewFilterManager.filteredBy = emptyQuery ? null : filterIndex;
 		tableViewFilterManager.filterQuery = trimmedQuery;
 	};
 </script>
@@ -26,15 +28,16 @@
 			class="table-view-filter"
 			type="text"
 			placeholder={`${column.columnName}...`}
-			bind:value={currentQueries[i]}
+			bind:value={tableViewFilterManager.currentQueries[i]}
 			oninput={() => onFilterInput(i)}
 		/>
 	{/each}
+	<div class="table-view-filter-filler"></div>
 </div>
 
 <style>
 	.table-view-filters {
-		grid-template-columns: var(--grid-layout);
+		grid-template-columns: var(--grid-layout) var(--scrollbar-width);
 
 		height: 32px;
 	}

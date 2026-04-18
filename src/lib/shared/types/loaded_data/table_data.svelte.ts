@@ -1,3 +1,5 @@
+import type { Nullable } from '../util';
+
 export class TableData<Select> {
 	protected array: Select[];
 
@@ -11,5 +13,10 @@ export class TableData<Select> {
 
 	public getArray() {
 		return this.array;
+	}
+
+	public getByIdOrNull(id: Nullable<number>) {
+		if (id === null) return null;
+		return this.array[id - 1] ?? null;
 	}
 }

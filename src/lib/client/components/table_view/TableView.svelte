@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="T, R">
 	import type { TableViewColumn } from './logic/table_view_column';
 	import TableViewList from './list/TableViewList.svelte';
 	import TableViewStatusBar from './TableViewStatusBar.svelte';
@@ -8,22 +8,33 @@
 	import { TableViewFilterManager } from './logic/table_view_filter_manager.svelte';
 	import { TableViewColumnManager } from './logic/table_view_column_manager.svelte';
 	import { onMount } from 'svelte';
+	import { TableViewItemManager, type ItemMapper } from './logic/table_view_item_manager.svelte';
 
 	const {
 		renderAfterResolved,
+		items,
+		itemMapper,
 		columns
 	}: {
 		renderAfterResolved: Promise<void>;
-		columns: TableViewColumn[];
+		items: T[];
+		itemMapper: ItemMapper<T, R>;
+		columns: TableViewColumn<R>[];
 	} = $props();
 
-	// svelte-ignore state_referenced_locally
 	const tableViewColumnManager = TableViewColumnManager.context.set(
-		new TableViewColumnManager(columns)
+		new TableViewColumnManager(() => columns) as TableViewColumnManager<unknown>
 	);
 
 	TableViewSortManager.context.set(new TableViewSortManager());
 	TableViewFilterManager.context.set(new TableViewFilterManager());
+
+	TableViewItemManager.context.set(
+		new TableViewItemManager(
+			() => items,
+			() => itemMapper
+		) as TableViewItemManager<unknown, unknown>
+	);
 
 	onMount(() => {
 		tableViewColumnManager.resetColumnSizes();
