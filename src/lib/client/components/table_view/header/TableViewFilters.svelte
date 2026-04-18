@@ -1,17 +1,13 @@
 <script lang="ts">
-	import type { Nullable } from '$shared/types/util';
-	import type { TableViewColumn } from '../logic/table_view_column';
+	import { TableViewColumnManager } from '../logic/table_view_column_manager.svelte';
+	import { TableViewFilterManager } from '../logic/table_view_filter_manager.svelte';
 
-	/* eslint-disable no-useless-assignment */
-	let {
-		columns,
-		filteredBy = $bindable(),
-		filterQuery = $bindable()
-	}: { columns: TableViewColumn[]; filteredBy: Nullable<number>; filterQuery: string } = $props();
-	/* eslint-enable no-useless-assignment */
+	const tableViewColumnManager = TableViewColumnManager.context.get();
+	const tableViewFilterManager = TableViewFilterManager.context.get();
 
-	// svelte-ignore state_referenced_locally
-	const currentQueries: string[] = $state(Array.from({ length: columns.length }, () => ''));
+	const currentQueries: string[] = $state(
+		Array.from({ length: tableViewColumnManager.columns.length }, () => '')
+	);
 
 	const onFilterInput = (filterIndex: number) => {
 		currentQueries.forEach((_, i) => {
@@ -19,13 +15,13 @@
 		});
 
 		const trimmedQuery = currentQueries[filterIndex].trim();
-		filteredBy = trimmedQuery.length === 0 ? null : filterIndex;
-		filterQuery = trimmedQuery;
+		tableViewFilterManager.filteredBy = trimmedQuery.length === 0 ? null : filterIndex;
+		tableViewFilterManager.filterQuery = trimmedQuery;
 	};
 </script>
 
 <div class="table-view-filters inverse-grid">
-	{#each columns as column, i (column.columnName)}
+	{#each tableViewColumnManager.columns as column, i (column.columnName)}
 		<input
 			class="table-view-filter"
 			type="text"

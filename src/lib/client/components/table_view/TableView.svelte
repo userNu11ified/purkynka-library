@@ -1,53 +1,50 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { TableViewColumn } from './logic/table_view_column';
 	import TableViewList from './list/TableViewList.svelte';
 	import TableViewStatusBar from './TableViewStatusBar.svelte';
-	import { CSSVariables } from '$client/css_utilities';
-	import { calculateDefaultSizes } from './logic/table_view_column_sizing';
 	import TableViewSorters from './header/TableViewSorters.svelte';
 	import TableViewFilters from './header/TableViewFilters.svelte';
-	import type { Nullable } from '$shared/types/util';
+	import { TableViewSortManager } from './logic/table_view_sort_manager.svelte';
+	import { TableViewFilterManager } from './logic/table_view_filter_manager.svelte';
+	import { TableViewColumnManager } from './logic/table_view_column_manager.svelte';
+	import { onMount } from 'svelte';
 
 	const {
 		renderAfterResolved,
 		columns
-	}: { renderAfterResolved: Promise<void>; columns: TableViewColumn[] } = $props();
-	const defaultColumnSizes = $derived(columns.map((column) => column.defaultColumnSize));
+	}: {
+		renderAfterResolved: Promise<void>;
+		columns: TableViewColumn[];
+	} = $props();
 
-	let availableWidth = $state(0);
-	const usableWidth = $derived(
-		availableWidth - (defaultColumnSizes.length - 1) * CSSVariables.BORDER_WIDTH
+	// svelte-ignore state_referenced_locally
+	const tableViewColumnManager = TableViewColumnManager.context.set(
+		new TableViewColumnManager(columns)
 	);
 
-	let columnSizes: number[] = $state([]);
-	const calculatedGridLayout = $derived(
-		columnSizes.map((columnSize) => `${columnSize}px`).join(' ')
-	);
-
-	let sortedBy: number = $state(0);
-	let sortedDescending: boolean = $state(true);
-
-	let filteredBy: Nullable<number> = $state(null);
-	let filterQuery: string = $state('');
-	const trimmedQuery = $derived(filterQuery.trim());
-	const lowercasedQuery = $derived(trimmedQuery.toLocaleLowerCase('cs'));
-	$inspect({ sortedBy, sortedDescending, filteredBy, trimmedQuery, lowercasedQuery });
+	TableViewSortManager.context.set(new TableViewSortManager());
+	TableViewFilterManager.context.set(new TableViewFilterManager());
 
 	onMount(() => {
-		columnSizes = calculateDefaultSizes(defaultColumnSizes, usableWidth);
+		tableViewColumnManager.resetColumnSizes();
 	});
 </script>
 
-<div class="table-view-container fill-container" bind:clientWidth={availableWidth}>
+<div
+	class="table-view-container fill-container"
+	bind:clientWidth={tableViewColumnManager.availableWidth}
+>
 	{#await renderAfterResolved}
 		<h1>Loading</h1>
 	{:then}
-		<div class="table-view fill-container inverse-grid" style:--grid-layout={calculatedGridLayout}>
+		<div
+			class="table-view fill-container inverse-grid"
+			style:--grid-layout={tableViewColumnManager.calculatedGridLayout}
+		>
 			<div class="table-view-content inverse-grid">
 				<div class="table-view-header inverse-grid">
-					<TableViewSorters {columns} bind:columnSizes bind:sortedBy bind:sortedDescending />
-					<TableViewFilters {columns} bind:filteredBy bind:filterQuery />
+					<TableViewSorters />
+					<TableViewFilters />
 				</div>
 				<TableViewList></TableViewList>
 			</div>

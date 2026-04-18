@@ -2,24 +2,16 @@
 	import Icon from '$client/components/icon/Icon.svelte';
 	import { CSSVariables } from '$client/css_utilities';
 	import { sum, type Nullable } from '$shared/types/util';
-	import type { TableViewColumn } from '../logic/table_view_column';
+	import { TableViewColumnManager } from '../logic/table_view_column_manager.svelte';
 	import { MINIMUM_COLUMN_WIDTH } from '../logic/table_view_column_sizing';
+	import { TableViewSortManager } from '../logic/table_view_sort_manager.svelte';
 
-	let {
-		columns,
-		columnSizes = $bindable(),
-		sortedBy = $bindable(),
-		sortedDescending = $bindable()
-	}: {
-		columns: TableViewColumn[];
-		columnSizes: number[];
-		sortedBy: number;
-		sortedDescending: boolean;
-	} = $props();
+	const tableViewColumnManager = TableViewColumnManager.context.get();
+	const tableViewSortManager = TableViewSortManager.context.get();
 
 	const columnNameWidths: number[] = $state([]);
 	const shouldCenterSortIcon = $derived(
-		columnSizes.map((v, i) => {
+		tableViewColumnManager.currentColumnSizes.map((v, i) => {
 			const columnNameWidth = columnNameWidths[i];
 
 			if (columnNameWidth === 0) return true;
@@ -28,11 +20,11 @@
 	);
 
 	const onSorterMouseDown = (sorterIndex: number) => {
-		if (sortedBy === sorterIndex) {
-			sortedDescending = !sortedDescending;
+		if (tableViewSortManager.sortedBy === sorterIndex) {
+			tableViewSortManager.sortedDescending = !tableViewSortManager.sortedDescending;
 		} else {
-			sortedBy = sorterIndex;
-			sortedDescending = true;
+			tableViewSortManager.sortedBy = sorterIndex;
+			tableViewSortManager.sortedDescending = true;
 		}
 	};
 
@@ -51,23 +43,29 @@
 	};
 
 	const decreaseSize = (resize: number, movedBy: number) => {
-		const oldLeftSize = columnSizes[resize];
-		const newLeftSize = Math.max(columnSizes[resize] + movedBy, MINIMUM_COLUMN_WIDTH);
+		const oldLeftSize = tableViewColumnManager.currentColumnSizes[resize];
+		const newLeftSize = Math.max(
+			tableViewColumnManager.currentColumnSizes[resize] + movedBy,
+			MINIMUM_COLUMN_WIDTH
+		);
 
 		const leftSizeDifference = newLeftSize - oldLeftSize;
 
-		columnSizes[resize] += leftSizeDifference;
-		columnSizes[resize + 1] -= leftSizeDifference;
+		tableViewColumnManager.currentColumnSizes[resize] += leftSizeDifference;
+		tableViewColumnManager.currentColumnSizes[resize + 1] -= leftSizeDifference;
 	};
 
 	const increaseSize = (resize: number, movedBy: number) => {
-		const oldRightSize = columnSizes[resize + 1];
-		const newRightSize = Math.max(columnSizes[resize + 1] - movedBy, MINIMUM_COLUMN_WIDTH);
+		const oldRightSize = tableViewColumnManager.currentColumnSizes[resize + 1];
+		const newRightSize = Math.max(
+			tableViewColumnManager.currentColumnSizes[resize + 1] - movedBy,
+			MINIMUM_COLUMN_WIDTH
+		);
 
 		const rightSizeDifference = newRightSize - oldRightSize;
 
-		columnSizes[resize] -= rightSizeDifference;
-		columnSizes[resize + 1] += rightSizeDifference;
+		tableViewColumnManager.currentColumnSizes[resize] -= rightSizeDifference;
+		tableViewColumnManager.currentColumnSizes[resize + 1] += rightSizeDifference;
 	};
 
 	const onWindowMouseMove = (e: MouseEvent) => {
@@ -84,14 +82,15 @@
 	};
 
 	const calculateLeftOffset = (resizerIndex: number) =>
-		sum(columnSizes.slice(0, resizerIndex + 1)) + resizerIndex * CSSVariables.BORDER_WIDTH;
+		sum(tableViewColumnManager.currentColumnSizes.slice(0, resizerIndex + 1)) +
+		resizerIndex * CSSVariables.BORDER_WIDTH;
 </script>
 
 <svelte:window onmouseup={onWindowMouseUp} onmousemove={onWindowMouseMove} />
 
 <div class="table-view-sorters inverse-grid">
-	{#each columns as column, i (column.columnName)}
-		{@const isSortedByColumn = sortedBy === i}
+	{#each tableViewColumnManager.columns as column, i (column.columnName)}
+		{@const isSortedByColumn = tableViewSortManager.sortedBy === i}
 		<button
 			class="table-view-sorter center-flex"
 			class:sorted-by={isSortedByColumn}
@@ -105,11 +104,14 @@
 					class="table-view-sort-order-container center-grid"
 					class:center={shouldCenterSortIcon[i]}
 				>
-					<Icon iconType={sortedDescending ? 'sort-descending' : 'sort-ascending'} width={20} />
+					<Icon
+						iconType={tableViewSortManager.sortedDescending ? 'sort-descending' : 'sort-ascending'}
+						width={20}
+					/>
 				</div>
 			{/if}
 		</button>
-		{#if i !== columns.length - 1}
+		{#if i !== tableViewColumnManager.columns.length - 1}
 			<button
 				class="table-view-resizer"
 				class:resizing={currentlyResizing === i}

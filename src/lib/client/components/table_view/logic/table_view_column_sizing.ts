@@ -1,18 +1,18 @@
 export const MINIMUM_COLUMN_WIDTH = 64;
 
-export type TableViewColumnSize =
+export type TableViewDefaultColumnSize =
 	| { type: 'px'; pixels: number }
 	| { type: 'fr'; fractions: number };
 
-export const calculateDefaultSizes = (
-	columnSizes: TableViewColumnSize[],
-	availableWidth: number
+export const calculateColumnSizes = (
+	defaultColumnSizes: TableViewDefaultColumnSize[],
+	usableWidth: number
 ) => {
-	const calculatedDefaultSizes = Array.from({ length: columnSizes.length }, () => 0);
+	const calculatedDefaultSizes = Array.from({ length: defaultColumnSizes.length }, () => 0);
 
-	let remainingColumns = columnSizes.length;
-	let remainingWidth = availableWidth;
-	columnSizes.forEach((v, i) => {
+	let remainingColumns = defaultColumnSizes.length;
+	let remainingWidth = usableWidth;
+	defaultColumnSizes.forEach((v, i) => {
 		if (v.type !== 'px') return;
 
 		remainingWidth -= v.pixels;
@@ -21,7 +21,7 @@ export const calculateDefaultSizes = (
 	});
 
 	const oneFraction = remainingWidth / remainingColumns;
-	columnSizes.forEach((v, i) => {
+	defaultColumnSizes.forEach((v, i) => {
 		if (v.type !== 'fr') return;
 
 		calculatedDefaultSizes[i] = v.fractions * oneFraction;
