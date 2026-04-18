@@ -41,3 +41,8 @@ button {
 button:hover {
 	background-color: var(--bg-hover);
 }
+
+:focus-visible {
+	outline: var(--focus-outline-width) solid var(--focus-outline-color);
+	outline-offset: calc(var(--focus-outline-width) * -1);
+}

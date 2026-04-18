@@ -25,4 +25,7 @@
 
 	--scrollbar-color: hsl(0, 0%, 25%);
 	--scrollbar-width: 10px;
+
+	--focus-outline-width: 2px;
+	--focus-outline-color: var(--information-color);
 }
