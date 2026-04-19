@@ -33,4 +33,8 @@
 	.view-with-sidebar {
 		grid-template-columns: var(--sidebar-width) auto;
 	}
+
+	.view {
+		position: relative;
+	}
 </style>

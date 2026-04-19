@@ -41,7 +41,9 @@
 		multiSelectActions?: Snippet<[selectedItems: IndexedMappedItem<R>[]]>;
 	} = $props();
 
+	let tableView: HTMLDivElement | undefined = $state();
 	let tableViewList: TableViewList<T, R> | undefined = $state();
+	let tableViewRect: DOMRect | undefined = $state();
 
 	const tableViewColumnManager = TableViewColumnManager.context.set(
 		new TableViewColumnManager(() => columns) as TableViewColumnManager<unknown>
@@ -63,8 +65,8 @@
 
 	const onViewMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
 		tableViewSelectionManager.mousePosition = [
-			e.pageX - e.currentTarget.offsetLeft,
-			e.pageY - e.currentTarget.offsetTop
+			e.pageX - e.currentTarget.offsetLeft - (tableViewRect?.left ?? 0),
+			e.pageY - e.currentTarget.offsetTop - (tableViewRect?.top ?? 0)
 		];
 	};
 
@@ -82,6 +84,7 @@
 
 	onMount(() => {
 		tableViewColumnManager.resetColumnSizes();
+		tableViewRect = tableView?.getBoundingClientRect();
 	});
 </script>
 
@@ -92,6 +95,7 @@
 	class="table-view-container fill-container"
 	onmousemove={onViewMouseMove}
 	bind:clientWidth={tableViewColumnManager.availableWidth}
+	bind:this={tableView}
 >
 	{#await renderAfterResolved}
 		<h1>Loading</h1>
