@@ -7,6 +7,7 @@
 		numberSorter,
 		stringSorter
 	} from '$client/components/table_view/logic/table_view_sorters';
+	import TableViewSelectAction from '$client/components/table_view/selection/TableViewSelectAction.svelte';
 	import TableView from '$client/components/table_view/TableView.svelte';
 	import { LibrarianData } from '$shared/types/loaded_data/librarian_data';
 	import { formatDateOrNull } from '$shared/types/util';
@@ -24,6 +25,11 @@
 			.map(({ value }) => value)
 			.join(' — ');
 	};
+
+	const onEditClick = () => {};
+	const onBorrowClick = () => {};
+	const onDuplicateClick = () => {};
+	const onDiscardClick = () => {};
 </script>
 
 <TableView
@@ -48,6 +54,26 @@
 			discardDateCompactString: discardDateString.replaceAll(' ', '')
 		};
 	}}
+	itemCopier={({
+		id,
+		isLarge,
+		bookName,
+		authorString,
+		annotation,
+		udcShortName,
+		note,
+		discardDateString
+	}) => [
+		id,
+		isLarge ? 'L' : 's',
+		bookName,
+		authorString,
+		annotation,
+		udcShortName,
+		note,
+		'',
+		discardDateString
+	]}
 	columns={[
 		{
 			columnName: 'ID',
@@ -151,4 +177,17 @@
 			}
 		}
 	]}
-></TableView>
+>
+	{#snippet singleSelectActions()}
+		<TableViewSelectAction iconType="edit" onClick={onEditClick}>Edit</TableViewSelectAction>
+		<TableViewSelectAction iconType="book-borrow" onClick={onBorrowClick}>
+			Borrow
+		</TableViewSelectAction>
+		<TableViewSelectAction iconType="book-add" onClick={onDuplicateClick}>
+			Duplicate
+		</TableViewSelectAction>
+		<TableViewSelectAction iconType="book-discard" onClick={onDiscardClick}>
+			Discard
+		</TableViewSelectAction>
+	{/snippet}
+</TableView>

@@ -25,7 +25,14 @@
 		| 'settings'
 		| 'sort-descending'
 		| 'sort-ascending'
-		| 'case-sensitive';
+		| 'case-sensitive'
+		| 'add'
+		| 'remove'
+		| 'edit'
+		| 'copy'
+		| 'selection-remove'
+		| 'column-width'
+		| 'chevron-up';
 </script>
 
 <script lang="ts">
@@ -208,6 +215,46 @@
 			fill="currentColor"
 			d="M20.06 18a4 4 0 0 1-.2-.89c-.67.7-1.48 1.05-2.41 1.05c-.83 0-1.52-.24-2.05-.71c-.53-.45-.8-1.06-.8-1.79c0-.88.33-1.56 1-2.05s1.61-.73 2.83-.73h1.4v-.64q0-.735-.45-1.17c-.3-.29-.75-.43-1.33-.43c-.52 0-.95.12-1.3.36c-.35.25-.52.54-.52.89h-1.46c0-.43.15-.84.45-1.24c.28-.4.71-.71 1.22-.94c.51-.21 1.06-.35 1.69-.35c.98 0 1.74.24 2.29.73s.84 1.16.86 2.02V16c0 .8.1 1.42.3 1.88V18zm-2.4-1.12c.45 0 .88-.11 1.29-.32c.4-.21.7-.49.88-.83v-1.57H18.7c-1.77 0-2.66.47-2.66 1.41c0 .43.15.73.46.96c.3.23.68.35 1.16.35m-12.2-3.17h4.07L7.5 8.29zM6.64 6h1.72l4.71 12h-1.93l-.97-2.57H4.82L3.86 18H1.93z"
 		/></svg
+	>
+{:else if iconType === 'add'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z" /></svg
+	>
+{:else if iconType === 'remove'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path fill="currentColor" d="M19 13H5v-2h14z" /></svg
+	>
+{:else if iconType === 'edit'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path
+			fill="currentColor"
+			d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83l3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"
+		/></svg
+	>
+{:else if iconType === 'copy'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path
+			fill="currentColor"
+			d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"
+		/></svg
+	>
+{:else if iconType === 'selection-remove'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path
+			fill="currentColor"
+			d="M20 20v-3h2v3a2 2 0 0 1-2 2h-3v-2zM2 20v-3h2v3h3v2H4c-1.1 0-2-.9-2-2m8 0h4v2h-4zm4.59-12L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41zM20 10h2v4h-2zM2 10h2v4H2zm0-6a2 2 0 0 1 2-2h3v2H4v3H2zm20 0v3h-2V4h-3V2h3c1.1 0 2 .9 2 2M10 2h4v2h-4z"
+		/></svg
+	>
+{:else if iconType === 'column-width'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path
+			fill="currentColor"
+			d="M9 11h6V8l4 4l-4 4v-3H9v3l-4-4l4-4zm-7 9V4h2v16zm18 0V4h2v16z"
+		/></svg
+	>
+{:else if iconType === 'chevron-up'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6l-6 6z" /></svg
 	>
 {/if}
 

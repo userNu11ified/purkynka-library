@@ -7,20 +7,41 @@
 	import { TableViewSortManager } from './logic/table_view_sort_manager.svelte';
 	import { TableViewFilterManager } from './logic/table_view_filter_manager.svelte';
 	import { TableViewColumnManager } from './logic/table_view_column_manager.svelte';
-	import { onMount } from 'svelte';
-	import { TableViewItemManager, type ItemMapper } from './logic/table_view_item_manager.svelte';
+	import { onMount, type Snippet } from 'svelte';
+	import {
+		TableViewItemManager,
+		type IndexedMappedItem,
+		type ItemMapper
+	} from './logic/table_view_item_manager.svelte';
+	import {
+		TableViewSelectionManager,
+		type ItemCopier
+	} from './logic/table_view_selection_manager.svelte';
+	import type { MouseEventHandler } from 'svelte/elements';
+	import TableViewSelectionMode from './selection/TableViewSelectionMode.svelte';
+	import TableViewSelectActions from './selection/TableViewSelectActions.svelte';
+	import ButtonWithPopup from '../ButtonWithPopup.svelte';
+	import Icon from '../icon/Icon.svelte';
 
 	const {
 		renderAfterResolved,
 		items,
 		itemMapper,
-		columns
+		itemCopier,
+		columns,
+		singleSelectActions,
+		multiSelectActions
 	}: {
 		renderAfterResolved: Promise<void>;
 		items: T[];
 		itemMapper: ItemMapper<T, R>;
+		itemCopier: ItemCopier<R>;
 		columns: TableViewColumn<R>[];
+		singleSelectActions?: Snippet<[selectedItem: IndexedMappedItem<R>]>;
+		multiSelectActions?: Snippet<[selectedItems: IndexedMappedItem<R>[]]>;
 	} = $props();
+
+	let tableViewList: TableViewList<T, R> | undefined = $state();
 
 	const tableViewColumnManager = TableViewColumnManager.context.set(
 		new TableViewColumnManager(() => columns) as TableViewColumnManager<unknown>
@@ -36,13 +57,40 @@
 		) as TableViewItemManager<unknown, unknown>
 	);
 
+	const tableViewSelectionManager = TableViewSelectionManager.context.set(
+		new TableViewSelectionManager(() => itemCopier) as TableViewSelectionManager<unknown>
+	);
+
+	const onViewMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
+		tableViewSelectionManager.mousePosition = [
+			e.pageX - e.currentTarget.offsetLeft,
+			e.pageY - e.currentTarget.offsetTop
+		];
+	};
+
+	const onWindowKeyDown = (e: KeyboardEvent) => {
+		if (e.code === 'ShiftLeft') tableViewSelectionManager.toggledUnselecting = true;
+		else if (e.code === 'Escape') tableViewSelectionManager.resetSelection();
+		else if (e.ctrlKey && e.code === 'KeyC') tableViewSelectionManager.copySelection();
+	};
+
+	const onWindowKeyUp = (e: KeyboardEvent) => {
+		if (e.code === 'ShiftLeft') tableViewSelectionManager.toggledUnselecting = false;
+	};
+
+	const onGoUpClick = () => tableViewList?.goUp();
+
 	onMount(() => {
 		tableViewColumnManager.resetColumnSizes();
 	});
 </script>
 
+<svelte:window onkeydown={onWindowKeyDown} onkeyup={onWindowKeyUp} />
+
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class="table-view-container fill-container"
+	onmousemove={onViewMouseMove}
 	bind:clientWidth={tableViewColumnManager.availableWidth}
 >
 	{#await renderAfterResolved}
@@ -57,25 +105,51 @@
 					<TableViewSorters />
 					<TableViewFilters />
 				</div>
-				<TableViewList></TableViewList>
+				<TableViewList bind:this={tableViewList}></TableViewList>
+				<TableViewSelectActions {singleSelectActions} {multiSelectActions}></TableViewSelectActions>
+
+				<ButtonWithPopup
+					class="table-view-go-up center-grid"
+					popupAlignment="end"
+					onclick={onGoUpClick}
+				>
+					{#snippet popup()}
+						Go Up
+					{/snippet}
+					<Icon iconType="chevron-up" />
+				</ButtonWithPopup>
 			</div>
 			<TableViewStatusBar></TableViewStatusBar>
+			<TableViewSelectionMode></TableViewSelectionMode>
 		</div>
 	{/await}
 </div>
 
 <style>
 	.table-view-container {
+		position: relative;
+
 		overflow: hidden;
 	}
 
 	.table-view {
-		grid-template-rows: auto 24px;
+		grid-template-rows: auto max-content;
 	}
 
 	.table-view-content {
+		position: relative;
+
 		grid-template-rows: max-content auto;
 
 		overflow-x: auto;
+	}
+
+	:global .table-view-go-up {
+		position: absolute;
+		right: calc(var(--scrollbar-width) + 8px);
+		bottom: 8px;
+
+		border: var(--border);
+		border-radius: 4px;
 	}
 </style>
