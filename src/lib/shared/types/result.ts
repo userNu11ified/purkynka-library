@@ -20,7 +20,11 @@ export type Result<T, E> = ResultOk<T> | ResultError<E>;
 
 export type FlatResult<T, E> = FlatResultOk<T> | FlatResultError<E>;
 export type FlattenedResult<R extends Result<unknown, unknown>> =
-	R extends Result<infer T, infer E> ? FlatResult<T, E> : never;
+	R extends ResultOk<infer T>
+		? FlatResultOk<T>
+		: R extends ResultError<infer E>
+			? FlatResultError<E>
+			: never;
 
 const ok = <T>(value: T): Result<T, never> => ({ $type: 'ok', value });
 const isOk = <T, E>(result: Result<T, E>): result is ResultOk<T> => result.$type === 'ok';
