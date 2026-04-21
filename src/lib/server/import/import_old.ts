@@ -2,10 +2,15 @@ import { oldDataImporterLogger } from '$server/server_loggers';
 import { SendInsertRequest } from '$server/worker/database_worker/messages/insert';
 import type { BookInsert } from '$shared/database/tables/books_table';
 import type { AuthorToBookInsert } from '$shared/database/tables/junction_tables';
-import type { DatabaseSchema, DatabaseTableName } from '$shared/types/database/schema';
+import {
+	DatabaseTableNames,
+	type DatabaseSchema,
+	type DatabaseTableName
+} from '$shared/types/database/schema';
 import type { Nullable } from '$shared/types/util';
 import type { InferInsertModel } from 'drizzle-orm';
 import type { OldDatabase, OldShorthand } from './import_old_types';
+import { SendRemoveRequest } from '$server/worker/database_worker/messages/remove';
 
 const incrementIdOrNull = (id: Nullable<number>) => (id === null ? null : id + 1);
 const parseDateOrNull = (date: Nullable<string>) => (date === null ? null : new Date(date));
