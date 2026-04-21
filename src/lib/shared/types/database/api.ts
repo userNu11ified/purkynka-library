@@ -1,3 +1,4 @@
+import type { FlattenedResult, Result } from '../result';
 import { camelCaseToKebabCase, type CamelCaseToKebabCase } from '../string_util';
 import {
 	DatabaseMatchedByIdTableNames,
@@ -29,7 +30,7 @@ export const isAPIMatchedByIdTableName = (value: string): value is APIMatchedByI
 export const getAPIEndpointURL = (endpoint: string) =>
 	`${window.location.origin}/api/v2/${endpoint}`;
 
-export const makeAPIRequest = (
+export const makeAPIRequest = <R extends Result<unknown, unknown>>(
 	method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
 	endpoint: string,
 	body?: any
@@ -37,4 +38,4 @@ export const makeAPIRequest = (
 	fetch(getAPIEndpointURL(endpoint), {
 		method,
 		body: body === undefined ? undefined : JSON.stringify(body)
-	});
+	}).then((r) => r.json() as FlattenedResult<R>);

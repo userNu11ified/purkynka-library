@@ -1,48 +1,54 @@
 import type { DatabaseWorkerResult } from '$server/worker/database_worker/database_worker_types';
 import type { SelectResponse } from '$server/worker/database_worker/messages/select';
 import type { DatabaseTableName } from '../database/schema';
-import { createContext } from 'svelte';
 import { Result, type ResultError, type ResultOk } from '../result';
 import type { DatabaseWorkerError } from '$server/worker/database_worker/messages/error';
-import { TableData } from './table_data.svelte';
-import { AuthorToBookData } from './author_to_book_data.svelte';
-
-const [getLibrarianDataContext, setLibrarianDataContext] = createContext<LibrarianData>();
+import { Context } from 'runed';
+import { TableWithIdData } from './table_with_id_data.svelte';
+import type {
+	AuthorNameSelect,
+	BookNameSelect,
+	DiscardReasonSelect,
+	ObtainedFromSelect,
+	PlaceOfPublishingSelect,
+	PublisherSelect
+} from '$shared/database/tables/lookup_tables';
+import type { LiteratureTypeSelect, UDCSelect } from '$shared/database/tables/shorthand_tables';
+import type { BookSelect } from '$shared/database/tables/books_table';
+import { AuthorToBookTableData } from './author_to_book_table_data.svelte';
 
 export class LibrarianData {
-	public bookNames: TableData<'bookNames'>;
-	public authorNames: TableData<'authorNames'>;
-	public publishers: TableData<'publishers'>;
-	public placesOfPublishing: TableData<'placesOfPublishing'>;
-	public obtainedFrom: TableData<'obtainedFrom'>;
-	public discardReasons: TableData<'discardReasons'>;
+	public static context = new Context<LibrarianData>('librarian-data');
 
-	public literatureTypes: TableData<'literatureTypes'>;
-	public udc: TableData<'udc'>;
+	public bookNames: TableWithIdData<BookNameSelect, 'bookNames'>;
+	public authorNames: TableWithIdData<AuthorNameSelect, 'authorNames'>;
+	public publishers: TableWithIdData<PublisherSelect, 'publishers'>;
+	public placesOfPublishing: TableWithIdData<PlaceOfPublishingSelect, 'placesOfPublishing'>;
+	public obtainedFrom: TableWithIdData<ObtainedFromSelect, 'obtainedFrom'>;
+	public discardReasons: TableWithIdData<DiscardReasonSelect, 'discardReasons'>;
 
-	public books: TableData<'books'>;
-	public authorToBook: AuthorToBookData<'authorToBook', number, number>;
+	public literatureTypes: TableWithIdData<LiteratureTypeSelect, 'literatureTypes'>;
+	public udc: TableWithIdData<UDCSelect, 'udc'>;
+
+	public books: TableWithIdData<BookSelect, 'books'>;
+	public authorToBook: AuthorToBookTableData;
 
 	public loaded: Promise<void>;
 	private loadedResolver!: () => void;
 
 	constructor() {
-		this.bookNames = new TableData('bookNames', (v) => v.id);
-		this.authorNames = new TableData('authorNames', (v) => v.id);
-		this.publishers = new TableData('publishers', (v) => v.id);
-		this.placesOfPublishing = new TableData('placesOfPublishing', (v) => v.id);
-		this.obtainedFrom = new TableData('obtainedFrom', (v) => v.id);
-		this.discardReasons = new TableData('discardReasons', (v) => v.id);
+		this.bookNames = new TableWithIdData('bookNames');
+		this.authorNames = new TableWithIdData('authorNames');
+		this.publishers = new TableWithIdData('publishers');
+		this.placesOfPublishing = new TableWithIdData('placesOfPublishing');
+		this.obtainedFrom = new TableWithIdData('obtainedFrom');
+		this.discardReasons = new TableWithIdData('discardReasons');
 
-		this.literatureTypes = new TableData('literatureTypes', (v) => v.id);
-		this.udc = new TableData('udc', (v) => v.id);
+		this.literatureTypes = new TableWithIdData('literatureTypes');
+		this.udc = new TableWithIdData('udc');
 
-		this.books = new TableData('books', (v) => v.id);
-		this.authorToBook = new AuthorToBookData(
-			'authorToBook',
-			(v) => v.bookId,
-			(v) => v.authorId
-		);
+		this.books = new TableWithIdData('books');
+		this.authorToBook = new AuthorToBookTableData();
 
 		this.loaded = new Promise((res) => (this.loadedResolver = res));
 	}
@@ -93,14 +99,6 @@ export class LibrarianData {
 		this.authorToBook.initialize(authorToBook.values);
 
 		this.loadedResolver();
-	}
-
-	public static getContext() {
-		return getLibrarianDataContext();
-	}
-
-	public static createContext() {
-		return setLibrarianDataContext(new LibrarianData());
 	}
 }
 
