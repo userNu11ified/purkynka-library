@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { pushState } from '$app/navigation';
+	import { stringFilter } from '$client/collation/filters';
 	import { MINIMUM_COLUMN_WIDTH } from '$client/components/table_view/logic/table_view_column_sizing';
-	import { stringFilter } from '$client/components/table_view/logic/table_view_filters';
 	import {
 		booleanSorter,
 		dateSorter,
@@ -12,32 +13,35 @@
 	import { LibrarianData } from '$shared/types/loaded_data/librarian_data';
 	import { formatDateOrNull } from '$shared/types/util';
 
-	const librarianData = LibrarianData.getContext();
-	const authorToBook = librarianData.authorToBook.getByPrimaryKey();
+	const librarianData = LibrarianData.context.get();
+	const authorToBook = librarianData.authorToBook.getByBookIdMap();
 
 	const getAuthorString = (bookId: number) => {
 		const authors = authorToBook.get(bookId);
 		if (authors === undefined) return '';
 
 		return authors
-			.map(({ authorId }) => librarianData.authorNames.getByIdOrNull(authorId))
+			.map(({ authorId }) => librarianData.authorNames.getValueByIdOrNull(authorId))
 			.filter((v) => v !== null)
 			.map(({ value }) => value)
 			.join(' — ');
 	};
 
-	const onEditClick = () => {};
-	const onBorrowClick = () => {};
-	const onDuplicateClick = () => {};
-	const onDiscardClick = () => {};
+	const onEditClick = (bookId: number) =>
+		pushState('', { bookEditorState: { type: 'edit', bookId } });
+	const onBorrowClick = (bookId: number) => {};
+	const onNewCopyClick = (bookId: number) =>
+		pushState('', { bookEditorState: { type: 'new-copy', bookId } });
+	const onDiscardClick = (bookId: number) =>
+		pushState('', { bookEditorState: { type: 'discard', bookId } });
 </script>
 
 <TableView
 	renderAfterResolved={librarianData.loaded}
 	items={librarianData.books.getArray()}
 	itemMapper={({ id, isLarge, bookNameId, annotation, udcId, note, discardDate }) => {
-		const bookName = librarianData.bookNames.getByIdOrNull(bookNameId);
-		const udc = librarianData.udc.getByIdOrNull(udcId);
+		const bookName = librarianData.bookNames.getValueByIdOrNull(bookNameId);
+		const udc = librarianData.udc.getValueByIdOrNull(udcId);
 		const discardDateString = formatDateOrNull(discardDate) ?? '';
 
 		return {
@@ -178,15 +182,20 @@
 		}
 	]}
 >
-	{#snippet singleSelectActions()}
-		<TableViewSelectAction iconType="edit" onClick={onEditClick}>Edit</TableViewSelectAction>
-		<TableViewSelectAction iconType="book-borrow" onClick={onBorrowClick}>
+	{#snippet singleSelectActions(selectedItem)}
+		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}
+			>Edit</TableViewSelectAction
+		>
+		<TableViewSelectAction iconType="book-borrow" onClick={() => onBorrowClick(selectedItem[0].id)}>
 			Borrow
 		</TableViewSelectAction>
-		<TableViewSelectAction iconType="book-add" onClick={onDuplicateClick}>
-			Duplicate
+		<TableViewSelectAction iconType="book-add" onClick={() => onNewCopyClick(selectedItem[0].id)}>
+			New Copy
 		</TableViewSelectAction>
-		<TableViewSelectAction iconType="book-discard" onClick={onDiscardClick}>
+		<TableViewSelectAction
+			iconType="book-discard"
+			onClick={() => onDiscardClick(selectedItem[0].id)}
+		>
 			Discard
 		</TableViewSelectAction>
 	{/snippet}

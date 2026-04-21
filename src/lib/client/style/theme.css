@@ -13,14 +13,16 @@
 	--text-header: hsl(0, 0%, 100%);
 	--text-primary: hsl(0, 0%, 85%);
 	--text-muted: hsl(0, 0%, 70%);
-	--text-disabled: hsl(0, 0%, 50%);
+	--text-disabled: hsl(0, 0%, 40%);
 
 	--information-color: hsl(219, 85%, 66%);
+	--information-disabled-color: hsl(219, 60%, 50%);
 	--success-color: hsl(95, 60%, 62%);
 	--warning-color: hsl(49, 85%, 64%);
 	--error-color: hsl(3, 60%, 64%);
 
 	--text-link: var(--information-color);
+	--text-link-disabled: var(--information-disabled-color);
 	--text-link-visited: #6a3cdd;
 
 	--scrollbar-color: hsl(0, 0%, 25%);
@@ -28,8 +30,15 @@
 
 	--focus-outline-width: 2px;
 	--focus-outline-color: var(--information-color);
+	--focus-outline-style: solid;
+	--focus-outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
 
 	--bg-jumped-to: hsl(95, 50%, 30%);
 	--bg-selected: hsl(219, 70%, 30%);
 	--border-selected: hsl(219, 70%, 40%);
+
+	--editor-input-height: 40px;
+	--editor-input-width: 320px;
+
+	--drop-shadow-color: rgba(0, 0, 0, 0.5);
 }

@@ -7,10 +7,22 @@
 	import type { LayoutProps } from './$types';
 	import { clientLogger } from '$client/client_loggers';
 	import { onMount } from 'svelte';
+	import { pushState } from '$app/navigation';
+	import SidebarButton from '$client/components/view_with_sidebar/SidebarButton.svelte';
+	import BookEditor from '$client/components/editors/BookEditor.svelte';
+	import UDCEditor from '$client/components/editors/UDCEditor.svelte';
+	import { EditorPageStates } from '$client/components/editors/editor_page_states.svelte';
 
 	let { children, data }: LayoutProps = $props();
 
-	const librarianData = LibrarianData.createContext();
+	const librarianData = LibrarianData.context.set(new LibrarianData());
+	const editorPageStates = EditorPageStates.context.set(new EditorPageStates());
+
+	const onBookAddClick = () => {
+		pushState('', {
+			bookEditorState: { type: 'new' }
+		});
+	};
 
 	onMount(() => {
 		librarianData
@@ -29,10 +41,25 @@
 				<SidebarLink href="/librarian/users" iconType="user">Users</SidebarLink>
 				<SidebarLink href="/librarian/other" iconType="list">Other</SidebarLink>
 				<SidebarSeparator />
+
+				<SidebarButton
+					iconType="book-add"
+					active={editorPageStates.bookEditorActive}
+					disabled={editorPageStates.bookEditorActive}
+					onClick={onBookAddClick}
+				>
+					Add Book
+				</SidebarButton>
 				<SidebarLink href="/librarian/settings" iconType="settings">Settings</SidebarLink>
 			{/snippet}
 
 			{#snippet view()}
+				{#if editorPageStates.bookEditorActive}
+					<BookEditor></BookEditor>
+				{/if}
+				{#if editorPageStates.udcEditorActive}
+					<UDCEditor></UDCEditor>
+				{/if}
 				{@render children()}
 			{/snippet}
 		</ViewWithSidebar>
