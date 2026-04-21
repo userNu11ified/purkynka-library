@@ -32,6 +32,6 @@ export type FailedToPatch = ReturnType<typeof failedToPatch>;
 export const failedToDelete = descriptiveErrorConstructor<
 	'failedToDelete',
 	'Failed to DELETE the provided data!',
-	{ patchError: FlatResultError<DatabaseWorkerError> }
+	{ deleteError: FlatResultError<DatabaseWorkerError> }
 >('failedToDelete', 'Failed to DELETE the provided data!');
 export type FailedToDelete = ReturnType<typeof failedToDelete>;
