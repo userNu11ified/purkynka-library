@@ -445,7 +445,24 @@
 		return Option.none();
 	};
 
-	const onAddMultipleClick = () => {};
+	const numberRegex = /^\d+$/;
+	const parsedAddCount = $derived.by(() => {
+		if (!numberRegex.test(timesAdded)) return null;
+		const parsedCount = +timesAdded;
+
+		if (parsedCount === 0) return null;
+		return parsedCount;
+	});
+
+	const onAddMultipleClick = async () => {
+		const bookAddErrors = await addBook(parsedAddCount!);
+		if (Option.isSome(bookAddErrors)) {
+			clientLogger.fatal('Failed to Add Book!', { error: bookAddErrors.value });
+			throw new Error();
+		}
+
+		history.back();
+	};
 
 	const onAddClick = async () => {
 		const bookAddErrors = await addBook(1);
@@ -465,8 +482,6 @@
 		}
 
 		history.back();
-
-		console.log('test');
 	};
 
 	udcEditorSubmitCallbacks.registerCallback((v) => {
@@ -544,7 +559,11 @@
 		{#snippet actions()}
 			<EditorAction actionColor="error" onClick={onCancelClick}>Cancel</EditorAction>
 			{#if bookEditorState.type === 'new' || bookEditorState.type === 'new-copy'}
-				<EditorAction actionColor="information" disabled={hasErrors} onClick={onAddMultipleClick}>
+				<EditorAction
+					actionColor="information"
+					disabled={hasErrors || parsedAddCount === null}
+					onClick={onAddMultipleClick}
+				>
 					Add <input class="book-count-input" type="text" bind:value={timesAdded} /> Times
 				</EditorAction>
 				<EditorAction actionColor="success" disabled={hasErrors} onClick={onAddClick}
