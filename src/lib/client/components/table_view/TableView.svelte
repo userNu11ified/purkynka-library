@@ -82,6 +82,8 @@
 
 	const onGoUpClick = () => tableViewList?.goUp();
 
+	export const clearSelection = () => tableViewSelectionManager.resetSelection();
+
 	onMount(() => {
 		tableViewColumnManager.resetColumnSizes();
 		tableViewRect = tableView?.getBoundingClientRect();

@@ -5,6 +5,7 @@
 		| 'book-info'
 		| 'book-add'
 		| 'book-discard'
+		| 'book-undiscard'
 		| 'book-borrow'
 		| 'book-return'
 		| 'book-lock'
@@ -73,6 +74,13 @@
 		><path
 			fill="currentColor"
 			d="M13 19c0 1.1.3 2.12.81 3H6c-1.11 0-2-.89-2-2V4a2 2 0 0 1 2-2h1v7l2.5-1.5L12 9V2h6a2 2 0 0 1 2 2v9.09c-.33-.05-.66-.09-1-.09c-3.31 0-6 2.69-6 6m9.54-2.12l-1.42-1.41L19 17.59l-2.12-2.12l-1.41 1.41L17.59 19l-2.12 2.12l1.41 1.42L19 20.41l2.12 2.13l1.42-1.42L20.41 19z"
+		/></svg
+	>
+{:else if iconType === 'book-undiscard'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path
+			fill="currentColor"
+			d="M12 18.5c0 1.29.39 2.5 1.04 3.5H6c-1.11 0-2-.89-2-2V4a2 2 0 0 1 2-2h1v7l2.5-1.5L12 9V2h6a2 2 0 0 1 2 2v8.18c-.5-.11-1-.18-1.5-.18a6.5 6.5 0 0 0-6.5 6.5m10 0v-4l-1.17 1.17A4 4 0 0 0 18 14.5c-2.21 0-4 1.79-4 4s1.79 4 4 4c1.68 0 3.12-1.03 3.71-2.5H20a2.5 2.5 0 1 1-.23-3.27L18 18.5z"
 		/></svg
 	>
 {:else if iconType === 'book-borrow'}
