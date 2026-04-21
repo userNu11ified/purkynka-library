@@ -11,7 +11,7 @@ export const getDatabaseFilePath = (databaseWorkerConfig: DatabaseWorkerConfig) 
 	if (env.DB_FILE_NAME === undefined)
 		throw new Error('.env file is missing required DB_FILE_NAME key!');
 
-	return `data/${env.DB_FILE_NAME}`;
+	return `data/current/${env.DB_FILE_NAME}`;
 };
 
 const PRAGMAS = [
