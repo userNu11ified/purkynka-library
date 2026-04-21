@@ -1,11 +1,6 @@
+import type { QueryState } from '$client/collation/query_state';
 import type { Nullable } from '$shared/types/util';
 import { Context } from 'runed';
-
-export type TableViewQueryState = {
-	trimmedQuery: string;
-	lowercaseQuery: string;
-	caseSensitive: boolean;
-};
 
 export class TableViewFilterManager {
 	public static context = new Context<TableViewFilterManager>('table-view-filter-manager');
@@ -19,9 +14,9 @@ export class TableViewFilterManager {
 
 	public trimmedQuery: string = $derived(this.filterQuery.trim());
 	public lowercaseQuery: string = $derived(this.trimmedQuery.toLocaleLowerCase('cs'));
-	public caseSensitive: boolean = $state(true);
+	public caseSensitive: boolean = $state(false);
 
-	public queryState: TableViewQueryState = $derived({
+	public queryState: QueryState = $derived({
 		trimmedQuery: this.trimmedQuery,
 		lowercaseQuery: this.lowercaseQuery,
 		caseSensitive: this.caseSensitive
