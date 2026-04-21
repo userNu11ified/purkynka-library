@@ -4,8 +4,6 @@ import { on } from 'svelte/events';
 export const trapFocus =
 	(startFocusIndex: number = 0): Attachment<HTMLElement> =>
 	(node) => {
-		console.log(node);
-
 		const focusedBeforeTrap = document.activeElement as HTMLElement | undefined;
 
 		function getFocusableElements(): HTMLElement[] {
