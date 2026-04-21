@@ -3,7 +3,6 @@ import {
 	SendUpdateRequest,
 	type UpdateResponse
 } from '$server/worker/database_worker/messages/update';
-import schema_api_patch_validators from '$shared/database/validators/api/patch/schema_api_patch_validators';
 import { requestBodyMalformed, type ValidationError } from '$shared/error/api_error';
 import {
 	databaseTableNameFromAPITableName,
@@ -17,6 +16,7 @@ import { type } from 'arktype';
 import type { RequestHandler } from './$types';
 import { createAPIErrorResponse, createAPIOkResponse } from './shared';
 import { patchByIdBody } from '$shared/types/validators/patch_request_validators';
+import { APIPatchValidators } from '$shared/database/validators/api/patch/schema_api_patch_validators';
 
 type PatchError = DatabaseWorkerError | ValidationError;
 
@@ -27,7 +27,7 @@ const patchById = async (
 	const patchBody = patchByIdBody(body);
 	if (patchBody instanceof type.errors) return createValidationResultErrorFromArkErrors(patchBody);
 
-	const updateValidator = schema_api_patch_validators[databaseMatchedByIdTableName];
+	const updateValidator = APIPatchValidators[databaseMatchedByIdTableName];
 	const newValue = updateValidator(patchBody.newValue);
 	if (newValue instanceof type.errors) return createValidationResultErrorFromArkErrors(newValue);
 

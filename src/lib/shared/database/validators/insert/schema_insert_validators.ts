@@ -3,7 +3,7 @@ import * as JunctionTableInsertValidators from './junction_table_insert_validato
 import * as LookupTableInsertValidators from './lookup_table_insert_validators.ts';
 import * as ShorthandTableInsertValidators from './shorthand_table_insert_validators.ts';
 
-export default {
+export const SchemaInsertValidators = {
 	...BooksTableInsertValidators,
 	...JunctionTableInsertValidators,
 	...LookupTableInsertValidators,

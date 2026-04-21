@@ -3,7 +3,7 @@ import * as JunctionTableAPIPatchValidators from './junction_table_api_patch_val
 import * as LookupTableAPIPatchValidators from './lookup_table_api_patch_validators.ts';
 import * as ShorthandTableAPIPatchValidators from './shorthand_table_api_patch_validators.ts';
 
-export default {
+export const APIPatchValidators = {
 	...BooksTableAPIPatchValidators,
 	...JunctionTableAPIPatchValidators,
 	...LookupTableAPIPatchValidators,
