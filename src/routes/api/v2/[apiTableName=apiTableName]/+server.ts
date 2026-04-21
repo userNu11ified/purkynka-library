@@ -1,6 +1,5 @@
 import { SendInsertRequest } from '$server/worker/database_worker/messages/insert';
 import { SendSelectRequest } from '$server/worker/database_worker/messages/select';
-import schema_insert_validators from '$shared/database/validators/insert/schema_insert_validators';
 import { requestBodyMalformed, validationError } from '$shared/error/api_error';
 import { APITableNames } from '$shared/types/database/api';
 import { DatabaseTableNames } from '$shared/types/database/schema';
@@ -8,6 +7,7 @@ import { Result } from '$shared/types/result';
 import { json } from '@sveltejs/kit';
 import { type } from 'arktype';
 import type { RequestHandler } from './$types';
+import schema_api_post_validators from '$shared/database/validators/api/post/schema_api_post_validators';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { apiTableName } = params;
@@ -31,7 +31,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		return json(Result.flatten(Result.error(requestBodyMalformed())));
 	}
 
-	const insertValidator = schema_insert_validators[databaseTableName].array();
+	const insertValidator = schema_api_post_validators[databaseTableName].array();
 	const validatedData = insertValidator(body);
 
 	if (validatedData instanceof type.errors) {
