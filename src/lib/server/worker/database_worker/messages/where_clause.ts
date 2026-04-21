@@ -19,13 +19,13 @@ export type ColumnFilter<ColumnName extends string, Value> =
 	| { columnName: ColumnName; filterType: 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte'; value: Value }
 	| { columnName: ColumnName; filterType: 'inArray' | 'notInArray'; values: Value[] };
 
-type ColumnFilters<Table extends SQLiteTable> = ValueOf<{
+export type ColumnFilters<Table extends SQLiteTable> = ValueOf<{
 	[Key in keyof InferSelectModel<Table>]: ColumnFilter<Key, InferSelectModel<Table>[Key]>;
 }>;
 
-type FilterCombiner<Table extends SQLiteTable> = {
+export type FilterCombiner<Table extends SQLiteTable> = {
 	filterType: 'and' | 'or';
-	filters: [ColumnFilters<Table>, ColumnFilters<Table>, ...ColumnFilters<Table>[]];
+	filters: [WhereClause<Table>, WhereClause<Table>, ...WhereClause<Table>[]];
 };
 
 export type WhereClause<Table extends SQLiteTable> = ColumnFilters<Table> | FilterCombiner<Table>;

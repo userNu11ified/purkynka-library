@@ -1,55 +1,45 @@
 import type { DatabaseWorkerResult } from '$server/worker/database_worker/database_worker_types';
 import type { SelectResponse } from '$server/worker/database_worker/messages/select';
 import type { DatabaseTableName } from '../database/schema';
-import type {
-	AuthorNameSelect,
-	BookNameSelect,
-	DiscardReasonSelect,
-	ObtainedFromSelect,
-	PlaceOfPublishingSelect,
-	PublisherSelect
-} from '$shared/database/tables/lookup_tables';
-import type { LiteratureTypeSelect, UDCSelect } from '$shared/database/tables/shorthand_tables';
-import type { BookSelect } from '$shared/database/tables/books_table';
-import type { AuthorToBookSelect } from '$shared/database/tables/junction_tables';
 import { createContext } from 'svelte';
 import { Result, type ResultError, type ResultOk } from '../result';
 import type { DatabaseWorkerError } from '$server/worker/database_worker/messages/error';
 import { TableData } from './table_data.svelte';
-import { JunctionTableData } from './junction_table_data.svelte';
+import { AuthorToBookData } from './author_to_book_data.svelte';
 
 const [getLibrarianDataContext, setLibrarianDataContext] = createContext<LibrarianData>();
 
 export class LibrarianData {
-	public bookNames: TableData<BookNameSelect>;
-	public authorNames: TableData<AuthorNameSelect>;
-	public publishers: TableData<PublisherSelect>;
-	public placesOfPublishing: TableData<PlaceOfPublishingSelect>;
-	public obtainedFrom: TableData<ObtainedFromSelect>;
-	public discardReasons: TableData<DiscardReasonSelect>;
+	public bookNames: TableData<'bookNames'>;
+	public authorNames: TableData<'authorNames'>;
+	public publishers: TableData<'publishers'>;
+	public placesOfPublishing: TableData<'placesOfPublishing'>;
+	public obtainedFrom: TableData<'obtainedFrom'>;
+	public discardReasons: TableData<'discardReasons'>;
 
-	public literatureTypes: TableData<LiteratureTypeSelect>;
-	public udc: TableData<UDCSelect>;
+	public literatureTypes: TableData<'literatureTypes'>;
+	public udc: TableData<'udc'>;
 
-	public books: TableData<BookSelect>;
-	public authorToBook: JunctionTableData<AuthorToBookSelect, number, number>;
+	public books: TableData<'books'>;
+	public authorToBook: AuthorToBookData<'authorToBook', number, number>;
 
 	public loaded: Promise<void>;
 	private loadedResolver!: () => void;
 
 	constructor() {
-		this.bookNames = new TableData();
-		this.authorNames = new TableData();
-		this.publishers = new TableData();
-		this.placesOfPublishing = new TableData();
-		this.obtainedFrom = new TableData();
-		this.discardReasons = new TableData();
+		this.bookNames = new TableData('bookNames', (v) => v.id);
+		this.authorNames = new TableData('authorNames', (v) => v.id);
+		this.publishers = new TableData('publishers', (v) => v.id);
+		this.placesOfPublishing = new TableData('placesOfPublishing', (v) => v.id);
+		this.obtainedFrom = new TableData('obtainedFrom', (v) => v.id);
+		this.discardReasons = new TableData('discardReasons', (v) => v.id);
 
-		this.literatureTypes = new TableData();
-		this.udc = new TableData();
+		this.literatureTypes = new TableData('literatureTypes', (v) => v.id);
+		this.udc = new TableData('udc', (v) => v.id);
 
-		this.books = new TableData();
-		this.authorToBook = new JunctionTableData(
+		this.books = new TableData('books', (v) => v.id);
+		this.authorToBook = new AuthorToBookData(
+			'authorToBook',
 			(v) => v.bookId,
 			(v) => v.authorId
 		);
