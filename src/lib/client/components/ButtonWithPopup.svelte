@@ -39,6 +39,15 @@
 		position: relative;
 	}
 
+	.button-with-popup:disabled {
+		color: var(--text-disabled);
+	}
+
+	.button-with-popup:disabled:hover {
+		background-color: unset;
+		cursor: not-allowed;
+	}
+
 	.button-with-popup:hover .button-popup:not(:hover) {
 		visibility: visible;
 	}
