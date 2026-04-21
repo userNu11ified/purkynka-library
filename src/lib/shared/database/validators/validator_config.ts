@@ -1,3 +1,3 @@
-import { configure } from 'arktype';
+import { configure } from 'arktype/config';
 
-export const setupValidatorConfig = () => configure({ onUndeclaredKey: 'reject' });
+configure({ onUndeclaredKey: 'reject' });
