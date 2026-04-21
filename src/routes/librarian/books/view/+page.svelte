@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { pushState } from '$app/navigation';
+	import { clientLogger } from '$client/client_loggers';
 	import { stringFilter } from '$client/collation/filters';
 	import { MINIMUM_COLUMN_WIDTH } from '$client/components/table_view/logic/table_view_column_sizing';
 	import {
@@ -11,10 +12,11 @@
 	import TableViewSelectAction from '$client/components/table_view/selection/TableViewSelectAction.svelte';
 	import TableView from '$client/components/table_view/TableView.svelte';
 	import { LibrarianData } from '$shared/types/loaded_data/librarian_data';
+	import { Result } from '$shared/types/result';
 	import { formatDateOrNull } from '$shared/types/util';
 
 	const librarianData = LibrarianData.context.get();
-	const authorToBook = librarianData.authorToBook.getByBookIdMap();
+	const authorToBook = $derived(librarianData.authorToBook.getByBookIdMap());
 
 	const getAuthorString = (bookId: number) => {
 		const authors = authorToBook.get(bookId);
@@ -34,6 +36,18 @@
 		pushState('', { bookEditorState: { type: 'new-copy', bookId } });
 	const onDiscardClick = (bookId: number) =>
 		pushState('', { bookEditorState: { type: 'discard', bookId } });
+	const onReturnClick = async (bookId: number) => {
+		const book = { ...librarianData.books.getValueByIdOrNull(bookId)! };
+		book.discardDate = null;
+		book.discardDocument = null;
+		book.discardReasonId = null;
+
+		const bookPatchResult = await librarianData.books.patch({ ids: [bookId], newValue: book });
+		if (Result.isError(bookPatchResult)) {
+			clientLogger.fatal('Failed to PATCH undiscarding book!', { error: bookPatchResult.value });
+			throw new Error();
+		}
+	};
 </script>
 
 <TableView
@@ -192,11 +206,22 @@
 		<TableViewSelectAction iconType="book-add" onClick={() => onNewCopyClick(selectedItem[0].id)}>
 			New Copy
 		</TableViewSelectAction>
-		<TableViewSelectAction
-			iconType="book-discard"
-			onClick={() => onDiscardClick(selectedItem[0].id)}
-		>
-			Discard
-		</TableViewSelectAction>
+		{#if selectedItem[0].discardDateString === ''}
+			<TableViewSelectAction
+				iconType="book-discard"
+				color="error"
+				onClick={() => onDiscardClick(selectedItem[0].id)}
+			>
+				Discard
+			</TableViewSelectAction>
+		{:else}
+			<TableViewSelectAction
+				iconType="book-undiscard"
+				color="success"
+				onClick={() => onReturnClick(selectedItem[0].id)}
+			>
+				Return
+			</TableViewSelectAction>
+		{/if}
 	{/snippet}
 </TableView>

@@ -21,7 +21,7 @@
 		librarianData.books.getArray().filter((v) => v.discardDate !== null)
 	);
 
-	const authorToBook = librarianData.authorToBook.getByBookIdMap();
+	const authorToBook = $derived(librarianData.authorToBook.getByBookIdMap());
 	const getAuthorString = (bookId: number) => {
 		const authors = authorToBook.get(bookId);
 		if (authors === undefined) return '';
@@ -209,6 +209,7 @@
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction
 			iconType="book-undiscard"
+			color="success"
 			onClick={() => onReturnClick(selectedItem[0].id)}
 		>
 			Return
