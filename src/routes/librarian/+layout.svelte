@@ -12,6 +12,9 @@
 	import BookEditor from '$client/components/editors/BookEditor.svelte';
 	import UDCEditor from '$client/components/editors/UDCEditor.svelte';
 	import { EditorPageStates } from '$client/components/editors/editor_page_states.svelte';
+	import MergeEditor from '$client/components/editors/MergeEditor.svelte';
+	import LookupEditor from '$client/components/editors/LookupEditor.svelte';
+	import ShorthandEditor from '$client/components/editors/ShorthandEditor.svelte';
 
 	let { children, data }: LayoutProps = $props();
 
@@ -59,6 +62,15 @@
 				{/if}
 				{#if editorPageStates.udcEditorActive}
 					<UDCEditor></UDCEditor>
+				{/if}
+				{#if editorPageStates.mergeEditorActive}
+					<MergeEditor></MergeEditor>
+				{/if}
+				{#if editorPageStates.lookupEditorActive}
+					<LookupEditor></LookupEditor>
+				{/if}
+				{#if editorPageStates.shorthandEditorActive}
+					<ShorthandEditor></ShorthandEditor>
 				{/if}
 				{@render children()}
 			{/snippet}

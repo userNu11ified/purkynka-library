@@ -2,6 +2,9 @@
 
 import type {
 	BookEditorPageState,
+	LookupEditorPageState,
+	MergeEditorPageState,
+	ShorthandEditorPageState,
 	UDCEditorPageState
 } from '$client/components/editors/editor_page_states.svelte';
 
@@ -14,6 +17,9 @@ declare global {
 		interface PageState {
 			bookEditorState?: BookEditorPageState;
 			udcEditorState?: UDCEditorPageState;
+			mergeEditorState?: MergeEditorPageState;
+			lookupEditorState?: LookupEditorPageState;
+			shorthandEditorState?: ShorthandEditorPageState;
 		}
 		// interface Platform {}
 	}

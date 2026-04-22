@@ -31,6 +31,7 @@
 		| 'remove'
 		| 'edit'
 		| 'copy'
+		| 'merge'
 		| 'selection-remove'
 		| 'column-width'
 		| 'chevron-up';
@@ -244,6 +245,13 @@
 		><path
 			fill="currentColor"
 			d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"
+		/></svg
+	>
+{:else if iconType === 'merge'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path
+			fill="currentColor"
+			d="M17 20.41L18.41 19L15 15.59L13.59 17M7.5 8H11v5.59L5.59 19L7 20.41l6-6V8h3.5L12 3.5"
 		/></svg
 	>
 {:else if iconType === 'selection-remove'}
