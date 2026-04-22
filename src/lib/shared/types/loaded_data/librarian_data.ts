@@ -11,11 +11,13 @@ import type {
 	DiscardReasonSelect,
 	ObtainedFromSelect,
 	PlaceOfPublishingSelect,
-	PublisherSelect
+	PublisherSelect,
+	ReaderClassSelect
 } from '$shared/database/tables/lookup_tables';
 import type { LiteratureTypeSelect, UDCSelect } from '$shared/database/tables/shorthand_tables';
 import type { BookSelect } from '$shared/database/tables/books_table';
 import { AuthorToBookTableData } from './author_to_book_table_data.svelte';
+import type { ReaderSelect } from '$shared/database/tables/readers_table';
 
 export class LibrarianData {
 	public static context = new Context<LibrarianData>('librarian-data');
@@ -33,6 +35,9 @@ export class LibrarianData {
 	public books: TableWithIdData<BookSelect, 'books'>;
 	public authorToBook: AuthorToBookTableData;
 
+	public readerClasses: TableWithIdData<ReaderClassSelect, 'readerClasses'>;
+	public readers: TableWithIdData<ReaderSelect, 'readers'>;
+
 	public loaded: Promise<void>;
 	private loadedResolver!: () => void;
 
@@ -49,6 +54,9 @@ export class LibrarianData {
 
 		this.books = new TableWithIdData('books');
 		this.authorToBook = new AuthorToBookTableData();
+
+		this.readerClasses = new TableWithIdData('readerClasses');
+		this.readers = new TableWithIdData('readers');
 
 		this.loaded = new Promise((res) => (this.loadedResolver = res));
 	}
@@ -71,7 +79,9 @@ export class LibrarianData {
 			literatureTypes,
 			udc,
 			books,
-			authorToBook
+			authorToBook,
+			readerClasses,
+			readers
 		] = loadedData.map((result) =>
 			Result.unwrap(result as ResultOk<SelectResponse>)
 		) as unknown as [
@@ -84,7 +94,9 @@ export class LibrarianData {
 			SelectResponse<'literatureTypes'>,
 			SelectResponse<'udc'>,
 			SelectResponse<'books'>,
-			SelectResponse<'authorToBook'>
+			SelectResponse<'authorToBook'>,
+			SelectResponse<'readerClasses'>,
+			SelectResponse<'readers'>
 		];
 
 		this.bookNames.initialize(bookNames.values);
@@ -97,6 +109,8 @@ export class LibrarianData {
 		this.udc.initialize(udc.values);
 		this.books.initialize(books.values);
 		this.authorToBook.initialize(authorToBook.values);
+		this.readerClasses.initialize(readerClasses.values);
+		this.readers.initialize(readers.values);
 
 		this.loadedResolver();
 	}
