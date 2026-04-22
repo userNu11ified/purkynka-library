@@ -1,10 +1,22 @@
 <script lang="ts">
+	import { pushState } from '$app/navigation';
+	import { EditorPageStates } from '$client/components/editors/editor_page_states.svelte';
+	import SidebarButton from '$client/components/view_with_sidebar/SidebarButton.svelte';
 	import SidebarLink from '$client/components/view_with_sidebar/SidebarLink.svelte';
 	import SidebarSeparator from '$client/components/view_with_sidebar/SidebarSeparator.svelte';
 	import ViewWithSidebar from '$client/components/view_with_sidebar/ViewWithSidebar.svelte';
 	import type { LayoutProps } from './$types';
 
 	let { children }: LayoutProps = $props();
+
+	const editorPageStates = EditorPageStates.context.get();
+
+	const onAddUserClick = () =>
+		pushState('', {
+			userEditorState: {
+				type: 'new'
+			}
+		});
 </script>
 
 <ViewWithSidebar>
@@ -14,7 +26,11 @@
 		<SidebarLink href="/librarian/users/librarians" iconType="librarian">Librarians</SidebarLink>
 
 		<SidebarSeparator />
-		<SidebarLink href="/librarian/users/add-user" iconType="user-add">Add User</SidebarLink>
+		<SidebarButton
+			iconType="user-add"
+			active={editorPageStates.userEditorActive}
+			onClick={onAddUserClick}>Add User</SidebarButton
+		>
 	{/snippet}
 	{#snippet view()}
 		{@render children()}

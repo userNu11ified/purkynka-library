@@ -23,6 +23,8 @@ export type LookupEditorPageState = {
 };
 export type ShorthandEditorPageState = { type: 'literatureType' | 'udc'; id: number };
 
+export type UserEditorPageState = { type: 'new' } | { type: 'edit'; userId: number };
+
 export class EditorPageStates {
 	public static context = new Context<EditorPageStates>('editor-page-states');
 
@@ -41,6 +43,9 @@ export class EditorPageStates {
 	public shorthandEditorState: ShorthandEditorPageState | undefined;
 	public shorthandEditorActive: boolean;
 
+	public userEditorState: UserEditorPageState | undefined;
+	public userEditorActive: boolean;
+
 	constructor() {
 		this.bookEditorState = $derived(page.state.bookEditorState);
 		this.bookEditorActive = $derived(this.bookEditorState !== undefined);
@@ -56,5 +61,8 @@ export class EditorPageStates {
 
 		this.shorthandEditorState = $derived(page.state.shorthandEditorState);
 		this.shorthandEditorActive = $derived(this.shorthandEditorState !== undefined);
+
+		this.userEditorState = $derived(page.state.userEditorState);
+		this.userEditorActive = $derived(this.userEditorState !== undefined);
 	}
 }

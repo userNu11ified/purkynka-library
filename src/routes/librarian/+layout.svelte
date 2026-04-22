@@ -15,6 +15,7 @@
 	import MergeEditor from '$client/components/editors/MergeEditor.svelte';
 	import LookupEditor from '$client/components/editors/LookupEditor.svelte';
 	import ShorthandEditor from '$client/components/editors/ShorthandEditor.svelte';
+	import UserEditor from '$client/components/editors/UserEditor.svelte';
 
 	let { children, data }: LayoutProps = $props();
 
@@ -71,6 +72,9 @@
 				{/if}
 				{#if editorPageStates.shorthandEditorActive}
 					<ShorthandEditor></ShorthandEditor>
+				{/if}
+				{#if editorPageStates.userEditorActive}
+					<UserEditor></UserEditor>
 				{/if}
 				{@render children()}
 			{/snippet}
