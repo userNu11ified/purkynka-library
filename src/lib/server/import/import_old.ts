@@ -7,11 +7,7 @@ import type { Nullable } from '$shared/types/util';
 import type { InferInsertModel } from 'drizzle-orm';
 import type { OldDatabase, OldShorthand } from './import_old_types';
 import type { ReaderInsert } from '$shared/database/tables/readers_table';
-import {
-	borrowHistory,
-	type BorrowHistoryInsert,
-	type BorrowInsert
-} from '$shared/database/tables/borrow_tables';
+import { type BorrowHistoryInsert, type BorrowInsert } from '$shared/database/tables/borrow_tables';
 
 const incrementIdOrNull = (id: Nullable<number>) => (id === null ? null : id + 1);
 const parseDateOrNull = (date: Nullable<string>) => (date === null ? null : new Date(date));
@@ -197,7 +193,7 @@ const importBorrows = async ({ borrows, borrow_history, reader_classes }: OldDat
 			{ book_id, reader_name, reader_class, borrow_date, return_date, times_extended, permanent },
 			borrowId
 		): BorrowHistoryInsert => ({
-			borrowId: incrementIdOrNull(borrowId)!,
+			id: incrementIdOrNull(borrowId)!,
 			bookId: incrementIdOrNull(book_id)!,
 			readerName: reader_name,
 			readerClass: reader_classes[reader_class],

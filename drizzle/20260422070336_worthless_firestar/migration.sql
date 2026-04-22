@@ -1,0 +1,1 @@
+ALTER TABLE `borrowHistory` RENAME COLUMN `borrowId` TO `id`;

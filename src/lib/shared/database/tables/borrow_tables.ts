@@ -19,7 +19,7 @@ export const borrows = sqliteTable('borrows', {
 });
 
 export const borrowHistory = sqliteTable('borrowHistory', {
-	borrowId: primaryKeyId(),
+	id: primaryKeyId(),
 	bookId: int().notNull(),
 
 	readerName: text().notNull(),
