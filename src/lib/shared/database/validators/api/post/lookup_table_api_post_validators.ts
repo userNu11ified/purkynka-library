@@ -5,7 +5,8 @@ import {
 	discardReasons as discardReasonsTable,
 	obtainedFrom as obtainedFromTable,
 	placesOfPublishing as placesOfPublishingTable,
-	publishers as publishersTable
+	publishers as publishersTable,
+	readerClasses as readerClassesTable
 } from '$shared/database/tables/lookup_tables';
 import { type } from 'arktype';
 
@@ -30,6 +31,10 @@ export const obtainedFrom = createInsertSchema(obtainedFromTable, {
 	updatedOn: (v) => type('string.date.iso.parse').pipe(v)
 });
 export const discardReasons = createInsertSchema(discardReasonsTable, {
+	createdOn: (v) => type('string.date.iso.parse').pipe(v),
+	updatedOn: (v) => type('string.date.iso.parse').pipe(v)
+});
+export const readerClasses = createInsertSchema(readerClassesTable, {
 	createdOn: (v) => type('string.date.iso.parse').pipe(v),
 	updatedOn: (v) => type('string.date.iso.parse').pipe(v)
 });

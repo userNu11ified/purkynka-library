@@ -2,15 +2,11 @@ import { oldDataImporterLogger } from '$server/server_loggers';
 import { SendInsertRequest } from '$server/worker/database_worker/messages/insert';
 import type { BookInsert } from '$shared/database/tables/books_table';
 import type { AuthorToBookInsert } from '$shared/database/tables/junction_tables';
-import {
-	DatabaseTableNames,
-	type DatabaseSchema,
-	type DatabaseTableName
-} from '$shared/types/database/schema';
+import { type DatabaseSchema, type DatabaseTableName } from '$shared/types/database/schema';
 import type { Nullable } from '$shared/types/util';
 import type { InferInsertModel } from 'drizzle-orm';
 import type { OldDatabase, OldShorthand } from './import_old_types';
-import { SendRemoveRequest } from '$server/worker/database_worker/messages/remove';
+import type { ReaderInsert } from '$shared/database/tables/readers_table';
 
 const incrementIdOrNull = (id: Nullable<number>) => (id === null ? null : id + 1);
 const parseDateOrNull = (date: Nullable<string>) => (date === null ? null : new Date(date));
@@ -41,7 +37,8 @@ const importLookupTables = async ({
 	publishers,
 	places_of_publishing,
 	givers,
-	discard_reasons
+	discard_reasons,
+	reader_classes
 }: OldDatabase) => {
 	const transformedBookNames = transformLookupTable(book_names);
 	const transformedAuthorNames = transformLookupTable(authors);
@@ -50,13 +47,16 @@ const importLookupTables = async ({
 	const transformedObtainedFrom = transformLookupTable(givers);
 	const transformedDiscardReasons = transformLookupTable(discard_reasons);
 
+	const transformedReaderClasses = transformLookupTable(reader_classes);
+
 	await Promise.all([
 		SendInsertRequest('bookNames', transformedBookNames),
 		SendInsertRequest('authorNames', transformedAuthorNames),
 		SendInsertRequest('publishers', transformedPublishers),
 		SendInsertRequest('placesOfPublishing', transformedPlacesOfPublishing),
 		SendInsertRequest('obtainedFrom', transformedObtainedFrom),
-		SendInsertRequest('discardReasons', transformedDiscardReasons)
+		SendInsertRequest('discardReasons', transformedDiscardReasons),
+		SendInsertRequest('readerClasses', transformedReaderClasses)
 	]);
 
 	oldDataImporterLogger.debug('Imported lookup tables!');
@@ -150,6 +150,25 @@ const importBooks = async ({ books }: OldDatabase) => {
 	oldDataImporterLogger.debug('Imported book tables!');
 };
 
+const digitRegex = /\d/;
+
+const importReaders = async ({ reader_classes, readers }: OldDatabase) => {
+	const transformedReaders = readers.map(
+		({ id, name, class_name, added_date, last_modified_date }): ReaderInsert => ({
+			id: incrementIdOrNull(id)!,
+			readerName: name,
+			readerClassId: incrementIdOrNull(class_name)!,
+			readerType: digitRegex.test(reader_classes[class_name]) ? 'S' : 'T',
+			createdOn: parseDateOrNull(added_date) ?? undefined,
+			updatedOn: parseDateOrNull(last_modified_date) ?? undefined
+		})
+	);
+
+	await sendChunked('readers', transformedReaders);
+
+	oldDataImporterLogger.debug('Imported readers!');
+};
+
 export const importOldData = async (filePath: string) => {
 	const oldDatabase = (await Bun.file(filePath).json()) as OldDatabase;
 	oldDataImporterLogger.debug(`Loaded old database from: ${filePath}!`);
@@ -157,5 +176,7 @@ export const importOldData = async (filePath: string) => {
 	await importLookupTables(oldDatabase);
 	await importShorthandTables(oldDatabase);
 	await importBooks(oldDatabase);
+	await importReaders(oldDatabase);
+
 	oldDataImporterLogger.info('Finished importing old database!');
 };
