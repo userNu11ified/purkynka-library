@@ -25,6 +25,8 @@ export class EditorFieldSelectState<T> extends EditorFieldState<
 	constructor(name: string, settings: EditorFieldSelectStateSettings<T>) {
 		super(name, settings);
 
+		this.empty = () => this.selectedOptionIndex === null;
+
 		this.selectedOptionIndex = $state(null);
 		this.selectOptions = $derived(
 			this.settings!.options.map((v) => ({
@@ -51,5 +53,9 @@ export class EditorFieldSelectState<T> extends EditorFieldState<
 		const valueText = this.settings!.textCreator(value);
 		const foundIndex = this.selectOptions.findIndex((v) => v.text === valueText);
 		this.selectedOptionIndex = foundIndex === -1 ? null : foundIndex;
+	}
+
+	public setFromIndex(index: Nullable<number>) {
+		this.selectedOptionIndex = index;
 	}
 }

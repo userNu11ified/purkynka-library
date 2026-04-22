@@ -201,7 +201,7 @@
 		}
 
 		editorState.idState.setFromValue(lastBook.id + 1);
-		editorState.literatureTypeState.selectedOptionIndex = 0;
+		editorState.literatureTypeState.setFromIndex(0);
 		editorState.addDateState.setFromValue(new Date());
 		editorState.documentNumberState.setFromValue(lastBook.documentNumber);
 		editorState.obtainedFromState.setFromListItem(

@@ -26,6 +26,8 @@ export abstract class EditorFieldState<
 	public trimmedValue: string;
 	public valueState: { value: string; trimmedValue: string };
 
+	public empty: () => boolean;
+
 	public parsed: { parsedValue: Nullable<T>; parseErrors: string[] };
 	public invalid: boolean;
 
@@ -39,8 +41,10 @@ export abstract class EditorFieldState<
 		this.trimmedValue = $derived(this.value.trim());
 		this.valueState = $derived({ value: this.value, trimmedValue: this.trimmedValue });
 
+		this.empty = $state(() => this.valueState.trimmedValue === '');
+
 		this.parsed = $derived.by(() => {
-			if (this.settings?.required && this.valueState.trimmedValue === '') {
+			if (this.settings?.required && this.empty()) {
 				return { parsedValue: null, parseErrors: ['This field is required!'] };
 			}
 
