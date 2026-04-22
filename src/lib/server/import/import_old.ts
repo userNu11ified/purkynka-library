@@ -7,6 +7,11 @@ import type { Nullable } from '$shared/types/util';
 import type { InferInsertModel } from 'drizzle-orm';
 import type { OldDatabase, OldShorthand } from './import_old_types';
 import type { ReaderInsert } from '$shared/database/tables/readers_table';
+import {
+	borrowHistory,
+	type BorrowHistoryInsert,
+	type BorrowInsert
+} from '$shared/database/tables/borrow_tables';
 
 const incrementIdOrNull = (id: Nullable<number>) => (id === null ? null : id + 1);
 const parseDateOrNull = (date: Nullable<string>) => (date === null ? null : new Date(date));
@@ -151,7 +156,6 @@ const importBooks = async ({ books }: OldDatabase) => {
 };
 
 const digitRegex = /\d/;
-
 const importReaders = async ({ reader_classes, readers }: OldDatabase) => {
 	const transformedReaders = readers.map(
 		({ id, name, class_name, added_date, last_modified_date }): ReaderInsert => ({
@@ -169,6 +173,47 @@ const importReaders = async ({ reader_classes, readers }: OldDatabase) => {
 	oldDataImporterLogger.debug('Imported readers!');
 };
 
+const importBorrows = async ({ borrows, borrow_history, reader_classes }: OldDatabase) => {
+	const transformedBorrows = borrows.map(
+		({ id, book, reader, borrow_date, return_date, times_extended, permanent }): BorrowInsert => ({
+			id: incrementIdOrNull(id)!,
+			bookId: incrementIdOrNull(book)!,
+			readerId: incrementIdOrNull(reader)!,
+			borrowDate: parseDateOrNull(borrow_date)!,
+			returnDate: parseDateOrNull(return_date),
+			timesExtended: times_extended,
+			permanent
+		})
+	);
+
+	const uniqueIds = new Set(transformedBorrows.map((v) => v.id));
+	const filteredBorrows = uniqueIds
+		.values()
+		.toArray()
+		.map((id) => transformedBorrows.find((v) => v.id === id)!);
+
+	const transformedBorrowHistory = borrow_history.map(
+		(
+			{ book_id, reader_name, reader_class, borrow_date, return_date, times_extended, permanent },
+			borrowId
+		): BorrowHistoryInsert => ({
+			borrowId: incrementIdOrNull(borrowId)!,
+			bookId: incrementIdOrNull(book_id)!,
+			readerName: reader_name,
+			readerClass: reader_classes[reader_class],
+			borrowDate: parseDateOrNull(borrow_date)!,
+			returnDate: parseDateOrNull(return_date),
+			timesExtended: times_extended,
+			permanent
+		})
+	);
+
+	await SendInsertRequest('borrows', filteredBorrows);
+	await SendInsertRequest('borrowHistory', transformedBorrowHistory);
+
+	oldDataImporterLogger.debug('Imported borrows!');
+};
+
 export const importOldData = async (filePath: string) => {
 	const oldDatabase = (await Bun.file(filePath).json()) as OldDatabase;
 	oldDataImporterLogger.debug(`Loaded old database from: ${filePath}!`);
@@ -177,6 +222,7 @@ export const importOldData = async (filePath: string) => {
 	await importShorthandTables(oldDatabase);
 	await importBooks(oldDatabase);
 	await importReaders(oldDatabase);
+	await importBorrows(oldDatabase);
 
 	oldDataImporterLogger.info('Finished importing old database!');
 };
