@@ -22,7 +22,7 @@ export const handlePost: RequestHandler = async ({ params, request }) => {
 		return createAPIErrorResponse(Result.error(requestBodyMalformed()));
 	}
 
-	const insertValidator = APIPostValidators[databaseTableName].array();
+	const insertValidator = APIPostValidators[databaseTableName].array().atLeastLength(1);
 	const validatedData = insertValidator(body);
 
 	if (validatedData instanceof type.errors)

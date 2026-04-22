@@ -21,6 +21,8 @@ import {
 	deleteAuthorToBookBody,
 	deleteByIdBody
 } from '$shared/types/validators/delete_request_validators';
+import { tableWithIdDeleteBody } from '$shared/types/loaded_data/table_with_id_data.svelte';
+import { authorToBookDeleteBody } from '$shared/types/loaded_data/author_to_book_table_data.svelte';
 
 type DeleteError = DatabaseWorkerError | ValidationError;
 
@@ -28,14 +30,14 @@ const handleDeleteById = async (
 	databaseMatchedByIdTableName: DatabaseMatchedByIdTableName,
 	body: any
 ): Promise<Result<RemoveResponse<DatabaseMatchedByIdTableName>, DeleteError>> => {
-	const deleteBody = deleteByIdBody(body);
+	const deleteBody = tableWithIdDeleteBody(body);
 	if (deleteBody instanceof type.errors)
 		return createValidationResultErrorFromArkErrors(deleteBody);
 
 	return SendRemoveRequest(databaseMatchedByIdTableName, {
 		filterType: 'inArray',
 		columnName: 'id',
-		values: deleteBody.ids
+		values: deleteBody
 	});
 };
 
@@ -74,7 +76,7 @@ const createAuthorToBookFilter = ({
 const handleDeleteAuthorToBook = async (
 	body: any
 ): Promise<Result<RemoveResponse<'authorToBook'>, DeleteError>> => {
-	const deleteBody = deleteAuthorToBookBody(body);
+	const deleteBody = authorToBookDeleteBody(body);
 	if (deleteBody instanceof type.errors)
 		return createValidationResultErrorFromArkErrors(deleteBody);
 

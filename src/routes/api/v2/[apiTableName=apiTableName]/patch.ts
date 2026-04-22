@@ -15,8 +15,8 @@ import { text } from '@sveltejs/kit';
 import { type } from 'arktype';
 import type { RequestHandler } from './$types';
 import { createAPIErrorResponse, createAPIOkResponse } from './shared';
-import { patchByIdBody } from '$shared/types/validators/patch_request_validators';
 import { APIPatchValidators } from '$shared/database/validators/api/patch/schema_api_patch_validators';
+import { tableWithIdPatchBody } from '$shared/types/loaded_data/table_with_id_data.svelte';
 
 type PatchError = DatabaseWorkerError | ValidationError;
 
@@ -24,18 +24,18 @@ const patchById = async (
 	databaseMatchedByIdTableName: DatabaseMatchedByIdTableName,
 	body: any
 ): Promise<Result<UpdateResponse<DatabaseMatchedByIdTableName>, PatchError>> => {
-	const patchBody = patchByIdBody(body);
+	const patchBody = tableWithIdPatchBody(APIPatchValidators[databaseMatchedByIdTableName])(body);
 	if (patchBody instanceof type.errors) return createValidationResultErrorFromArkErrors(patchBody);
 
-	const updateValidator = APIPatchValidators[databaseMatchedByIdTableName];
-	const newValue = updateValidator(patchBody.newValue);
-	if (newValue instanceof type.errors) return createValidationResultErrorFromArkErrors(newValue);
-
-	return SendUpdateRequest<DatabaseMatchedByIdTableName>(databaseMatchedByIdTableName, newValue, {
-		filterType: 'inArray',
-		columnName: 'id',
-		values: patchBody.ids
-	});
+	return SendUpdateRequest<DatabaseMatchedByIdTableName>(
+		databaseMatchedByIdTableName,
+		patchBody.newValue,
+		{
+			filterType: 'inArray',
+			columnName: 'id',
+			values: patchBody.ids
+		}
+	);
 };
 
 export const handlePatch: RequestHandler = async ({ params, request }) => {
