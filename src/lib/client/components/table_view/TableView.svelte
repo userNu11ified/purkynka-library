@@ -99,9 +99,7 @@
 	bind:clientWidth={tableViewColumnManager.availableWidth}
 	bind:this={tableView}
 >
-	{#await renderAfterResolved}
-		<h1>Loading</h1>
-	{:then}
+	{#await renderAfterResolved then}
 		<div
 			class="table-view fill-container inverse-grid"
 			style:--grid-layout={tableViewColumnManager.calculatedGridLayout}
