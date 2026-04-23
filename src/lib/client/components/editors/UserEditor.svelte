@@ -151,7 +151,7 @@
 </script>
 
 <Modal onClickOutside={() => history.back()}>
-	<Editor {@attach trapFocus(1)}>
+	<Editor {@attach trapFocus(0)}>
 		{#snippet title()}
 			{userEditorState.type === 'new' ? 'Add Reader' : 'Edit Reader'}
 		{/snippet}
