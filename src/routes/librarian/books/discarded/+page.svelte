@@ -33,7 +33,7 @@
 			.join(' — ');
 	};
 
-	const onReturnClick = async (bookId: number) => {
+	const onRestoreClick = async (bookId: number) => {
 		const book = { ...librarianData.books.getValueByIdOrNull(bookId)! };
 		book.discardDate = null;
 		book.discardDocument = null;
@@ -171,6 +171,7 @@
 		},
 		{
 			columnName: 'Price',
+			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.price },
@@ -179,6 +180,7 @@
 		},
 		{
 			columnName: 'Literature Type',
+			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.literatureTypeShortName },
@@ -190,6 +192,7 @@
 		},
 		{
 			columnName: 'Discard Reason',
+			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.discardReason },
@@ -198,6 +201,7 @@
 		},
 		{
 			columnName: 'Discard Document',
+			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.discardDocument },
@@ -208,9 +212,9 @@
 >
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction
-			iconType="book-undiscard"
+			iconType="book-restore"
 			color="success"
-			onClick={() => onReturnClick(selectedItem[0].id)}
+			onClick={() => onRestoreClick(selectedItem[0].id)}
 		>
 			Return
 		</TableViewSelectAction>

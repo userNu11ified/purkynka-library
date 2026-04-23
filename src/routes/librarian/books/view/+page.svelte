@@ -31,12 +31,31 @@
 
 	const onEditClick = (bookId: number) =>
 		pushState('', { bookEditorState: { type: 'edit', bookId } });
-	const onBorrowClick = (bookId: number) => {};
+	const onBorrowClick = (bookId: number) => pushState('', { borrowEditorState: { bookId } });
+	const onReturnClick = async (borrowId: number) => {
+		const borrow = librarianData.borrows.getValueByIdOrNull(borrowId)!;
+		const borrowRemoveResult = await librarianData.borrows.delete([borrow.id]);
+		if (Result.isError(borrowRemoveResult)) {
+			clientLogger.fatal('Failed to PATCH returned borrow!', { error: borrowRemoveResult.value });
+			throw new Error();
+		}
+
+		const borrowHistoryPatchResult = await librarianData.borrowHistory.patch({
+			ids: [borrow.id],
+			newValue: { returnDate: new Date() }
+		});
+		if (Result.isError(borrowHistoryPatchResult)) {
+			clientLogger.fatal('Failed to PATCH borrow history!', {
+				error: borrowHistoryPatchResult.value
+			});
+			throw new Error();
+		}
+	};
 	const onNewCopyClick = (bookId: number) =>
 		pushState('', { bookEditorState: { type: 'new-copy', bookId } });
 	const onDiscardClick = (bookId: number) =>
 		pushState('', { bookEditorState: { type: 'discard', bookId } });
-	const onReturnClick = async (bookId: number) => {
+	const onRestoreClick = async (bookId: number) => {
 		const book = { ...librarianData.books.getValueByIdOrNull(bookId)! };
 		book.discardDate = null;
 		book.discardDocument = null;
@@ -57,6 +76,8 @@
 		const bookName = librarianData.bookNames.getValueByIdOrNull(bookNameId);
 		const udc = librarianData.udc.getValueByIdOrNull(udcId);
 		const discardDateString = formatDateOrNull(discardDate) ?? '';
+		const borrow = librarianData.borrows.getByBookIdOrNull(id);
+		const reader = librarianData.readers.getValueByIdOrNull(borrow?.readerId ?? null);
 
 		return {
 			id,
@@ -69,7 +90,12 @@
 			note: note ?? '',
 			discardDate: discardDate ?? new Date(1, 1, 1970),
 			discardDateString,
-			discardDateCompactString: discardDateString.replaceAll(' ', '')
+			discardDateCompactString: discardDateString.replaceAll(' ', ''),
+			borrowId: borrow?.id ?? null,
+			borrowClassName:
+				librarianData.readerClasses.getValueByIdOrNull(reader?.readerClassId ?? null)?.value ?? '',
+			borrowReaderName: reader?.readerName ?? '',
+			borrowDate: formatDateOrNull(borrow?.borrowDate ?? null) ?? ''
 		};
 	}}
 	itemCopier={({
@@ -177,7 +203,11 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
-			columnRenderer: { type: 'text', textCreator: () => '' },
+			columnRenderer: {
+				type: 'text',
+				textCreator: (v) => v.borrowClassName,
+				titleCreator: (v) => `${v.borrowReaderName}\n${v.borrowDate}`
+			},
 			columnSorter: () => 0,
 			columnSearcher: { type: 'filter', filter: () => true }
 		},
@@ -197,12 +227,25 @@
 	]}
 >
 	{#snippet singleSelectActions(selectedItem)}
+		{#if selectedItem[0].borrowId !== null}
+			<TableViewSelectAction
+				iconType="book-return"
+				onClick={() => onReturnClick(selectedItem[0].borrowId!)}
+			>
+				Return
+			</TableViewSelectAction>
+		{:else}
+			<TableViewSelectAction
+				iconType="book-borrow"
+				onClick={() => onBorrowClick(selectedItem[0].id)}
+			>
+				Borrow
+			</TableViewSelectAction>
+		{/if}
 		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}
 			>Edit</TableViewSelectAction
 		>
-		<TableViewSelectAction iconType="book-borrow" onClick={() => onBorrowClick(selectedItem[0].id)}>
-			Borrow
-		</TableViewSelectAction>
+
 		<TableViewSelectAction iconType="book-add" onClick={() => onNewCopyClick(selectedItem[0].id)}>
 			New Copy
 		</TableViewSelectAction>
@@ -216,11 +259,11 @@
 			</TableViewSelectAction>
 		{:else}
 			<TableViewSelectAction
-				iconType="book-undiscard"
+				iconType="book-restore"
 				color="success"
-				onClick={() => onReturnClick(selectedItem[0].id)}
+				onClick={() => onRestoreClick(selectedItem[0].id)}
 			>
-				Return
+				Restore
 			</TableViewSelectAction>
 		{/if}
 	{/snippet}
