@@ -16,6 +16,7 @@
 	import LookupEditor from '$client/components/editors/LookupEditor.svelte';
 	import ShorthandEditor from '$client/components/editors/ShorthandEditor.svelte';
 	import UserEditor from '$client/components/editors/UserEditor.svelte';
+	import BorrowEditor from '$client/components/editors/BorrowEditor.svelte';
 
 	let { children, data }: LayoutProps = $props();
 
@@ -72,6 +73,9 @@
 				{/if}
 				{#if editorPageStates.shorthandEditorActive}
 					<ShorthandEditor></ShorthandEditor>
+				{/if}
+				{#if editorPageStates.borrowEditorActive}
+					<BorrowEditor></BorrowEditor>
 				{/if}
 				{#if editorPageStates.userEditorActive}
 					<UserEditor></UserEditor>

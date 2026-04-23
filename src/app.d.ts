@@ -2,6 +2,7 @@
 
 import type {
 	BookEditorPageState,
+	BorrowEditorPageState,
 	LookupEditorPageState,
 	MergeEditorPageState,
 	ShorthandEditorPageState,
@@ -22,6 +23,7 @@ declare global {
 			lookupEditorState?: LookupEditorPageState;
 			shorthandEditorState?: ShorthandEditorPageState;
 			userEditorState?: UserEditorPageState;
+			borrowEditorState?: BorrowEditorPageState;
 		}
 		// interface Platform {}
 	}

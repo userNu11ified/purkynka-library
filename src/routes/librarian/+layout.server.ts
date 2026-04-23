@@ -19,7 +19,10 @@ export const load: LayoutServerLoad = () => {
 			authorToBook: SendSelectRequest('authorToBook'),
 
 			readerClasses: SendSelectRequest('readerClasses'),
-			readers: SendSelectRequest('readers')
+			readers: SendSelectRequest('readers'),
+
+			borrows: SendSelectRequest('borrows'),
+			borrowHistory: SendSelectRequest('borrowHistory')
 		} satisfies LoadedLibrarianData
 	};
 };

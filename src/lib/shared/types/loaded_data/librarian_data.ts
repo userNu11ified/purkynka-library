@@ -18,6 +18,8 @@ import type { LiteratureTypeSelect, UDCSelect } from '$shared/database/tables/sh
 import type { BookSelect } from '$shared/database/tables/books_table';
 import { AuthorToBookTableData } from './author_to_book_table_data.svelte';
 import type { ReaderSelect } from '$shared/database/tables/readers_table';
+import type { BorrowHistorySelect } from '$shared/database/tables/borrow_tables';
+import { BorrowTableData } from './borrow_table_data.svelte';
 
 export class LibrarianData {
 	public static context = new Context<LibrarianData>('librarian-data');
@@ -38,6 +40,9 @@ export class LibrarianData {
 	public readerClasses: TableWithIdData<ReaderClassSelect, 'readerClasses'>;
 	public readers: TableWithIdData<ReaderSelect, 'readers'>;
 
+	public borrows: BorrowTableData;
+	public borrowHistory: TableWithIdData<BorrowHistorySelect, 'borrowHistory'>;
+
 	public loaded: Promise<void>;
 	private loadedResolver!: () => void;
 
@@ -57,6 +62,9 @@ export class LibrarianData {
 
 		this.readerClasses = new TableWithIdData('readerClasses');
 		this.readers = new TableWithIdData('readers');
+
+		this.borrows = new BorrowTableData();
+		this.borrowHistory = new TableWithIdData('borrowHistory');
 
 		this.loaded = new Promise((res) => (this.loadedResolver = res));
 	}
@@ -81,7 +89,9 @@ export class LibrarianData {
 			books,
 			authorToBook,
 			readerClasses,
-			readers
+			readers,
+			borrows,
+			borrowHistory
 		] = loadedData.map((result) =>
 			Result.unwrap(result as ResultOk<SelectResponse>)
 		) as unknown as [
@@ -96,7 +106,9 @@ export class LibrarianData {
 			SelectResponse<'books'>,
 			SelectResponse<'authorToBook'>,
 			SelectResponse<'readerClasses'>,
-			SelectResponse<'readers'>
+			SelectResponse<'readers'>,
+			SelectResponse<'borrows'>,
+			SelectResponse<'borrowHistory'>
 		];
 
 		this.bookNames.initialize(bookNames.values);
@@ -111,6 +123,8 @@ export class LibrarianData {
 		this.authorToBook.initialize(authorToBook.values);
 		this.readerClasses.initialize(readerClasses.values);
 		this.readers.initialize(readers.values);
+		this.borrows.initialize(borrows.values);
+		this.borrowHistory.initialize(borrowHistory.values);
 
 		this.loadedResolver();
 	}

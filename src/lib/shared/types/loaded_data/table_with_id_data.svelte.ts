@@ -20,7 +20,7 @@ export const tableWithIdPostBody = (
 	from: (typeof APIPostValidators)[DatabaseMatchedByIdTableName]
 ) => from.array().atLeastLength(1);
 
-type PatchOptions<T extends ObjectWithId> = {
+export type PatchOptions<T extends ObjectWithId> = {
 	ids: number[];
 	newValue: AtLeastOneKey<T>;
 };

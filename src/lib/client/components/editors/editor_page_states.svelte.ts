@@ -25,6 +25,8 @@ export type ShorthandEditorPageState = { type: 'literatureType' | 'udc'; id: num
 
 export type UserEditorPageState = { type: 'new' } | { type: 'edit'; userId: number };
 
+export type BorrowEditorPageState = { bookId: number };
+
 export class EditorPageStates {
 	public static context = new Context<EditorPageStates>('editor-page-states');
 
@@ -46,6 +48,9 @@ export class EditorPageStates {
 	public userEditorState: UserEditorPageState | undefined;
 	public userEditorActive: boolean;
 
+	public borrowEditorState: BorrowEditorPageState | undefined;
+	public borrowEditorActive: boolean;
+
 	constructor() {
 		this.bookEditorState = $derived(page.state.bookEditorState);
 		this.bookEditorActive = $derived(this.bookEditorState !== undefined);
@@ -64,5 +69,8 @@ export class EditorPageStates {
 
 		this.userEditorState = $derived(page.state.userEditorState);
 		this.userEditorActive = $derived(this.userEditorState !== undefined);
+
+		this.borrowEditorState = $derived(page.state.borrowEditorState);
+		this.borrowEditorActive = $derived(this.borrowEditorState !== undefined);
 	}
 }
