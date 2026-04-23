@@ -21,7 +21,7 @@
 		class:align-right={inputState.settings?.inputOptions?.textAlignment === 'right'}
 		class:error={inputState.invalid}
 		style:--width={inputState.settings?.inputOptions?.width}
-		type="text"
+		type={inputState.settings?.inputOptions?.inputType ?? 'text'}
 		name={inputState.name}
 		disabled={inputState.settings?.inputOptions?.disabled}
 		required={inputState.settings?.required}

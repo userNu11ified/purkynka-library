@@ -5,7 +5,7 @@ import type {
 import { type } from 'arktype';
 import { TableData, type DeleteError, type PostError } from './table_data.svelte';
 import { APIPostValidators } from '$shared/database/validators/api/post/schema_api_post_validators';
-import { makeAPIRequest } from '$shared/types/database/api';
+import { makeAPIJsonRequest } from '$shared/types/database/api';
 import type { DatabaseWorkerResult } from '$server/worker/database_worker/database_worker_types';
 import type { InsertResponse } from '$server/worker/database_worker/messages/insert';
 import { Result } from '$shared/types/result';
@@ -101,11 +101,9 @@ export class AuthorToBookTableData extends TableData<
 	}
 
 	public async post(postedValues: PostOptions): Promise<Result<AuthorToBookSelect[], PostError>> {
-		const postResult = await makeAPIRequest<DatabaseWorkerResult<InsertResponse<'authorToBook'>>>(
-			'POST',
-			this.apiTableName,
-			postedValues
-		);
+		const postResult = await makeAPIJsonRequest<
+			DatabaseWorkerResult<InsertResponse<'authorToBook'>>
+		>('POST', this.apiTableName, postedValues);
 
 		if (Result.isFlatError(postResult))
 			return Result.error(failedToPost({ postError: postResult }));
@@ -129,11 +127,9 @@ export class AuthorToBookTableData extends TableData<
 	public async delete(
 		deleteOptions: DeleteOptions
 	): Promise<Result<AuthorToBookSelect[], DeleteError>> {
-		const deleteResult = await makeAPIRequest<DatabaseWorkerResult<RemoveResponse<'authorToBook'>>>(
-			'DELETE',
-			this.apiTableName,
-			deleteOptions
-		);
+		const deleteResult = await makeAPIJsonRequest<
+			DatabaseWorkerResult<RemoveResponse<'authorToBook'>>
+		>('DELETE', this.apiTableName, deleteOptions);
 
 		if (Result.isFlatError(deleteResult))
 			return Result.error(failedToDelete({ deleteError: deleteResult }));

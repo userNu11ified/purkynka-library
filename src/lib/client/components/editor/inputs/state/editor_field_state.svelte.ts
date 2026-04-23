@@ -3,6 +3,7 @@ import type { Nullable } from '$shared/types/util';
 
 export type EditorFieldStateSettings = {
 	inputOptions?: {
+		inputType?: 'text' | 'password';
 		width?: string;
 		disabled?: boolean;
 		textAlignment?: 'left' | 'center' | 'right';

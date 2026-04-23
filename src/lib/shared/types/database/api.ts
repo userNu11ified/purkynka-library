@@ -30,8 +30,12 @@ export const isAPIMatchedByIdTableName = (value: string): value is APIMatchedByI
 export const getAPIEndpointURL = (endpoint: string) =>
 	`${window.location.origin}/api/v2/${endpoint}`;
 
-export const makeAPIRequest = <R extends Result<unknown, unknown>>(
-	method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+export const getEndpointURL = (endpoint: string) => `${window.location.origin}/${endpoint}`;
+
+type SupportedHTTPMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+
+export const makeAPIJsonRequest = <R extends Result<unknown, unknown>>(
+	method: SupportedHTTPMethod,
 	endpoint: string,
 	body?: any
 ) =>
@@ -39,3 +43,9 @@ export const makeAPIRequest = <R extends Result<unknown, unknown>>(
 		method,
 		body: body === undefined ? undefined : JSON.stringify(body)
 	}).then((r) => r.json() as FlattenedResult<R>);
+
+export const makeRequest = <T = any>(method: SupportedHTTPMethod, endpoint: string, body?: T) =>
+	fetch(getEndpointURL(endpoint), {
+		method,
+		body: body === undefined ? undefined : JSON.stringify(body)
+	});

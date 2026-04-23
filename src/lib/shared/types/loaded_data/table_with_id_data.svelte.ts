@@ -2,7 +2,7 @@ import { SvelteMap } from 'svelte/reactivity';
 import { TableData, type DeleteError, type PatchError, type PostError } from './table_data.svelte';
 import type { DatabaseMatchedByIdTableName } from '$shared/types/database/schema';
 import { Result } from '$shared/types/result';
-import { makeAPIRequest } from '$shared/types/database/api';
+import { makeAPIJsonRequest } from '$shared/types/database/api';
 import type { InsertResponse } from '$server/worker/database_worker/messages/insert';
 import type { DatabaseWorkerResult } from '$server/worker/database_worker/database_worker_types';
 import { failedToDelete, failedToPatch, failedToPost } from '$shared/error/api_error';
@@ -63,7 +63,7 @@ export class TableWithIdData<
 	}
 
 	public async post(postedValues: PostOptions<T>): Promise<Result<T[], PostError>> {
-		const postResult = await makeAPIRequest<DatabaseWorkerResult<InsertResponse<TableName>>>(
+		const postResult = await makeAPIJsonRequest<DatabaseWorkerResult<InsertResponse<TableName>>>(
 			'POST',
 			this.apiTableName,
 			postedValues
@@ -85,7 +85,7 @@ export class TableWithIdData<
 	}
 
 	public async patch(patchOptions: PatchOptions<T>): Promise<Result<T[], PatchError>> {
-		const patchResult = await makeAPIRequest<DatabaseWorkerResult<UpdateResponse<TableName>>>(
+		const patchResult = await makeAPIJsonRequest<DatabaseWorkerResult<UpdateResponse<TableName>>>(
 			'PATCH',
 			this.apiTableName,
 			patchOptions
@@ -110,7 +110,7 @@ export class TableWithIdData<
 	}
 
 	public async delete(deletedIds: DeleteOptions): Promise<Result<T[], DeleteError>> {
-		const deleteResult = await makeAPIRequest<DatabaseWorkerResult<RemoveResponse<TableName>>>(
+		const deleteResult = await makeAPIJsonRequest<DatabaseWorkerResult<RemoveResponse<TableName>>>(
 			'DELETE',
 			this.apiTableName,
 			deletedIds
