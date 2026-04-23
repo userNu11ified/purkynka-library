@@ -43,6 +43,7 @@
 </script>
 
 <TableView
+	bind:this={tableView}
 	renderAfterResolved={librarianData.loaded}
 	items={librarianData.librarians.getArray()}
 	itemMapper={({ id, email, password }) => ({ id, email, finishedRegistering: password !== null })}

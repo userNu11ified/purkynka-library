@@ -11,6 +11,13 @@
 
 	const editorPageStates = EditorPageStates.context.get();
 
+	const onAddLibrarianClick = () =>
+		pushState('', {
+			librarianEditorState: {
+				type: 'new'
+			}
+		});
+
 	const onAddUserClick = () =>
 		pushState('', {
 			userEditorState: {
@@ -26,9 +33,17 @@
 		<SidebarLink href="/librarian/users/librarians" iconType="librarian">Librarians</SidebarLink>
 
 		<SidebarSeparator />
+
+		<SidebarButton
+			iconType="shield-add"
+			active={editorPageStates.librarianEditorActive}
+			disabled={editorPageStates.librarianEditorActive || editorPageStates.userEditorActive}
+			onClick={onAddLibrarianClick}>Add<br />Librarian</SidebarButton
+		>
 		<SidebarButton
 			iconType="user-add"
 			active={editorPageStates.userEditorActive}
+			disabled={editorPageStates.librarianEditorActive || editorPageStates.userEditorActive}
 			onClick={onAddUserClick}>Add User</SidebarButton
 		>
 	{/snippet}

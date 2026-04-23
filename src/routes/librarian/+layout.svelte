@@ -17,6 +17,7 @@
 	import ShorthandEditor from '$client/components/editors/ShorthandEditor.svelte';
 	import UserEditor from '$client/components/editors/UserEditor.svelte';
 	import BorrowEditor from '$client/components/editors/BorrowEditor.svelte';
+	import LibrarianEditor from '$client/components/editors/LibrarianEditor.svelte';
 
 	let { children, data }: LayoutProps = $props();
 
@@ -79,6 +80,9 @@
 				{/if}
 				{#if editorPageStates.userEditorActive}
 					<UserEditor></UserEditor>
+				{/if}
+				{#if editorPageStates.librarianEditorActive}
+					<LibrarianEditor></LibrarianEditor>
 				{/if}
 				{@render children()}
 			{/snippet}
