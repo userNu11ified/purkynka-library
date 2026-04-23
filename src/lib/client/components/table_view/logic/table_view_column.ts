@@ -5,7 +5,11 @@ import type { Nullable } from '$shared/types/util';
 import type { QueryState } from '$client/collation/query_state';
 
 export type TableViewColumnRenderer<R> =
-	| { type: 'text'; textCreator: (mappedItem: R) => string | number }
+	| {
+			type: 'text';
+			textCreator: (mappedItem: R) => string | number;
+			titleCreator?: (mappedItem: R) => string | number;
+	  }
 	| { type: 'snippet'; snippet: Snippet<[item: R]> };
 
 export type TableViewColumnSorter<R> = (left: R, right: R) => number;

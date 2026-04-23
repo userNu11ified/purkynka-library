@@ -85,7 +85,12 @@
 						class:align-center={column.columnAlignment === 'center'}
 						class:align-right={column.columnAlignment === 'right'}
 					>
-						<div class="table-view-column">
+						<div
+							class="table-view-column"
+							title={column.columnRenderer.type === 'text'
+								? `${column.columnRenderer.titleCreator?.(v) ?? ''}`
+								: ''}
+						>
 							{#if column.columnRenderer.type === 'text'}
 								{column.columnRenderer.textCreator(v)}
 							{:else}
