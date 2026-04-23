@@ -52,11 +52,6 @@
 		})
 	});
 
-	$inspect(editorState.id.parsed);
-	$inspect(editorState.readerName.parsed);
-	$inspect(editorState.readerClass.parsed);
-	$inspect(editorState.readerType.parsed);
-
 	const hasErrors = $derived(
 		Object.values(editorState).some((v) => v.parsed.parseErrors.length !== 0)
 	);
