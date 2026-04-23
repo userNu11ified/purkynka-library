@@ -86,6 +86,8 @@
 		white-space: pre;
 
 		filter: drop-shadow(0px 0px 8px var(--drop-shadow-color));
+
+		z-index: 10;
 	}
 
 	.editor-input-errors.align-left {
