@@ -20,6 +20,7 @@ import { AuthorToBookTableData } from './author_to_book_table_data.svelte';
 import type { ReaderSelect } from '$shared/database/tables/readers_table';
 import type { BorrowHistorySelect } from '$shared/database/tables/borrow_tables';
 import { BorrowTableData } from './borrow_table_data.svelte';
+import type { LibrarianSelect } from '$shared/database/tables/librarian_table';
 
 export class LibrarianData {
 	public static context = new Context<LibrarianData>('librarian-data');
@@ -43,6 +44,8 @@ export class LibrarianData {
 	public borrows: BorrowTableData;
 	public borrowHistory: TableWithIdData<BorrowHistorySelect, 'borrowHistory'>;
 
+	public librarians: TableWithIdData<LibrarianSelect, 'librarians'>;
+
 	public loaded: Promise<void>;
 	private loadedResolver!: () => void;
 
@@ -65,6 +68,8 @@ export class LibrarianData {
 
 		this.borrows = new BorrowTableData();
 		this.borrowHistory = new TableWithIdData('borrowHistory');
+
+		this.librarians = new TableWithIdData('librarians');
 
 		this.loaded = new Promise((res) => (this.loadedResolver = res));
 	}
@@ -91,7 +96,8 @@ export class LibrarianData {
 			readerClasses,
 			readers,
 			borrows,
-			borrowHistory
+			borrowHistory,
+			librarians
 		] = loadedData.map((result) =>
 			Result.unwrap(result as ResultOk<SelectResponse>)
 		) as unknown as [
@@ -108,7 +114,8 @@ export class LibrarianData {
 			SelectResponse<'readerClasses'>,
 			SelectResponse<'readers'>,
 			SelectResponse<'borrows'>,
-			SelectResponse<'borrowHistory'>
+			SelectResponse<'borrowHistory'>,
+			SelectResponse<'librarians'>
 		];
 
 		this.bookNames.initialize(bookNames.values);
@@ -125,6 +132,7 @@ export class LibrarianData {
 		this.readers.initialize(readers.values);
 		this.borrows.initialize(borrows.values);
 		this.borrowHistory.initialize(borrowHistory.values);
+		this.librarians.initialize(librarians.values);
 
 		this.loadedResolver();
 	}

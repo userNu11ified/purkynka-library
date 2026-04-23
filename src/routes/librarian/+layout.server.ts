@@ -22,7 +22,9 @@ export const load: LayoutServerLoad = () => {
 			readers: SendSelectRequest('readers'),
 
 			borrows: SendSelectRequest('borrows'),
-			borrowHistory: SendSelectRequest('borrowHistory')
+			borrowHistory: SendSelectRequest('borrowHistory'),
+
+			librarians: SendSelectRequest('librarians')
 		} satisfies LoadedLibrarianData
 	};
 };
