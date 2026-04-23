@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onClickOutside } from 'runed';
 	import type { Snippet } from 'svelte';
+	import { sineInOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
 
 	let {
 		onClickOutside: onClickOutsideHandler,
@@ -17,7 +19,7 @@
 		);
 </script>
 
-<div class="modal-container fill-container">
+<div class="modal-container fill-container" transition:fade={{ duration: 250, easing: sineInOut }}>
 	<div class="modal-background fill-container"></div>
 	<div class="modal center-grid" bind:this={modal}>{@render children()}</div>
 </div>

@@ -37,8 +37,12 @@
 		Object.values(editorState).some((v) => v.parsed.parseErrors.length !== 0)
 	);
 
+	let showLoading = $state(false);
+
 	const onCancelClick = () => history.back();
 	const onSaveClick = async () => {
+		showLoading = true;
+
 		const id = editorState.id.getParsedValue()!;
 		const newValue = {
 			shortName: editorState.shortName.getParsedValue()!,
@@ -51,6 +55,8 @@
 			throw new Error();
 		}
 
+		showLoading = false;
+
 		history.back();
 	};
 
@@ -62,7 +68,7 @@
 </script>
 
 <Modal onClickOutside={() => history.back()}>
-	<Editor {@attach trapFocus(1)}>
+	<Editor {showLoading} {@attach trapFocus(1)}>
 		{#snippet title()}
 			Edit
 		{/snippet}

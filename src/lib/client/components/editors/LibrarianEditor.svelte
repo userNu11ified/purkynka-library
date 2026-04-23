@@ -23,9 +23,13 @@
 		})
 	});
 
+	let showLoading = $state(false);
+
 	const onCancelClick = () => history.back();
 
 	const onAddClick = async () => {
+		showLoading = true;
+
 		const librarianPostResult = await librarianData.librarians.post([
 			{ id: editorState.id.getParsedValue()!, email: editorState.email.getParsedValue()! }
 		]);
@@ -33,6 +37,8 @@
 			clientLogger.fatal('Failed to POST librarian!', { error: librarianPostResult.value });
 			throw new Error();
 		}
+
+		showLoading = false;
 
 		history.back();
 	};
@@ -45,7 +51,7 @@
 </script>
 
 <Modal onClickOutside={() => history.back()}>
-	<Editor {@attach trapFocus(1)}>
+	<Editor {showLoading} {@attach trapFocus(1)}>
 		{#snippet title()}
 			Add Librarian
 		{/snippet}

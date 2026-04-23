@@ -18,8 +18,11 @@
 	import UserEditor from '$client/components/editors/UserEditor.svelte';
 	import BorrowEditor from '$client/components/editors/BorrowEditor.svelte';
 	import LibrarianEditor from '$client/components/editors/LibrarianEditor.svelte';
+	import Loading from '$client/components/loading/Loading.svelte';
 
 	let { children, data }: LayoutProps = $props();
+
+	let loaded = $state(false);
 
 	const librarianData = LibrarianData.context.set(new LibrarianData());
 	const editorPageStates = EditorPageStates.context.set(new EditorPageStates());
@@ -31,9 +34,10 @@
 	};
 
 	onMount(() => {
-		librarianData
-			.initialize(data.librarianData)
-			.then(() => clientLogger.info('Librarian Data Loaded!'));
+		librarianData.initialize(data.librarianData).then(() => {
+			clientLogger.info('Librarian Data Loaded!');
+			loaded = true;
+		});
 	});
 </script>
 
@@ -60,6 +64,8 @@
 			{/snippet}
 
 			{#snippet view()}
+				{@render children()}
+
 				{#if editorPageStates.bookEditorActive}
 					<BookEditor></BookEditor>
 				{/if}
@@ -84,7 +90,10 @@
 				{#if editorPageStates.librarianEditorActive}
 					<LibrarianEditor></LibrarianEditor>
 				{/if}
-				{@render children()}
+
+				{#if !loaded}
+					<Loading></Loading>
+				{/if}
 			{/snippet}
 		</ViewWithSidebar>
 	</div>

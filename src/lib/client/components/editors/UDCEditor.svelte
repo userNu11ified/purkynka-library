@@ -8,6 +8,7 @@
 	import type { UDCInsert, UDCSelect } from '$shared/database/tables/shorthand_tables';
 	import { LibrarianData } from '$shared/types/loaded_data/librarian_data';
 	import { Result } from '$shared/types/result';
+	import { trapFocus } from '../attachments/focus_trap.svelte';
 	import Editor from '../editor/Editor.svelte';
 	import { EditorCallbackHandler } from '../editor/editor_callback_handler.svelte';
 	import EditorAction from '../editor/EditorAction.svelte';
@@ -30,14 +31,16 @@
 		Object.values(editorState).some((v) => v.parsed.parseErrors.length !== 0)
 	);
 
+	let showLoading = $state(false);
+
 	const onClickCancel = () => {
-		history.back();
 		udcEditorCancelCallbacks.callbacks.forEach((v) => v());
+		history.back();
 	};
 
 	const onClickAdd = async () => {
 		if (hasErrors) return;
-		await librarianData.loaded;
+		showLoading = true;
 
 		const udcInsert: UDCInsert[] = [
 			{
@@ -53,6 +56,9 @@
 		}
 
 		udcEditorSubmitCallbacks.callbacks.forEach((v) => v(udcInsertResult.value[0]));
+
+		showLoading = false;
+
 		history.back();
 	};
 
@@ -64,33 +70,29 @@
 		history.back();
 	}}
 >
-	{#await librarianData.loaded}
-		<h1>Loading</h1>
-	{:then}
-		<Editor>
-			{#snippet title()}
-				{udcEditorState.type === 'new' ? 'Add UDC' : 'Edit UDC'}
-			{/snippet}
+	<Editor {showLoading} {@attach trapFocus(1)}>
+		{#snippet title()}
+			{udcEditorState.type === 'new' ? 'Add UDC' : 'Edit UDC'}
+		{/snippet}
 
-			{#snippet fields()}
-				<EditorSingleColumnLayout>
-					<EditorStringInputLine state={editorState.shortName}></EditorStringInputLine>
-					<EditorStringInputLine state={editorState.longName}></EditorStringInputLine>
-				</EditorSingleColumnLayout>
-			{/snippet}
+		{#snippet fields()}
+			<EditorSingleColumnLayout>
+				<EditorStringInputLine state={editorState.shortName}></EditorStringInputLine>
+				<EditorStringInputLine state={editorState.longName}></EditorStringInputLine>
+			</EditorSingleColumnLayout>
+		{/snippet}
 
-			{#snippet actions()}
-				<EditorAction actionColor="error" onClick={onClickCancel}>Cancel</EditorAction>
-				{#if udcEditorState.type === 'new'}
-					<EditorAction actionColor="success" disabled={hasErrors} onClick={onClickAdd}>
-						Add
-					</EditorAction>
-				{:else}
-					<EditorAction actionColor="success" disabled={hasErrors} onClick={onClickSave}>
-						Save
-					</EditorAction>
-				{/if}
-			{/snippet}
-		</Editor>
-	{/await}
+		{#snippet actions()}
+			<EditorAction actionColor="error" onClick={onClickCancel}>Cancel</EditorAction>
+			{#if udcEditorState.type === 'new'}
+				<EditorAction actionColor="success" disabled={hasErrors} onClick={onClickAdd}>
+					Add
+				</EditorAction>
+			{:else}
+				<EditorAction actionColor="success" disabled={hasErrors} onClick={onClickSave}>
+					Save
+				</EditorAction>
+			{/if}
+		{/snippet}
+	</Editor>
 </Modal>

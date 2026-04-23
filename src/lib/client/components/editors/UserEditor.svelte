@@ -100,9 +100,13 @@
 		return Result.ok(newReader);
 	};
 
+	let showLoading = $state(false);
+
 	const onCancelClick = () => history.back();
 
 	const onAddClick = async () => {
+		showLoading = true;
+
 		const readerParseResult = await parseReader();
 		if (Result.isError(readerParseResult)) {
 			clientLogger.fatal('Failed to parse new reader!', { error: readerParseResult.value });
@@ -116,10 +120,14 @@
 			throw new Error();
 		}
 
+		showLoading = false;
+
 		history.back();
 	};
 
 	const onSaveClick = async () => {
+		showLoading = true;
+
 		const readerParseResult = await parseReader();
 		if (Result.isError(readerParseResult)) {
 			clientLogger.fatal('Failed to parse new reader!', { error: readerParseResult.value });
@@ -136,6 +144,8 @@
 			throw new Error();
 		}
 
+		showLoading = false;
+
 		history.back();
 	};
 
@@ -146,7 +156,7 @@
 </script>
 
 <Modal onClickOutside={() => history.back()}>
-	<Editor {@attach trapFocus(0)}>
+	<Editor {showLoading} {@attach trapFocus(0)}>
 		{#snippet title()}
 			{userEditorState.type === 'new' ? 'Add Reader' : 'Edit Reader'}
 		{/snippet}

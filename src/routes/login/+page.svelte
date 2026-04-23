@@ -5,7 +5,7 @@
 	import { EditorFieldStringState } from '$client/components/editor/inputs/state/editor_field_string_state.svelte';
 	import EditorSingleColumnLayout from '$client/components/editor/layout/EditorSingleColumnLayout.svelte';
 	import EditorStringInputLine from '$client/components/editor/premade_lines/EditorStringInputLine.svelte';
-	import Loading from '$client/components/Loading.svelte';
+
 	import { makeRequest } from '$shared/types/database/api';
 	import type { LoginBody } from '$shared/types/login';
 

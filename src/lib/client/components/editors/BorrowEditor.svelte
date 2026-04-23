@@ -77,8 +77,12 @@
 		)
 	);
 
+	let showLoading = $state(false);
+
 	const onCancelClick = () => history.back();
 	const onBorrowClick = async () => {
+		showLoading = true;
+
 		const reader = editorState.reader.getParsedValue();
 		if (reader === null || reader.type === 'new') {
 			clientLogger.fatal('Reader Input in invalid state!');
@@ -117,6 +121,8 @@
 			clientLogger.fatal('Failed to POST borrow history');
 			throw new Error();
 		}
+
+		showLoading = false;
 
 		history.back();
 	};
@@ -159,7 +165,7 @@
 		if (!editorPageStates.userEditorActive) history.back();
 	}}
 >
-	<Editor {@attach trapFocus(0)}>
+	<Editor {showLoading} {@attach trapFocus(0)}>
 		{#snippet title()}
 			Borrow Book
 		{/snippet}

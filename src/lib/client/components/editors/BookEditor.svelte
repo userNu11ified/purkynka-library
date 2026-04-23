@@ -445,6 +445,8 @@
 		return Option.none();
 	};
 
+	let showLoading = $state(false);
+
 	const numberRegex = /^\d+$/;
 	const parsedAddCount = $derived.by(() => {
 		if (!numberRegex.test(timesAdded)) return null;
@@ -455,31 +457,43 @@
 	});
 
 	const onAddMultipleClick = async () => {
+		showLoading = true;
+
 		const bookAddErrors = await addBook(parsedAddCount!);
 		if (Option.isSome(bookAddErrors)) {
 			clientLogger.fatal('Failed to Add Book!', { error: bookAddErrors.value });
 			throw new Error();
 		}
 
+		showLoading = false;
+
 		history.back();
 	};
 
 	const onAddClick = async () => {
+		showLoading = true;
+
 		const bookAddErrors = await addBook(1);
 		if (Option.isSome(bookAddErrors)) {
 			clientLogger.fatal('Failed to Add Book!', { error: bookAddErrors.value });
 			throw new Error();
 		}
 
+		showLoading = false;
+
 		history.back();
 	};
 
 	const onSaveClick = async () => {
+		showLoading = true;
+
 		const bookSaveErrors = await saveBook();
 		if (Option.isSome(bookSaveErrors)) {
 			clientLogger.fatal('Failed to Save Book!', { error: bookSaveErrors.value });
 			throw new Error();
 		}
+
+		showLoading = false;
 
 		history.back();
 	};
@@ -504,6 +518,7 @@
 	}}
 >
 	<Editor
+		{showLoading}
 		{@attach trapFocus(
 			bookEditorState.type === 'new' ? 1 : bookEditorState.type === 'discard' ? 30 : undefined
 		)}

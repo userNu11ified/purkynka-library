@@ -17,18 +17,24 @@
 	// svelte-ignore state_referenced_locally
 	let selectedIndex = $state(mergeEditorState.values[0][1]);
 
+	let showLoading = $state(false);
+
 	const onCancelClick = () => history.back();
 	const onMergeClick = () => {
+		showLoading = true;
+
 		mergeEditorSubmitCallbacks.callbacks.forEach((v) =>
 			v([selectedIndex, mergeEditorState.values.map((v) => v[1])])
 		);
+
+		showLoading = false;
 
 		history.back();
 	};
 </script>
 
 <Modal onClickOutside={() => history.back()}>
-	<Editor {@attach trapFocus(1)}>
+	<Editor {showLoading} {@attach trapFocus(1)}>
 		{#snippet title()}
 			Merge
 		{/snippet}

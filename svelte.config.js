@@ -11,6 +11,9 @@ const config = {
 			const isExternalLibrary = pathSegments.includes('node_modules');
 
 			return isExternalLibrary ? undefined : true;
+		},
+		experimental: {
+			async: true
 		}
 	},
 	kit: {

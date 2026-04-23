@@ -38,7 +38,8 @@
 		| 'chevron-right'
 		| 'password-reset'
 		| 'shield-add'
-		| 'loading';
+		| 'loading'
+		| 'quote';
 </script>
 
 <script lang="ts">
@@ -297,6 +298,10 @@
 {:else if iconType === 'loading'}
 	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
 		><path fill="currentColor" d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8" /></svg
+	>
+{:else if iconType === 'quote'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path fill="currentColor" d="M14 17h3l2-4V7h-6v6h3M6 17h3l2-4V7H5v6h3z" /></svg
 	>
 {/if}
 

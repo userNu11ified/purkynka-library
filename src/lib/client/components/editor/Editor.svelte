@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import Loading from '../Loading.svelte';
+	import Loading from '../loading/Loading.svelte';
 
 	let {
 		title,
