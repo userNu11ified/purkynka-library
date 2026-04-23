@@ -6,6 +6,15 @@ import { SendConfigureRequest } from '$server/worker/database_worker/messages/co
 import { Result } from '$shared/types/result';
 import { env } from 'bun';
 import { initializeAdminUser } from '$server/login/admin';
+import { SendCloseRequest } from '$server/worker/database_worker/messages/close';
+
+process.on('SIGINT', async () => {
+	console.log();
+	serverLogger.warning('Received SIGINT! Closing.');
+
+	await SendCloseRequest();
+	process.exit();
+});
 
 if (env.DB_FILE_NAME === undefined)
 	throw new Error('.env file is missing required DB_FILE_NAME key!');
