@@ -4,6 +4,7 @@ import * as LookupTableAPIGetValidators from './lookup_table_api_get_validators.
 import * as ShorthandTableAPIGetValidators from './shorthand_table_api_get_validators.ts';
 import * as ReadersTableAPIGetValidators from './readers_table_api_get_validators.ts';
 import * as BorrowTableAPIGetValidators from './borrow_table_api_get_validators.ts';
+import * as LibrarianTableAPIGetValidators from './librarian_table_api_get_validators.ts';
 
 export const APIGetValidators = {
 	...BooksTableAPIGetValidators,
@@ -11,5 +12,6 @@ export const APIGetValidators = {
 	...LookupTableAPIGetValidators,
 	...ShorthandTableAPIGetValidators,
 	...ReadersTableAPIGetValidators,
-	...BorrowTableAPIGetValidators
+	...BorrowTableAPIGetValidators,
+	...LibrarianTableAPIGetValidators
 };

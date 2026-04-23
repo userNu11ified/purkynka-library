@@ -4,6 +4,7 @@ import * as LookupTables from './tables/lookup_tables.ts';
 import * as ShorthandTables from './tables/shorthand_tables.ts';
 import * as ReadersTable from './tables/readers_table.ts';
 import * as BorrowTables from './tables/borrow_tables.ts';
+import * as LibrarianTable from './tables/librarian_table.ts';
 
 export default {
 	...LookupTables,
@@ -11,5 +12,6 @@ export default {
 	...BooksTable,
 	...JunctionTables,
 	...ReadersTable,
-	...BorrowTables
+	...BorrowTables,
+	...LibrarianTable
 };

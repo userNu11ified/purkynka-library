@@ -4,6 +4,7 @@ import * as LookupTableUpdateValidators from './lookup_table_update_validators.t
 import * as ShorthandTableUpdateValidators from './shorthand_table_update_validators.ts';
 import * as ReadersTableUpdateValidators from './readers_table_update_validators.ts';
 import * as BorrowTableUpdateValidators from './borrow_table_update_validators.ts';
+import * as LibrarianTableUpdateValidators from './librarian_table_update_validators.ts';
 
 export const SchemaUpdateValidators = {
 	...BooksTableUpdateValidators,
@@ -11,5 +12,6 @@ export const SchemaUpdateValidators = {
 	...LookupTableUpdateValidators,
 	...ShorthandTableUpdateValidators,
 	...ReadersTableUpdateValidators,
-	...BorrowTableUpdateValidators
+	...BorrowTableUpdateValidators,
+	...LibrarianTableUpdateValidators
 };

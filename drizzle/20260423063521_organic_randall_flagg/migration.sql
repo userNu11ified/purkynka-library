@@ -1,0 +1,1 @@
+ALTER TABLE `librarian` RENAME TO `librarians`;

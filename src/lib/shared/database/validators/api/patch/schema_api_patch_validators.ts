@@ -4,6 +4,7 @@ import * as LookupTableAPIPatchValidators from './lookup_table_api_patch_validat
 import * as ShorthandTableAPIPatchValidators from './shorthand_table_api_patch_validators.ts';
 import * as ReadersTableAPIPatchValidators from './readers_table_api_patch_validators.ts';
 import * as BorrowTableAPIPatchValidators from './borrow_table_api_patch_validators.ts';
+import * as LibrarianTableAPIPatchValidators from './librarian_table_api_patch_validators.ts';
 
 export const APIPatchValidators = {
 	...BooksTableAPIPatchValidators,
@@ -11,5 +12,6 @@ export const APIPatchValidators = {
 	...LookupTableAPIPatchValidators,
 	...ShorthandTableAPIPatchValidators,
 	...ReadersTableAPIPatchValidators,
-	...BorrowTableAPIPatchValidators
+	...BorrowTableAPIPatchValidators,
+	...LibrarianTableAPIPatchValidators
 };
