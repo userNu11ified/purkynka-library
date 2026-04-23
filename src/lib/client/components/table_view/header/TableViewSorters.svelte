@@ -13,7 +13,7 @@
 
 	const columnNameWidths: number[] = $state([]);
 	const shouldCenterSortIcon = $derived(
-		tableViewColumnManager.currentColumnSizes.map((v, i) => {
+		tableViewColumnManager.currentColumnSizes.current.map((v, i) => {
 			const columnNameWidth = columnNameWidths[i];
 
 			if (columnNameWidth === 0) return true;
@@ -47,29 +47,29 @@
 	};
 
 	const decreaseSize = (resize: number, movedBy: number) => {
-		const oldLeftSize = tableViewColumnManager.currentColumnSizes[resize];
+		const oldLeftSize = tableViewColumnManager.currentColumnSizes.current[resize];
 		const newLeftSize = Math.max(
-			tableViewColumnManager.currentColumnSizes[resize] + movedBy,
+			tableViewColumnManager.currentColumnSizes.current[resize] + movedBy,
 			MINIMUM_COLUMN_WIDTH
 		);
 
 		const leftSizeDifference = newLeftSize - oldLeftSize;
 
-		tableViewColumnManager.currentColumnSizes[resize] += leftSizeDifference;
-		tableViewColumnManager.currentColumnSizes[resize + 1] -= leftSizeDifference;
+		tableViewColumnManager.currentColumnSizes.current[resize] += leftSizeDifference;
+		tableViewColumnManager.currentColumnSizes.current[resize + 1] -= leftSizeDifference;
 	};
 
 	const increaseSize = (resize: number, movedBy: number) => {
-		const oldRightSize = tableViewColumnManager.currentColumnSizes[resize + 1];
+		const oldRightSize = tableViewColumnManager.currentColumnSizes.current[resize + 1];
 		const newRightSize = Math.max(
-			tableViewColumnManager.currentColumnSizes[resize + 1] - movedBy,
+			tableViewColumnManager.currentColumnSizes.current[resize + 1] - movedBy,
 			MINIMUM_COLUMN_WIDTH
 		);
 
 		const rightSizeDifference = newRightSize - oldRightSize;
 
-		tableViewColumnManager.currentColumnSizes[resize] -= rightSizeDifference;
-		tableViewColumnManager.currentColumnSizes[resize + 1] += rightSizeDifference;
+		tableViewColumnManager.currentColumnSizes.current[resize] -= rightSizeDifference;
+		tableViewColumnManager.currentColumnSizes.current[resize + 1] += rightSizeDifference;
 	};
 
 	const onWindowMouseMove = (e: MouseEvent) => {
@@ -86,7 +86,7 @@
 	};
 
 	const calculateLeftOffset = (resizerIndex: number) =>
-		sum(tableViewColumnManager.currentColumnSizes.slice(0, resizerIndex + 1)) +
+		sum(tableViewColumnManager.currentColumnSizes.current.slice(0, resizerIndex + 1)) +
 		resizerIndex * CSSVariables.BORDER_WIDTH;
 </script>
 

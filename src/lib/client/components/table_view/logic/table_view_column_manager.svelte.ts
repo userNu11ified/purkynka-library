@@ -1,4 +1,4 @@
-import { Context } from 'runed';
+import { Context, PersistedState, Previous } from 'runed';
 import { CSSVariables } from '$client/css_utilities';
 import { calculateColumnSizes, type TableViewDefaultColumnSize } from './table_view_column_sizing';
 import type { TableViewColumn } from './table_view_column';
@@ -6,20 +6,25 @@ import type { TableViewColumn } from './table_view_column';
 export class TableViewColumnManager<R> {
 	public static context = new Context<TableViewColumnManager<unknown>>('table-view-column-manager');
 
+	public persistentStateId: string;
 	public columns: TableViewColumn<R>[];
 
 	public availableWidth: number;
+	public previousAvailableWidth: Previous<number>;
 	public usableWidth: number;
 
 	public defaultColumnSizes: TableViewDefaultColumnSize[];
-	public currentColumnSizes: number[];
+	public currentColumnSizes: PersistedState<number[]>;
 
 	public calculatedGridLayout: string;
 
-	constructor(columns: () => TableViewColumn<R>[]) {
+	constructor(persistentStateId: () => string, columns: () => TableViewColumn<R>[]) {
+		this.persistentStateId = $derived.by(persistentStateId);
 		this.columns = $derived.by(columns);
 
 		this.availableWidth = $state(0);
+		this.previousAvailableWidth = new Previous(() => this.availableWidth, 0);
+
 		this.usableWidth = $derived(
 			this.availableWidth -
 				this.columns.length * CSSVariables.BORDER_WIDTH -
@@ -27,14 +32,17 @@ export class TableViewColumnManager<R> {
 		);
 
 		this.defaultColumnSizes = $derived(this.columns.map((v) => v.defaultColumnSize));
-		this.currentColumnSizes = $state([]);
+		this.currentColumnSizes = new PersistedState(this.persistentStateId, []);
 
 		this.calculatedGridLayout = $derived(
-			this.currentColumnSizes.map((columnSize) => `${columnSize}px`).join(' ')
+			this.currentColumnSizes.current.map((columnSize) => `${columnSize}px`).join(' ')
 		);
 	}
 
 	public resetColumnSizes = () => {
-		this.currentColumnSizes = calculateColumnSizes(this.defaultColumnSizes, this.usableWidth);
+		this.currentColumnSizes.current = calculateColumnSizes(
+			this.defaultColumnSizes,
+			this.usableWidth
+		);
 	};
 }

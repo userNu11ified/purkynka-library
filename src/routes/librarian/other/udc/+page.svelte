@@ -43,6 +43,7 @@
 
 <TableView
 	renderAfterResolved={librarianData.loaded}
+	persistentStateId="udc-column-sizes"
 	items={udc}
 	itemMapper={(v) => v}
 	itemCopier={({ id, shortName, longName }) => [id, shortName, longName]}

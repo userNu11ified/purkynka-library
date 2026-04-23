@@ -45,6 +45,7 @@
 <TableView
 	bind:this={tableView}
 	renderAfterResolved={librarianData.loaded}
+	persistentStateId="librarians-column-sizes"
 	items={librarianData.librarians.getArray()}
 	itemMapper={({ id, email, password }) => ({ id, email, finishedRegistering: password !== null })}
 	itemCopier={({ id, email, finishedRegistering }) => [

@@ -43,6 +43,7 @@
 
 <TableView
 	renderAfterResolved={librarianData.loaded}
+	persistentStateId="literature-types-column-sizes"
 	items={literatureTypes}
 	itemMapper={(v) => v}
 	itemCopier={({ id, shortName, longName }) => [id, shortName, longName]}

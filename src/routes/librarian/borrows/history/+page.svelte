@@ -21,6 +21,7 @@
 
 <TableView
 	renderAfterResolved={librarianData.loaded}
+	persistentStateId="history-column-sizes"
 	items={librarianData.borrowHistory.getArray()}
 	itemMapper={({
 		id,

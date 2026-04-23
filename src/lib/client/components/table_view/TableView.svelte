@@ -22,9 +22,11 @@
 	import TableViewSelectActions from './selection/TableViewSelectActions.svelte';
 	import ButtonWithPopup from '../ButtonWithPopup.svelte';
 	import Icon from '../icon/Icon.svelte';
+	import { watch } from 'runed';
 
 	const {
 		renderAfterResolved,
+		persistentStateId,
 		items,
 		itemMapper,
 		itemCopier,
@@ -33,6 +35,7 @@
 		multiSelectActions
 	}: {
 		renderAfterResolved: Promise<void>;
+		persistentStateId: string;
 		items: T[];
 		itemMapper: ItemMapper<T, R>;
 		itemCopier: ItemCopier<R>;
@@ -42,11 +45,15 @@
 	} = $props();
 
 	let tableView: HTMLDivElement | undefined = $state();
+	let tableViewContent: HTMLDivElement | undefined = $state();
 	let tableViewList: TableViewList<T, R> | undefined = $state();
 	let tableViewRect: DOMRect | undefined = $state();
 
 	const tableViewColumnManager = TableViewColumnManager.context.set(
-		new TableViewColumnManager(() => columns) as TableViewColumnManager<unknown>
+		new TableViewColumnManager(
+			() => persistentStateId,
+			() => columns
+		) as TableViewColumnManager<unknown>
 	);
 
 	TableViewSortManager.context.set(new TableViewSortManager());
@@ -84,8 +91,22 @@
 
 	export const clearSelection = () => tableViewSelectionManager.resetSelection();
 
+	watch(
+		() => tableViewColumnManager.availableWidth,
+		(availableWidth) => {
+			if (tableViewColumnManager.previousAvailableWidth.current === 0) return;
+			if ((tableViewContent?.scrollWidth ?? 0) !== (tableViewContent?.clientWidth ?? 0)) return;
+
+			const previousAvailableWidth = tableViewColumnManager.previousAvailableWidth.current!;
+			const sizeDifference = availableWidth - previousAvailableWidth;
+			console.log(sizeDifference);
+			tableViewColumnManager.currentColumnSizes.current[0] += sizeDifference;
+		}
+	);
+
 	onMount(() => {
-		tableViewColumnManager.resetColumnSizes();
+		if (tableViewColumnManager.currentColumnSizes.current.length === 0)
+			tableViewColumnManager.resetColumnSizes();
 		tableViewRect = tableView?.getBoundingClientRect();
 	});
 </script>
@@ -104,7 +125,7 @@
 			class="table-view fill-container inverse-grid"
 			style:--grid-layout={tableViewColumnManager.calculatedGridLayout}
 		>
-			<div class="table-view-content inverse-grid">
+			<div class="table-view-content inverse-grid" bind:this={tableViewContent}>
 				<div class="table-view-header inverse-grid">
 					<TableViewSorters />
 					<TableViewFilters />
