@@ -23,7 +23,7 @@
 
 <button class="sidebar-button center-flex flex-column" class:active {disabled} onclick={onClick}>
 	<Icon {iconType} width={iconWidth} />
-	{#if getSidebarExpanded()}
+	{#if getSidebarExpanded().current}
 		<span class="sidebar-button-text">{@render children()}</span>
 	{/if}
 </button>

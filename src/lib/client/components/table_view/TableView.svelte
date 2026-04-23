@@ -91,22 +91,25 @@
 
 	export const clearSelection = () => tableViewSelectionManager.resetSelection();
 
+	const resizeColumns = (availableWidth: number) => {
+		if (tableViewColumnManager.previousAvailableWidth.current === 0) return;
+		if ((tableViewContent?.scrollWidth ?? 0) !== (tableViewContent?.clientWidth ?? 0)) return;
+
+		const previousAvailableWidth = tableViewColumnManager.previousAvailableWidth.current!;
+		const sizeDifference = availableWidth - previousAvailableWidth;
+		tableViewColumnManager.currentColumnSizes.current[0] += sizeDifference;
+	};
+
 	watch(
 		() => tableViewColumnManager.availableWidth,
-		(availableWidth) => {
-			if (tableViewColumnManager.previousAvailableWidth.current === 0) return;
-			if ((tableViewContent?.scrollWidth ?? 0) !== (tableViewContent?.clientWidth ?? 0)) return;
-
-			const previousAvailableWidth = tableViewColumnManager.previousAvailableWidth.current!;
-			const sizeDifference = availableWidth - previousAvailableWidth;
-			console.log(sizeDifference);
-			tableViewColumnManager.currentColumnSizes.current[0] += sizeDifference;
-		}
+		(availableWidth) => resizeColumns(availableWidth)
 	);
 
 	onMount(() => {
 		if (tableViewColumnManager.currentColumnSizes.current.length === 0)
 			tableViewColumnManager.resetColumnSizes();
+		resizeColumns(tableViewColumnManager.availableWidth);
+
 		tableViewRect = tableView?.getBoundingClientRect();
 	});
 </script>

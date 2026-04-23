@@ -25,7 +25,7 @@
 
 <a class="sidebar-link button-like center-flex flex-column" class:opened href={resolve(href)}>
 	<Icon {iconType} width={iconWidth} />
-	{#if getSidebarExpanded()}
+	{#if getSidebarExpanded().current}
 		<span class="sidebar-link-text">{@render children()}</span>
 	{/if}
 </a>
