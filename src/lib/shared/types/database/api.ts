@@ -42,10 +42,20 @@ export const makeAPIJsonRequest = <R extends Result<unknown, unknown>>(
 	fetch(getAPIEndpointURL(endpoint), {
 		method,
 		body: body === undefined ? undefined : JSON.stringify(body)
-	}).then((r) => r.json() as FlattenedResult<R>);
+	})
+		.then((r) => {
+			if (!r.ok) window.location.reload();
+			return r as Response;
+		})
+		.then((r) => {
+			r.json() as FlattenedResult<R>;
+		});
 
 export const makeRequest = <T = any>(method: SupportedHTTPMethod, endpoint: string, body?: T) =>
 	fetch(getEndpointURL(endpoint), {
 		method,
 		body: body === undefined ? undefined : JSON.stringify(body)
+	}).then((r) => {
+		if (!r.ok) window.location.reload();
+		return r as Response;
 	});

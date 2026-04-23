@@ -32,7 +32,9 @@
 			password: editorState.password.getParsedValue()!
 		} satisfies LoginBody).then((r) => r.ok);
 
-		if (loginOk) return await goto('/librarian');
+		const searchParams = new URLSearchParams(window.location.search);
+
+		if (loginOk) return await goto(searchParams.get('redirectTo') ?? '/librarian');
 
 		loggingIn = false;
 		unsuccessful = true;

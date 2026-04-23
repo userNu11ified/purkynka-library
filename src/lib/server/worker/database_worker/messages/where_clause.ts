@@ -5,10 +5,12 @@ import {
 	gt,
 	gte,
 	inArray,
+	like,
 	lt,
 	lte,
 	ne,
 	notInArray,
+	notLike,
 	SQL,
 	sql,
 	type InferSelectModel
@@ -16,7 +18,11 @@ import {
 import type { SQLiteColumn, SQLiteTable } from 'drizzle-orm/sqlite-core';
 
 export type ColumnFilter<ColumnName extends string, Value> =
-	| { columnName: ColumnName; filterType: 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte'; value: Value }
+	| {
+			columnName: ColumnName;
+			filterType: 'eq' | 'like' | 'neq' | 'notLike' | 'gt' | 'gte' | 'lt' | 'lte';
+			value: Value;
+	  }
 	| { columnName: ColumnName; filterType: 'inArray' | 'notInArray'; values: Value[] };
 
 export type ColumnFilters<Table extends SQLiteTable> = ValueOf<{
@@ -53,7 +59,10 @@ export const parseWhereFilter = <Table extends DatabaseTable>(
 	if (whereClause.filterType === 'inArray') return inArray(column, whereClause.values);
 	else if (whereClause.filterType === 'notInArray') return notInArray(column, whereClause.values);
 	else if (whereClause.filterType === 'eq') return eq(column, whereClause.value);
+	else if (whereClause.filterType === 'like') return like(column, whereClause.value as string);
 	else if (whereClause.filterType === 'neq') return ne(column, whereClause.value);
+	else if (whereClause.filterType === 'notLike')
+		return notLike(column, whereClause.value as string);
 	else if (whereClause.filterType === 'lt') return lt(column, whereClause.value);
 	else if (whereClause.filterType === 'lte') return lte(column, whereClause.value);
 	else if (whereClause.filterType === 'gt') return gt(column, whereClause.value);

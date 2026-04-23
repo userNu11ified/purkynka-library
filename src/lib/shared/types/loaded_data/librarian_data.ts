@@ -139,5 +139,7 @@ export class LibrarianData {
 }
 
 export type LoadedLibrarianData = {
-	[Key in DatabaseTableName]: Promise<DatabaseWorkerResult<SelectResponse<Key>>>;
+	[Key in Exclude<DatabaseTableName, 'sessions'>]: Promise<
+		DatabaseWorkerResult<SelectResponse<Key>>
+	>;
 };

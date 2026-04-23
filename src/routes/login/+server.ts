@@ -6,6 +6,8 @@ import type { RequestHandler } from './$types';
 import { type } from 'arktype';
 import { hashPassword, verifyPassword } from '$server/login/hash';
 import { loginRequestBody } from '$shared/types/login';
+import { createSession } from '$server/login/session';
+import { SendRemoveRequest } from '$server/worker/database_worker/messages/remove';
 
 const registerLibrarian = async (librarianId: number, password: string) => {
 	const passwordHash = await hashPassword(password);
@@ -38,14 +40,34 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	if (librarian.password === null) {
 		const registerResult = await registerLibrarian(librarian.id, loginParameters.password);
 		if (Result.isError(registerResult)) return createError();
-		redirect(303, '/librarian');
+
+		const [sessionId, expiresAt] = await createSession(librarian.id);
+		cookies.set('session', sessionId, {
+			secure: true,
+			httpOnly: true,
+			path: '/',
+			expires: expiresAt
+		});
+		return new Response();
 	}
 
-	const hashMatches = await verifyPassword(loginParameters.password, librarian.password);
-
+	const hashMatches = await verifyPassword(loginParameters.password, librarian.password!);
 	if (!hashMatches) return createError();
 
-	cookies.set('session', 'Not Implemented!', { secure: true, httpOnly: true, path: '/' });
+	const sessionDeleteResult = await SendRemoveRequest('sessions', {
+		filterType: 'eq',
+		columnName: 'librarianId',
+		value: librarian.id
+	});
+	if (Result.isError(sessionDeleteResult)) return createError();
+
+	const [sessionId, expiresAt] = await createSession(librarian.id);
+	cookies.set('session', sessionId, {
+		secure: true,
+		httpOnly: true,
+		path: '/',
+		expires: expiresAt
+	});
 
 	return new Response();
 };
