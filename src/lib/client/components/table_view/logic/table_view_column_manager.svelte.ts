@@ -10,7 +10,7 @@ export class TableViewColumnManager<R> {
 	public columns: TableViewColumn<R>[];
 
 	public availableWidth: number;
-	public previousAvailableWidth: Previous<number>;
+	public previousUsableWidth: Previous<number>;
 	public usableWidth: number;
 
 	public defaultColumnSizes: TableViewDefaultColumnSize[];
@@ -23,13 +23,14 @@ export class TableViewColumnManager<R> {
 		this.columns = $derived.by(columns);
 
 		this.availableWidth = $state(0);
-		this.previousAvailableWidth = new Previous(() => this.availableWidth, 0);
 
 		this.usableWidth = $derived(
 			this.availableWidth -
 				this.columns.length * CSSVariables.BORDER_WIDTH -
 				CSSVariables.SCROLLBAR_WIDTH
 		);
+
+		this.previousUsableWidth = new Previous(() => this.usableWidth, 0);
 
 		this.defaultColumnSizes = $derived(this.columns.map((v) => v.defaultColumnSize));
 		this.currentColumnSizes = new PersistedState(this.persistentStateId, []);

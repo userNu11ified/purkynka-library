@@ -91,18 +91,18 @@
 
 	export const clearSelection = () => tableViewSelectionManager.resetSelection();
 
-	const resizeColumns = (availableWidth: number) => {
-		if (tableViewColumnManager.previousAvailableWidth.current === 0) return;
+	const resizeColumns = (usableWidth: number) => {
+		if (tableViewColumnManager.previousUsableWidth.current === 0) return;
 		if ((tableViewContent?.scrollWidth ?? 0) !== (tableViewContent?.clientWidth ?? 0)) return;
 
-		const previousAvailableWidth = tableViewColumnManager.previousAvailableWidth.current!;
-		const sizeDifference = availableWidth - previousAvailableWidth;
+		const previousUsableWidth = tableViewColumnManager.previousUsableWidth.current!;
+		const sizeDifference = usableWidth - previousUsableWidth;
 		tableViewColumnManager.currentColumnSizes.current[0] += sizeDifference;
 	};
 
 	watch(
-		() => tableViewColumnManager.availableWidth,
-		(availableWidth) => resizeColumns(availableWidth)
+		() => tableViewColumnManager.usableWidth,
+		(usableWidth) => resizeColumns(usableWidth)
 	);
 
 	onMount(() => {

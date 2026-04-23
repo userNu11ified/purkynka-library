@@ -41,4 +41,11 @@
 	--editor-input-width: 320px;
 
 	--drop-shadow-color: rgba(0, 0, 0, 0.5);
+
+	--past-due-0: hsl(95, 60%, 62%);
+	--past-due-1: hsl(3, 20%, 25%);
+	--past-due-2: hsl(3, 30%, 30%);
+	--past-due-3: hsl(3, 40%, 40%);
+	--past-due-4: hsl(3, 50%, 50%);
+	--past-due-5: hsl(3, 60%, 50%);
 }

@@ -120,6 +120,8 @@
 	}
 
 	.table-view-column-container {
+		position: relative;
+
 		display: flex;
 		align-items: center;
 		justify-content: left;

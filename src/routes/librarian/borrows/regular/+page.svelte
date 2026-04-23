@@ -92,6 +92,16 @@
 	onMount(() => (createPageUsed('borrows').current = page.route.id));
 </script>
 
+{#snippet returnUntilColumn(value: { returnUntilString: string; weeksPastDue: number })}
+	<div
+		class="return-until-column fill-container center-grid"
+		title={`${value.weeksPastDue} Weeks Late`}
+		data-past-due={value.weeksPastDue}
+	>
+		{value.returnUntilString}
+	</div>
+{/snippet}
+
 <TableView
 	renderAfterResolved={librarianData.loaded}
 	persistentStateId="regular-column-sizes"
@@ -109,6 +119,8 @@
 		);
 		const returnUntilString = formatDateOrNull(returnUntil)!;
 
+		const weeksPastDue = (new Date().getTime() - returnUntil.getTime()) / 1000 / 60 / 60 / 24 / 7;
+		const weeksPastDueClamped = weeksPastDue < 0 ? 0 : Math.min(Math.floor(weeksPastDue), 5);
 		return {
 			borrowId: id,
 			bookId,
@@ -123,7 +135,8 @@
 			timesExtended,
 			returnUntil,
 			returnUntilString,
-			returnUntilCompactString: returnUntilString.replaceAll(' ', '')
+			returnUntilCompactString: returnUntilString.replaceAll(' ', ''),
+			weeksPastDue: weeksPastDueClamped
 		};
 	}}
 	itemCopier={({
@@ -237,7 +250,7 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
-			columnRenderer: { type: 'text', textCreator: (v) => v.returnUntilString },
+			columnRenderer: { type: 'snippet', snippet: returnUntilColumn },
 			columnSorter: (l, r) => dateSorter(l.returnUntil, r.returnUntil),
 			columnSearcher: {
 				type: 'filter',
@@ -265,3 +278,38 @@
 		>
 	{/snippet}
 </TableView>
+
+<style>
+	.return-until-column {
+		position: absolute;
+		left: 0;
+		top: 0;
+
+		background-color: transparent;
+	}
+
+	.return-until-column[data-past-due='0'] {
+		background-color: var(--past-due-0);
+		color: var(--bg-primary);
+	}
+
+	.return-until-column[data-past-due='1'] {
+		background-color: var(--past-due-1);
+	}
+
+	.return-until-column[data-past-due='2'] {
+		background-color: var(--past-due-2);
+	}
+
+	.return-until-column[data-past-due='3'] {
+		background-color: var(--past-due-3);
+	}
+
+	.return-until-column[data-past-due='4'] {
+		background-color: var(--past-due-4);
+	}
+
+	.return-until-column[data-past-due='5'] {
+		background-color: var(--past-due-5);
+	}
+</style>
