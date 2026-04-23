@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { pushState } from '$app/navigation';
+	import { page } from '$app/state';
 	import { clientLogger } from '$client/client_loggers';
 	import { stringFilter } from '$client/collation/filters';
 	import { mergeEditorSubmitCallbacks } from '$client/components/editors/MergeEditor.svelte';
@@ -9,8 +10,10 @@
 	} from '$client/components/table_view/logic/table_view_sorters';
 	import TableViewSelectAction from '$client/components/table_view/selection/TableViewSelectAction.svelte';
 	import TableView from '$client/components/table_view/TableView.svelte';
+	import { createPageUsed } from '$client/page_used';
 	import { LibrarianData } from '$shared/types/loaded_data/librarian_data';
 	import { Result } from '$shared/types/result';
+	import { onMount } from 'svelte';
 
 	let tableView: TableView<any, any> | undefined = $state();
 
@@ -68,6 +71,8 @@
 			throw new Error();
 		}
 	});
+
+	onMount(() => (createPageUsed('other').current = page.route.id));
 </script>
 
 <TableView

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { pushState } from '$app/navigation';
+	import { page } from '$app/state';
 	import { stringFilter } from '$client/collation/filters';
 	import {
 		dateSorter,
@@ -8,8 +9,10 @@
 	} from '$client/components/table_view/logic/table_view_sorters';
 	import TableViewSelectAction from '$client/components/table_view/selection/TableViewSelectAction.svelte';
 	import TableView from '$client/components/table_view/TableView.svelte';
+	import { createPageUsed } from '$client/page_used';
 	import { LibrarianData } from '$shared/types/loaded_data/librarian_data';
 	import { formatDateOrNull } from '$shared/types/util';
+	import { onMount } from 'svelte';
 
 	const librarianData = LibrarianData.context.get();
 	const students = $derived(librarianData.readers.getArray().filter((v) => v.readerType === 'T'));
@@ -18,6 +21,8 @@
 		pushState('', {
 			userEditorState: { type: 'edit', userId }
 		});
+
+	onMount(() => (createPageUsed('users').current = page.route.id));
 </script>
 
 <TableView

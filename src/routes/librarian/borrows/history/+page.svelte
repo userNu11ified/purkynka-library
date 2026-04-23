@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { stringFilter } from '$client/collation/filters';
 	import { MINIMUM_COLUMN_WIDTH } from '$client/components/table_view/logic/table_view_column_sizing';
 	import {
@@ -8,10 +9,14 @@
 		stringSorter
 	} from '$client/components/table_view/logic/table_view_sorters';
 	import TableView from '$client/components/table_view/TableView.svelte';
+	import { createPageUsed } from '$client/page_used';
 	import { LibrarianData } from '$shared/types/loaded_data/librarian_data';
 	import { formatDateOrNull } from '$shared/types/util';
+	import { onMount } from 'svelte';
 
 	const librarianData = LibrarianData.context.get();
+
+	onMount(() => (createPageUsed('borrows').current = page.route.id));
 </script>
 
 <TableView
