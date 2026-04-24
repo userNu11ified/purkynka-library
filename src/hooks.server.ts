@@ -7,7 +7,7 @@ import { Result } from '$shared/types/result';
 import { env } from 'bun';
 import { initializeAdminUser } from '$server/login/admin';
 import { SendCloseRequest } from '$server/worker/database_worker/messages/close';
-import { redirect, type Handle, type RequestEvent } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { SendSelectRequest } from '$server/worker/database_worker/messages/select';
 import { shouldCheckSession } from '$server/login/session';
 import { SendRemoveRequest } from '$server/worker/database_worker/messages/remove';
@@ -26,7 +26,7 @@ if (env.DB_FILE_NAME === undefined)
 if (env.ADMIN_PASSWORD === undefined)
 	throw new Error('.env file is missing required ADMIN_PASSWORD key!');
 
-if (env.IMPORT_OLD_DATA !== undefined) await createDatabaseBackup('pre-import');
+if (env.IMPORT_OLD_DATA !== undefined) await createDatabaseBackup();
 const configureResult = await SendConfigureRequest({
 	databaseFilePath: 'env'
 });

@@ -49,6 +49,15 @@ export const makeAPIJsonRequest = <R extends Result<unknown, unknown>>(
 		})
 		.then((r) => r.json() as FlattenedResult<R>);
 
+export const makeAPIRequest = <T>(method: SupportedHTTPMethod, endpoint: string, body?: T) =>
+	fetch(getAPIEndpointURL(endpoint), {
+		method,
+		body: body === undefined ? undefined : JSON.stringify(body)
+	}).then((r) => {
+		if (!r.ok) window.location.reload();
+		return r as Response;
+	});
+
 export const makeRequest = <T = any>(method: SupportedHTTPMethod, endpoint: string, body?: T) =>
 	fetch(getEndpointURL(endpoint), {
 		method,

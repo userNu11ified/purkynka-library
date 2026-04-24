@@ -11,6 +11,10 @@ export const handleConfigureRequest = async (
 ): Promise<DatabaseWorkerResult<ConfigureResponse>> => {
 	databaseWorkerLogger.debug('Reconfiguring Database Worker!');
 
+	if (context.db !== undefined) {
+		context.db.$client.close();
+	}
+
 	context.db = initializeDatabase(config);
 
 	return Result.ok(true);

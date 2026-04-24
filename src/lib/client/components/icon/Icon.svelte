@@ -39,7 +39,9 @@
 		| 'password-reset'
 		| 'shield-add'
 		| 'loading'
-		| 'quote';
+		| 'quote'
+		| 'download'
+		| 'upload';
 </script>
 
 <script lang="ts">
@@ -302,6 +304,14 @@
 {:else if iconType === 'quote'}
 	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
 		><path fill="currentColor" d="M14 17h3l2-4V7h-6v6h3M6 17h3l2-4V7H5v6h3z" /></svg
+	>
+{:else if iconType === 'download'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path fill="currentColor" d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z" /></svg
+	>
+{:else if iconType === 'upload'}
+	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 24 24"
+		><path fill="currentColor" d="M9 16v-6H5l7-7l7 7h-4v6zm-4 4v-2h14v2z" /></svg
 	>
 {/if}
 
