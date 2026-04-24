@@ -30,8 +30,6 @@ const getTimestamp = (date: Date) => {
 };
 
 export const createDatabaseBackup = async (): Promise<Result<BackupInformation, BackupError>> => {
-	console.log('creating');
-
 	try {
 		await getDatabaseBackupList();
 

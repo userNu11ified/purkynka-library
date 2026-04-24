@@ -210,10 +210,7 @@ const importBorrows = async ({ borrows, borrow_history, reader_classes }: OldDat
 	oldDataImporterLogger.debug('Imported borrows!');
 };
 
-export const importOldData = async (filePath: string) => {
-	const oldDatabase = (await Bun.file(filePath).json()) as OldDatabase;
-	oldDataImporterLogger.debug(`Loaded old database from: ${filePath}!`);
-
+export const importOldData = async (oldDatabase: any) => {
 	await importLookupTables(oldDatabase);
 	await importShorthandTables(oldDatabase);
 	await importBooks(oldDatabase);

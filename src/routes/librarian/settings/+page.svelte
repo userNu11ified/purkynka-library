@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
 	import { page } from '$app/state';
 	import { clientLogger } from '$client/client_loggers';
 	import ButtonWithPopup from '$client/components/ButtonWithPopup.svelte';
@@ -10,6 +11,10 @@
 	import { makeAPIJsonRequest, makeAPIRequest } from '$shared/types/database/api';
 	import { Result } from '$shared/types/result';
 	import { onMount } from 'svelte';
+	import type { ChangeEventHandler } from 'svelte/elements';
+
+	let databaseImportInput: HTMLInputElement | undefined = $state();
+	let oldDatabaseImportInput: HTMLInputElement | undefined = $state();
 
 	let loading = $state(false);
 	let backups: BackupInformation[] = $state([]);
@@ -88,10 +93,66 @@
 		document.body.removeChild(a);
 	};
 
+	const onImportBackupClick = () => {
+		databaseImportInput?.click();
+	};
+
+	const onImportChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
+		const file = e.currentTarget.files?.[0];
+		if (file === undefined) return;
+
+		loading = true;
+
+		const formData = new FormData();
+		formData.append('file', file);
+
+		await makeAPIRequest('POST', 'backup/import', formData);
+
+		window.location.reload();
+	};
+
+	const onImportOldBackupClick = () => {
+		oldDatabaseImportInput?.click();
+	};
+
+	const onImportOldChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
+		const file = e.currentTarget.files?.[0];
+		if (file === undefined) return;
+
+		loading = true;
+
+		const formData = new FormData();
+		formData.append('file', file);
+
+		await makeAPIRequest('POST', 'backup/import-old', formData);
+
+		window.location.reload();
+
+		loading = false;
+	};
+
 	onMount(() => {
 		backups = page.data.backups as BackupInformation[];
+
+		invalidate('app:backups');
 	});
 </script>
+
+<input
+	type="file"
+	accept="application/gzip, application/x-gzip"
+	bind:this={databaseImportInput}
+	hidden
+	onchange={onImportChange}
+/>
+
+<input
+	type="file"
+	accept="application/json"
+	bind:this={oldDatabaseImportInput}
+	hidden
+	onchange={onImportOldChange}
+/>
 
 <div class="settings-container">
 	<div class="settings">
@@ -142,7 +203,11 @@
 				</InfiniteList>
 			</div>
 
-			<button class="create-backup" onclick={onCreateBackupClick}>Create Backup</button>
+			<button class="backup-action create" onclick={onCreateBackupClick}>Create Backup</button>
+			<button class="backup-action import" onclick={onImportBackupClick}>Import Backup</button>
+			<button class="backup-action import-old" onclick={onImportOldBackupClick}
+				>Import V1 Backup</button
+			>
 		</div>
 	</div>
 
@@ -164,7 +229,7 @@
 
 	.backup-list {
 		width: 90%;
-		height: 256px;
+		height: 320px;
 
 		border: var(--border);
 		border-radius: 4px;
@@ -189,17 +254,32 @@
 		gap: 8px;
 	}
 
-	.create-backup {
+	.backup-action {
 		width: 90%;
 		height: 48px;
 
 		border: var(--border);
-		border-color: var(--success-color);
 		border-radius: 4px;
 
-		color: var(--success-color);
 		font-size: 20px;
 		font-weight: 500;
+	}
+
+	.backup-action.create {
+		border-color: var(--success-color);
+		color: var(--success-color);
+	}
+
+	.backup-action.import {
+		border-color: var(--information-color);
+		color: var(--information-color);
+	}
+
+	.backup-action.import-old {
+		border-color: var(--error-color);
+		color: var(--error-color);
+
+		margin-top: 32px;
 	}
 
 	:global .backup-button {

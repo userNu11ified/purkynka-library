@@ -52,7 +52,7 @@ export const makeAPIJsonRequest = <R extends Result<unknown, unknown>>(
 export const makeAPIRequest = <T>(method: SupportedHTTPMethod, endpoint: string, body?: T) =>
 	fetch(getAPIEndpointURL(endpoint), {
 		method,
-		body: body === undefined ? undefined : JSON.stringify(body)
+		body: body === undefined ? undefined : body instanceof FormData ? body : JSON.stringify(body)
 	}).then((r) => {
 		if (!r.ok) window.location.reload();
 		return r as Response;
