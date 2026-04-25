@@ -82,7 +82,7 @@
 	]}
 	columns={[
 		{
-			columnName: 'ID',
+			columnName: 'Přír. č.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -100,7 +100,7 @@
 			}
 		},
 		{
-			columnName: 'Book Name',
+			columnName: 'Název knihy',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.bookName },
@@ -108,7 +108,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.bookName, q) }
 		},
 		{
-			columnName: 'Publisher',
+			columnName: 'Naklad.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -117,7 +117,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.publisher, q) }
 		},
 		{
-			columnName: 'Place Of Publishing',
+			columnName: 'Místo',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -126,7 +126,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.placeOfPublishing, q) }
 		},
 		{
-			columnName: 'Year Of Publishing',
+			columnName: 'Rok',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -135,7 +135,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.yearOfPublishing, q) }
 		},
 		{
-			columnName: 'Edition',
+			columnName: 'Číslo',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -144,7 +144,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.edition, q) }
 		},
 		{
-			columnName: 'Page Count',
+			columnName: 'Str.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -153,7 +153,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.pageCount, q) }
 		},
 		{
-			columnName: 'Literature Type',
+			columnName: 'Typ',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -166,7 +166,7 @@
 			}
 		},
 		{
-			columnName: 'Price',
+			columnName: 'Cena',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -175,7 +175,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.price, q) }
 		},
 		{
-			columnName: 'Obtained From',
+			columnName: 'Od',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -187,7 +187,7 @@
 >
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}>
-			Edit
+			Upravit
 		</TableViewSelectAction>
 	{/snippet}
 </TableView>

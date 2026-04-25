@@ -119,7 +119,7 @@ export class EditorFieldSearchableState<T> extends EditorFieldState<
 	protected parseValue(): Result<Nullable<EditorSearchableFieldValue<T>>, string[]> {
 		if (this.settings!.list.onSpecialAdderClick !== undefined && this.matchedItem === null) {
 			if (this.trimmedValue === '') return Result.ok(null);
-			else return Result.error(['Value needs to be selected from list!']);
+			else return Result.error(['Hodnota musí být vybrána ze seznamu!']);
 		}
 
 		if (this.trimmedValue === '' && this.matchedItem === null) return Result.ok(null);

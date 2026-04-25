@@ -120,7 +120,7 @@
 				class="table-view-resizer"
 				class:resizing={currentlyResizing === i}
 				style:--left-offset={`${calculateLeftOffset(i)}px`}
-				aria-label="Column Resizer"
+				aria-label="Rozšiřovatel sloupce"
 				onmousedown={() => onResizerMouseDown(i)}
 				onkeydown={(e) => onResizerKeyDown(e, i)}
 				bind:this={resizers[i]}

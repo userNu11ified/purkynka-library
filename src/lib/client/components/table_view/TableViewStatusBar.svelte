@@ -32,7 +32,7 @@
 			onclick={onResetColumnSizesClick}
 		>
 			{#snippet popup()}
-				Reset Column Sizes
+				Resetovat velikosti sloupců
 			{/snippet}
 
 			<Icon iconType="column-width" width={20} />
@@ -41,7 +41,7 @@
 
 	<ButtonWithPopup class="item-count center-flex" onclick={onSelectAllClick}>
 		{#snippet popup()}
-			Select Filtered
+			Vybrat všechny vyhledané
 		{/snippet}
 
 		<div class="filtered-item-count">{tableViewItemManager.collatedItems.length}</div>
@@ -56,7 +56,7 @@
 			onclick={onCaseSensitiveClick}
 		>
 			<Icon iconType="case-sensitive" width={20} />
-			Case Sensitive
+			Rozlišovat vel. a mal. písmena
 		</button>
 	</div>
 </div>

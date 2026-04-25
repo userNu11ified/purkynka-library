@@ -8,12 +8,12 @@
 
 <ViewWithSidebar>
 	{#snippet sidebar()}
-		<SidebarLink href="/librarian/books/view" iconType="book">View</SidebarLink>
+		<SidebarLink href="/librarian/books/view" iconType="book">Seznam</SidebarLink>
 		<SidebarLink href="/librarian/books/extended-view" iconType="book-info">
-			Extended View
+			Seznam informací
 		</SidebarLink>
 
-		<SidebarLink href="/librarian/books/discarded" iconType="book-discard">Discarded</SidebarLink>
+		<SidebarLink href="/librarian/books/discarded" iconType="book-discard">Vyřazené</SidebarLink>
 	{/snippet}
 	{#snippet view()}
 		{@render children()}

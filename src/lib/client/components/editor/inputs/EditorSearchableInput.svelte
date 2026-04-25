@@ -56,7 +56,7 @@
 		onclick={onCaseSensitiveClick}
 	>
 		{#snippet popup()}
-			Toggle Case Sensitive Search
+			Rozlišovt vel. a mal. písmena
 		{/snippet}
 		<Icon iconType="case-sensitive" width={20} />
 	</ButtonWithPopup>
@@ -66,7 +66,7 @@
 			onclick={onSpecialAdderClick}
 		>
 			{#snippet popup()}
-				Add
+				Přidat
 			{/snippet}
 
 			<Icon iconType="add" width={24} />

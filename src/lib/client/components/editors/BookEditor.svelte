@@ -61,12 +61,12 @@
 	const discardReasons = librarianData.discardReasons.getArray();
 
 	const editorState = $state({
-		idState: new EditorFieldIntegerState('Book ID', {
+		idState: new EditorFieldIntegerState('Přírustkové číslo', {
 			inputOptions: { disabled: true, textAlignment: 'center', width: '96px' },
 			required: true
 		}),
 		isLargeState: false,
-		bookNameState: new EditorFieldSearchableState('Book Name', {
+		bookNameState: new EditorFieldSearchableState('Název knihy', {
 			list: {
 				searchIn: bookNames,
 				textCreator: ({ value }) => value,
@@ -75,7 +75,7 @@
 			}
 		}),
 		authorStates: [
-			new EditorFieldSearchableState('Author', {
+			new EditorFieldSearchableState('Autor', {
 				list: {
 					searchIn: authorNames,
 					textCreator: ({ value }) => value,
@@ -86,7 +86,7 @@
 						stringFilterEqual(v.item.value.replaceAll(',', ''), q)
 				}
 			}),
-			new EditorFieldSearchableState('Author Two', {
+			new EditorFieldSearchableState('Autor dva', {
 				list: {
 					searchIn: authorNames,
 					textCreator: ({ value }) => value,
@@ -97,7 +97,7 @@
 						stringFilterEqual(v.item.value.replaceAll(',', ''), q)
 				}
 			}),
-			new EditorFieldSearchableState('Author Three', {
+			new EditorFieldSearchableState('Autor tři', {
 				list: {
 					searchIn: authorNames,
 					textCreator: ({ value }) => value,
@@ -109,7 +109,7 @@
 				}
 			})
 		],
-		publisherState: new EditorFieldSearchableState('Publisher', {
+		publisherState: new EditorFieldSearchableState('Nakladatelství', {
 			list: {
 				searchIn: publishers,
 				textCreator: ({ value }) => value,
@@ -117,7 +117,7 @@
 				matcher: (v, q) => stringFilterEqual(v.item.value, q)
 			}
 		}),
-		placeOfPublishingState: new EditorFieldSearchableState('Place Of Publishing', {
+		placeOfPublishingState: new EditorFieldSearchableState('Místo vydání', {
 			list: {
 				searchIn: placesOfPublishing,
 				textCreator: ({ value }) => value,
@@ -125,17 +125,17 @@
 				matcher: (v, q) => stringFilterEqual(v.item.value, q)
 			}
 		}),
-		yearOfPublishingState: new EditorFieldStringState('Year Of Publishing', {
+		yearOfPublishingState: new EditorFieldStringState('Rok vydání', {
 			inputOptions: { width: '96px' }
 		}),
-		editionState: new EditorFieldStringState('Edition'),
-		pageCountState: new EditorFieldStringState('Page Count'),
-		literatureTypeState: new EditorFieldSelectState('Literature Type', {
+		editionState: new EditorFieldStringState('Číslo vydání'),
+		pageCountState: new EditorFieldStringState('Počet stran'),
+		literatureTypeState: new EditorFieldSelectState('Typ literatury', {
 			options: literatureTypes,
 			textCreator: ({ shortName }) => shortName,
 			titleCreator: ({ longName }) => longName
 		}),
-		udcState: new EditorFieldSearchableState('UDC', {
+		udcState: new EditorFieldSearchableState('MDT', {
 			list: {
 				searchIn: udc,
 				textCreator: ({ longName }) => longName,
@@ -151,14 +151,14 @@
 				}
 			}
 		}),
-		addDateState: new EditorFieldDateState('Add Date', {
+		addDateState: new EditorFieldDateState('Datum zápisu', {
 			inputOptions: { errorAlignment: 'left' }
 		}),
-		priceState: new EditorFieldStringState('Price', { inputOptions: { errorAlignment: 'left' } }),
-		documentNumberState: new EditorFieldStringState('Document Number', {
+		priceState: new EditorFieldStringState('Cena', { inputOptions: { errorAlignment: 'left' } }),
+		documentNumberState: new EditorFieldStringState('Číslo dokladu', {
 			inputOptions: { errorAlignment: 'left' }
 		}),
-		obtainedFromState: new EditorFieldSearchableState('Obtained From', {
+		obtainedFromState: new EditorFieldSearchableState('Získáno od', {
 			list: {
 				searchIn: obtainedFrom,
 				textCreator: ({ value }) => value,
@@ -166,13 +166,13 @@
 				matcher: (v, q) => stringFilterEqual(v.item.value, q)
 			}
 		}),
-		annotationState: new EditorFieldStringState('Annotation', {
+		annotationState: new EditorFieldStringState('Anotace', {
 			inputOptions: { errorAlignment: 'left' }
 		}),
-		discardDateState: new EditorFieldDateState('Discard Date', {
+		discardDateState: new EditorFieldDateState('Datum vyřazení', {
 			inputOptions: { errorAlignment: 'left' }
 		}),
-		discardReasonState: new EditorFieldSearchableState('Discard Reason', {
+		discardReasonState: new EditorFieldSearchableState('Důvod vyřazení', {
 			list: {
 				searchIn: discardReasons,
 				textCreator: ({ value }) => value,
@@ -180,10 +180,10 @@
 				matcher: (v, q) => stringFilterEqual(v.item.value, q)
 			}
 		}),
-		discardDocumentState: new EditorFieldStringState('Discard Document', {
+		discardDocumentState: new EditorFieldStringState('Doklad o vyřazení', {
 			inputOptions: { errorAlignment: 'left' }
 		}),
-		noteState: new EditorFieldStringState('Note', { inputOptions: { errorAlignment: 'left' } })
+		noteState: new EditorFieldStringState('Poznámka', { inputOptions: { errorAlignment: 'left' } })
 	});
 
 	const hasErrors = $derived(
@@ -525,10 +525,10 @@
 	>
 		{#snippet title()}
 			{bookEditorState.type === 'new' || bookEditorState.type === 'new-copy'
-				? 'Add Book'
+				? 'Přidat knihu'
 				: bookEditorState.type === 'edit'
-					? 'Edit Book'
-					: 'Discard Book'}
+					? 'Upravit knihu'
+					: 'Vyřadit knihu'}
 		{/snippet}
 
 		{#snippet fields()}
@@ -536,7 +536,7 @@
 				{#snippet left()}
 					<EditorIntegerInputLine state={editorState.idState}>
 						<EditorToggleInput bind:toggled={editorState.isLargeState}>
-							{editorState.isLargeState ? 'L' : 's'}
+							{editorState.isLargeState ? 'V' : 'm'}
 						</EditorToggleInput>
 					</EditorIntegerInputLine>
 					<EditorSearchableInputLine state={editorState.bookNameState} />
@@ -572,21 +572,21 @@
 		{/snippet}
 
 		{#snippet actions()}
-			<EditorAction actionColor="error" onClick={onCancelClick}>Cancel</EditorAction>
+			<EditorAction actionColor="error" onClick={onCancelClick}>Zrušit</EditorAction>
 			{#if bookEditorState.type === 'new' || bookEditorState.type === 'new-copy'}
 				<EditorAction
 					actionColor="information"
 					disabled={hasErrors || parsedAddCount === null}
 					onClick={onAddMultipleClick}
 				>
-					Add <input class="book-count-input" type="text" bind:value={timesAdded} /> Times
+					Přidat <input class="book-count-input" type="text" bind:value={timesAdded} /> krát
 				</EditorAction>
 				<EditorAction actionColor="success" disabled={hasErrors} onClick={onAddClick}
-					>Add</EditorAction
+					>Přidat</EditorAction
 				>
 			{:else}
 				<EditorAction actionColor="success" disabled={hasErrors} onClick={onSaveClick}
-					>Save</EditorAction
+					>Uložit</EditorAction
 				>
 			{/if}
 		{/snippet}

@@ -16,11 +16,8 @@
 	import EditorSingleColumnLayout from '../editor/layout/EditorSingleColumnLayout.svelte';
 	import EditorStringInputLine from '../editor/premade_lines/EditorStringInputLine.svelte';
 	import Modal from '../Modal.svelte';
-	import { EditorPageStates } from './editor_page_states.svelte';
 
 	const librarianData = LibrarianData.context.get();
-	const editorPageStates = EditorPageStates.context.get();
-	const udcEditorState = $derived(editorPageStates.udcEditorState!);
 
 	const editorState = $state({
 		shortName: new EditorFieldStringState('Short Name', { required: true }),
@@ -61,8 +58,6 @@
 
 		history.back();
 	};
-
-	const onClickSave = () => {};
 </script>
 
 <Modal
@@ -72,7 +67,7 @@
 >
 	<Editor {showLoading} {@attach trapFocus(1)}>
 		{#snippet title()}
-			{udcEditorState.type === 'new' ? 'Add UDC' : 'Edit UDC'}
+			Přidat MDT
 		{/snippet}
 
 		{#snippet fields()}
@@ -83,16 +78,10 @@
 		{/snippet}
 
 		{#snippet actions()}
-			<EditorAction actionColor="error" onClick={onClickCancel}>Cancel</EditorAction>
-			{#if udcEditorState.type === 'new'}
-				<EditorAction actionColor="success" disabled={hasErrors} onClick={onClickAdd}>
-					Add
-				</EditorAction>
-			{:else}
-				<EditorAction actionColor="success" disabled={hasErrors} onClick={onClickSave}>
-					Save
-				</EditorAction>
-			{/if}
+			<EditorAction actionColor="error" onClick={onClickCancel}>Zrušit</EditorAction>
+			<EditorAction actionColor="success" disabled={hasErrors} onClick={onClickAdd}>
+				Přidat
+			</EditorAction>
 		{/snippet}
 	</Editor>
 </Modal>

@@ -101,7 +101,7 @@
 		discardDocument
 	}) => [
 		id,
-		isLarge ? 'L' : 's',
+		isLarge ? 'V' : 'm',
 		bookName,
 		authorString,
 		discardDateString,
@@ -112,7 +112,7 @@
 	]}
 	columns={[
 		{
-			columnName: 'ID',
+			columnName: 'Přír. č.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -134,20 +134,20 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'px', pixels: MINIMUM_COLUMN_WIDTH },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'L' : 's') },
+			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'V' : 'm') },
 			columnSorter: (l, r) => booleanSorter(l.isLarge, r.isLarge),
 			columnSearcher: {
 				type: 'filter',
 				filter: (v, q) => {
 					const queryAsBoolean =
-						q.lowercaseQuery === 'l' ? true : q.lowercaseQuery === 's' ? false : null;
+						q.lowercaseQuery === 'v' ? true : q.lowercaseQuery === 'm' ? false : null;
 					if (queryAsBoolean === null) return false;
 					return v.isLarge === queryAsBoolean;
 				}
 			}
 		},
 		{
-			columnName: 'Book Name',
+			columnName: 'Název knihy',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.bookName },
@@ -155,7 +155,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.bookName, q) }
 		},
 		{
-			columnName: 'Author',
+			columnName: 'Autor',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.authorString },
@@ -163,7 +163,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.authorString, q) }
 		},
 		{
-			columnName: 'Discard Date',
+			columnName: 'Datum odpisu',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -176,7 +176,7 @@
 			}
 		},
 		{
-			columnName: 'Price',
+			columnName: 'Cena',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -185,7 +185,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.price, q) }
 		},
 		{
-			columnName: 'Literature Type',
+			columnName: 'Literatura',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -193,11 +193,12 @@
 			columnSorter: (l, r) => stringSorter(l.literatureTypeShortName, r.literatureTypeShortName),
 			columnSearcher: {
 				type: 'filter',
-				filter: (v, q) => stringFilter(v.literatureTypeShortName, q)
+				filter: (v, q) =>
+					stringFilter(v.literatureTypeShortName, q) || stringFilter(v.literatureTypeLongName, q)
 			}
 		},
 		{
-			columnName: 'Discard Reason',
+			columnName: 'Důvod',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -206,7 +207,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.discardReason, q) }
 		},
 		{
-			columnName: 'Discard Document',
+			columnName: 'Doklad odpisu',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -222,7 +223,7 @@
 			color="success"
 			onClick={() => onRestoreClick(selectedItem[0].id)}
 		>
-			Return
+			Vrátit
 		</TableViewSelectAction>
 	{/snippet}
 </TableView>

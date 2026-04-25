@@ -19,7 +19,7 @@ export class EditorFieldIntegerState extends EditorFieldState<
 		if (this.trimmedValue === '') return Result.ok(null);
 
 		const isIntegerString = integerStringRegex.test(this.trimmedValue);
-		if (!isIntegerString) return Result.error(['Value is not an integer!']);
+		if (!isIntegerString) return Result.error(['Hodnota není celé číslo!']);
 
 		const stringAsInteger = +this.valueState.trimmedValue;
 		if (this.settings?.range !== undefined) {
@@ -27,9 +27,9 @@ export class EditorFieldIntegerState extends EditorFieldState<
 
 			const rangeErrors: string[] = [];
 			if (minimum !== undefined && stringAsInteger < minimum)
-				rangeErrors.push(`Value needs to be at least ${minimum}!`);
+				rangeErrors.push(`Musí být alespoň ${minimum}!`);
 			if (maximum !== undefined && stringAsInteger > maximum)
-				rangeErrors.push(`Value needs to be at most ${maximum}!`);
+				rangeErrors.push(`Musí být maximálně ${maximum}!`);
 
 			if (rangeErrors.length !== 0) return Result.error(rangeErrors);
 		}

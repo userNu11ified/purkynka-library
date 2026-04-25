@@ -36,7 +36,7 @@ export class EditorFieldDateState extends EditorFieldState<Date> {
 		if (this.trimmedValue === '') return Result.ok(null);
 
 		const validDate = dateRegex.exec(this.trimmedValue);
-		if (validDate === null) return Result.error(['Invalid format date!']);
+		if (validDate === null) return Result.error(['Špatný formát data!']);
 
 		const [_, day, month, year] = validDate;
 		return Result.ok(new Date(+year, +month - 1, +day));

@@ -46,7 +46,7 @@ export abstract class EditorFieldState<
 
 		this.parsed = $derived.by(() => {
 			if (this.settings?.required && this.empty()) {
-				return { parsedValue: null, parseErrors: ['This field is required!'] };
+				return { parsedValue: null, parseErrors: ['Tato položka je povinná!'] };
 			}
 
 			const parseValueResult = this.parseValue();

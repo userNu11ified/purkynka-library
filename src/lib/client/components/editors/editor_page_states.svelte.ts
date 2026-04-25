@@ -7,7 +7,7 @@ export type BookEditorPageState =
 	| { type: 'edit'; bookId: number }
 	| { type: 'discard'; bookId: number };
 
-export type UDCEditorPageState = { type: 'new' } | { type: 'edit'; udcId: number };
+export type UDCEditorPageState = { type: 'new' };
 
 export type MergeEditorPageState = { values: [string, number][] };
 

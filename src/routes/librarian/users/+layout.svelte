@@ -28,9 +28,9 @@
 
 <ViewWithSidebar>
 	{#snippet sidebar()}
-		<SidebarLink href="/librarian/users/students" iconType="student">Students</SidebarLink>
-		<SidebarLink href="/librarian/users/teachers" iconType="teacher">Teachers</SidebarLink>
-		<SidebarLink href="/librarian/users/librarians" iconType="librarian">Librarians</SidebarLink>
+		<SidebarLink href="/librarian/users/students" iconType="student">Studenti</SidebarLink>
+		<SidebarLink href="/librarian/users/teachers" iconType="teacher">Učitelé</SidebarLink>
+		<SidebarLink href="/librarian/users/librarians" iconType="librarian">Knihovníci</SidebarLink>
 
 		<SidebarSeparator />
 
@@ -38,13 +38,13 @@
 			iconType="shield-add"
 			active={editorPageStates.librarianEditorActive}
 			disabled={editorPageStates.librarianEditorActive || editorPageStates.userEditorActive}
-			onClick={onAddLibrarianClick}>Add<br />Librarian</SidebarButton
+			onClick={onAddLibrarianClick}>Přidat knihovníka</SidebarButton
 		>
 		<SidebarButton
 			iconType="user-add"
 			active={editorPageStates.userEditorActive}
 			disabled={editorPageStates.librarianEditorActive || editorPageStates.userEditorActive}
-			onClick={onAddUserClick}>Add User</SidebarButton
+			onClick={onAddUserClick}>Přidat čtenáře</SidebarButton
 		>
 	{/snippet}
 	{#snippet view()}

@@ -29,8 +29,8 @@
 			inputOptions: { disabled: true, width: '128px', textAlignment: 'center' },
 			required: true
 		}),
-		shortName: new EditorFieldStringState('Short Name', { required: true }),
-		longName: new EditorFieldStringState('Long Name', { required: true })
+		shortName: new EditorFieldStringState('Zkratka', { required: true }),
+		longName: new EditorFieldStringState('Celé jméno', { required: true })
 	});
 
 	const hasErrors = $derived(
@@ -82,10 +82,10 @@
 		{/snippet}
 
 		{#snippet actions()}
-			<EditorAction actionColor="error" onClick={onCancelClick}>Cancel</EditorAction>
-			<EditorAction actionColor="success" disabled={hasErrors} onClick={onSaveClick}
-				>Save</EditorAction
-			>
+			<EditorAction actionColor="error" onClick={onCancelClick}>Zrušit</EditorAction>
+			<EditorAction actionColor="success" disabled={hasErrors} onClick={onSaveClick}>
+				Uložit
+			</EditorAction>
 		{/snippet}
 	</Editor>
 </Modal>

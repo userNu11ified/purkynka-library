@@ -53,7 +53,7 @@
 <Modal onClickOutside={() => history.back()}>
 	<Editor {showLoading} {@attach trapFocus(1)}>
 		{#snippet title()}
-			Add Librarian
+			Přidat knihovníka
 		{/snippet}
 
 		{#snippet fields()}
@@ -64,8 +64,8 @@
 		{/snippet}
 
 		{#snippet actions()}
-			<EditorAction actionColor="error" onClick={onCancelClick}>Cancel</EditorAction>
-			<EditorAction actionColor="success" onClick={onAddClick}>Add</EditorAction>
+			<EditorAction actionColor="error" onClick={onCancelClick}>Zrušit</EditorAction>
+			<EditorAction actionColor="success" onClick={onAddClick}>Přidat</EditorAction>
 		{/snippet}
 	</Editor>
 </Modal>

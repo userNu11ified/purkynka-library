@@ -36,7 +36,7 @@
 <Modal onClickOutside={() => history.back()}>
 	<Editor {showLoading} {@attach trapFocus(1)}>
 		{#snippet title()}
-			Merge
+			Spojit
 		{/snippet}
 
 		{#snippet fields()}
@@ -56,8 +56,8 @@
 		{/snippet}
 
 		{#snippet actions()}
-			<EditorAction actionColor="error" onClick={onCancelClick}>Cancel</EditorAction>
-			<EditorAction actionColor="success" onClick={onMergeClick}>Merge</EditorAction>
+			<EditorAction actionColor="error" onClick={onCancelClick}>Zrušit</EditorAction>
+			<EditorAction actionColor="success" onClick={onMergeClick}>Spojit</EditorAction>
 		{/snippet}
 	</Editor>
 </Modal>

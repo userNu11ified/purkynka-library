@@ -68,17 +68,17 @@
 	}) => [
 		id,
 		bookId,
-		isLarge === null ? '' : isLarge ? 'L' : 's',
+		isLarge === null ? '' : isLarge ? 'V' : 'm',
 		bookName,
 		readerName,
 		readerClass,
 		borrowDateString,
-		permanent ? 'Permanent' : returnDateString,
+		permanent ? 'Trvale' : returnDateString,
 		`${timesExtended}x`
 	]}
 	columns={[
 		{
-			columnName: 'Borrow ID',
+			columnName: 'Výpůjčka č.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -96,7 +96,7 @@
 			}
 		},
 		{
-			columnName: 'Book ID',
+			columnName: 'Přír. č.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -112,7 +112,7 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'px', pixels: MINIMUM_COLUMN_WIDTH },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'L' : 's') },
+			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'V' : 'm') },
 			columnSorter: (l, r) => booleanSorter(l.isLarge ?? false, r.isLarge ?? false),
 			columnSearcher: {
 				type: 'filter',
@@ -120,14 +120,14 @@
 					if (v.isLarge === null && q.trimmedQuery === '') return true;
 
 					const queryAsBoolean =
-						q.lowercaseQuery === 'l' ? true : q.lowercaseQuery === 's' ? false : null;
+						q.lowercaseQuery === 'v' ? true : q.lowercaseQuery === 'm' ? false : null;
 					if (queryAsBoolean === null) return false;
 					return v.isLarge === queryAsBoolean;
 				}
 			}
 		},
 		{
-			columnName: 'Book Name',
+			columnName: 'Název knihy',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.bookName },
@@ -135,7 +135,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.bookName, q) }
 		},
 		{
-			columnName: 'Reader Name',
+			columnName: 'Čtenář',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -144,7 +144,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerName, q) }
 		},
 		{
-			columnName: 'Reader Class',
+			columnName: 'Třída',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -153,7 +153,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerClass, q) }
 		},
 		{
-			columnName: 'Borrow Date',
+			columnName: 'Půjčeno',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -166,7 +166,7 @@
 			}
 		},
 		{
-			columnName: 'Return Date',
+			columnName: 'Vráceno',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -182,7 +182,7 @@
 			}
 		},
 		{
-			columnName: 'Permanent',
+			columnName: 'Trvale',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -203,7 +203,7 @@
 			}
 		},
 		{
-			columnName: 'Times Extended',
+			columnName: 'Prodlouženo',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 

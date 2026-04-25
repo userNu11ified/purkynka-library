@@ -78,7 +78,9 @@
 	renderAfterResolved={librarianData.loaded}
 	persistentStateId="view-column-sizes"
 	items={librarianData.books.getArray()}
-	itemMapper={({ id, isLarge, bookNameId, annotation, udcId, note, discardDate }) => {
+	itemMapper={(book) => {
+		const { id, isLarge, bookNameId, annotation, udcId, note, discardDate } = book;
+
 		const bookName = librarianData.bookNames.getValueByIdOrNull(bookNameId);
 		const udc = librarianData.udc.getValueByIdOrNull(udcId);
 		const discardDateString = formatDateOrNull(discardDate) ?? '';
@@ -115,7 +117,7 @@
 		discardDateString
 	}) => [
 		id,
-		isLarge ? 'L' : 's',
+		isLarge ? 'V' : 'm',
 		bookName,
 		authorString,
 		annotation,
@@ -126,7 +128,7 @@
 	]}
 	columns={[
 		{
-			columnName: 'ID',
+			columnName: 'Přír. č.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -148,20 +150,20 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'px', pixels: MINIMUM_COLUMN_WIDTH },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'L' : 's') },
+			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'V' : 'm') },
 			columnSorter: (l, r) => booleanSorter(l.isLarge, r.isLarge),
 			columnSearcher: {
 				type: 'filter',
 				filter: (v, q) => {
 					const queryAsBoolean =
-						q.lowercaseQuery === 'l' ? true : q.lowercaseQuery === 's' ? false : null;
+						q.lowercaseQuery === 'V' ? true : q.lowercaseQuery === 'm' ? false : null;
 					if (queryAsBoolean === null) return false;
 					return v.isLarge === queryAsBoolean;
 				}
 			}
 		},
 		{
-			columnName: 'Book Name',
+			columnName: 'Název knihy',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.bookName },
@@ -169,7 +171,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.bookName, q) }
 		},
 		{
-			columnName: 'Author',
+			columnName: 'Autor',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.authorString },
@@ -177,7 +179,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.authorString, q) }
 		},
 		{
-			columnName: 'Annotation',
+			columnName: 'Anotace',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.annotation },
@@ -185,7 +187,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.annotation, q) }
 		},
 		{
-			columnName: 'UDC',
+			columnName: 'MDT',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -197,7 +199,7 @@
 			}
 		},
 		{
-			columnName: 'Note',
+			columnName: 'Pozn.',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.note },
@@ -205,7 +207,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.note, q) }
 		},
 		{
-			columnName: 'Borrowed',
+			columnName: 'Půjč.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -218,7 +220,7 @@
 			columnSearcher: { type: 'filter', filter: () => true }
 		},
 		{
-			columnName: 'Discarded',
+			columnName: 'Vyřaz.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -238,22 +240,22 @@
 				iconType="book-return"
 				onClick={() => onReturnClick(selectedItem[0].borrowId!)}
 			>
-				Return
+				Vrátit
 			</TableViewSelectAction>
 		{:else}
 			<TableViewSelectAction
 				iconType="book-borrow"
 				onClick={() => onBorrowClick(selectedItem[0].id)}
 			>
-				Borrow
+				Půjčit
 			</TableViewSelectAction>
 		{/if}
 		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}
-			>Edit</TableViewSelectAction
+			>Upravit</TableViewSelectAction
 		>
 
 		<TableViewSelectAction iconType="book-add" onClick={() => onNewCopyClick(selectedItem[0].id)}>
-			New Copy
+			Přidat znovu
 		</TableViewSelectAction>
 		{#if selectedItem[0].discardDateString === ''}
 			<TableViewSelectAction
@@ -261,7 +263,7 @@
 				color="error"
 				onClick={() => onDiscardClick(selectedItem[0].id)}
 			>
-				Discard
+				Vyřadit
 			</TableViewSelectAction>
 		{:else}
 			<TableViewSelectAction
@@ -269,7 +271,7 @@
 				color="success"
 				onClick={() => onRestoreClick(selectedItem[0].id)}
 			>
-				Restore
+				Zrušit vyřazení
 			</TableViewSelectAction>
 		{/if}
 	{/snippet}

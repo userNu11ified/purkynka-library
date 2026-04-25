@@ -46,12 +46,12 @@
 	bind:this={tableView}
 	renderAfterResolved={librarianData.loaded}
 	persistentStateId="librarians-column-sizes"
-	items={librarianData.librarians.getArray()}
+	items={librarianData.librarians.getArray()!}
 	itemMapper={({ id, email, password }) => ({ id, email, finishedRegistering: password !== null })}
 	itemCopier={({ id, email, finishedRegistering }) => [
 		id,
 		email,
-		finishedRegistering ? 'Yes' : 'No'
+		finishedRegistering ? 'Ano' : 'Ne'
 	]}
 	columns={[
 		{
@@ -73,7 +73,7 @@
 			}
 		},
 		{
-			columnName: 'Email',
+			columnName: 'Email knihovníka',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -82,17 +82,17 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.email, q) }
 		},
 		{
-			columnName: 'Finished Registering',
+			columnName: 'Dokončil registraci',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.finishedRegistering ? 'Yes' : 'No') },
+			columnRenderer: { type: 'text', textCreator: (v) => (v.finishedRegistering ? 'Ano' : 'Ne') },
 			columnSorter: (l, r) => booleanSorter(l.finishedRegistering, r.finishedRegistering),
 			columnSearcher: {
 				type: 'filter',
 				filter: (v, q) =>
-					stringFilter(v.finishedRegistering ? 'Y' : 'N', q) ||
-					stringFilter(v.finishedRegistering ? 'Yes' : 'No', q)
+					stringFilter(v.finishedRegistering ? 'A' : 'N', q) ||
+					stringFilter(v.finishedRegistering ? 'Ano' : 'Ne', q)
 			}
 		}
 	]}
@@ -100,13 +100,14 @@
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction
 			iconType="password-reset"
-			onClick={() => onPasswordResetClick(selectedItem[0].id)}>Reset Password</TableViewSelectAction
+			onClick={() => onPasswordResetClick(selectedItem[0].id)}
+			>Resetovat heslo</TableViewSelectAction
 		>
 		<TableViewSelectAction
 			iconType="trash-can"
 			color="error"
 			disabled={selectedItem[0].email === 'Admin'}
-			onClick={() => onDeleteClick(selectedItem[0].id)}>Delete</TableViewSelectAction
+			onClick={() => onDeleteClick(selectedItem[0].id)}>Vymazat</TableViewSelectAction
 		>
 	{/snippet}
 </TableView>

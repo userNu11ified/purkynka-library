@@ -9,10 +9,10 @@
 
 <ViewWithSidebar>
 	{#snippet sidebar()}
-		<SidebarLink href="/librarian/borrows/regular" iconType="book-borrow">Regular</SidebarLink>
-		<SidebarLink href="/librarian/borrows/permanent" iconType="book-lock">Permanent</SidebarLink>
+		<SidebarLink href="/librarian/borrows/regular" iconType="book-borrow">Výpůjčky</SidebarLink>
+		<SidebarLink href="/librarian/borrows/permanent" iconType="book-lock">Trvalé</SidebarLink>
 		<SidebarSeparator />
-		<SidebarLink href="/librarian/borrows/history" iconType="history">History</SidebarLink>
+		<SidebarLink href="/librarian/borrows/history" iconType="history">Historie</SidebarLink>
 	{/snippet}
 	{#snippet view()}
 		{@render children()}

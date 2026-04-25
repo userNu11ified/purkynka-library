@@ -34,8 +34,8 @@
 			inputOptions: { width: '128px', disabled: true, textAlignment: 'center' },
 			required: true
 		}),
-		readerName: new EditorFieldStringState('Reader Name', { required: true }),
-		readerClass: new EditorFieldSearchableState('Reader Class', {
+		readerName: new EditorFieldStringState('Jméno čtenáře', { required: true }),
+		readerClass: new EditorFieldSearchableState('Třída čtenáře', {
 			list: {
 				searchIn: librarianData.readerClasses.getArray(),
 				textCreator: ({ value }) => value,
@@ -44,7 +44,7 @@
 			},
 			required: true
 		}),
-		readerType: new EditorFieldSelectState('Reader Type', {
+		readerType: new EditorFieldSelectState('Typ čtenáře', {
 			options: ['S', 'T'],
 			textCreator: (item) => item,
 			titleCreator: (item) => item,
@@ -158,7 +158,7 @@
 <Modal onClickOutside={() => history.back()}>
 	<Editor {showLoading} {@attach trapFocus(0)}>
 		{#snippet title()}
-			{userEditorState.type === 'new' ? 'Add Reader' : 'Edit Reader'}
+			{userEditorState.type === 'new' ? 'Přidat čtenáře' : 'Upravit čtenáře'}
 		{/snippet}
 
 		{#snippet fields()}
@@ -171,14 +171,14 @@
 		{/snippet}
 
 		{#snippet actions()}
-			<EditorAction actionColor="error" onClick={onCancelClick}>Cancel</EditorAction>
+			<EditorAction actionColor="error" onClick={onCancelClick}>Zrušit</EditorAction>
 			{#if userEditorState.type === 'new'}
 				<EditorAction actionColor="success" disabled={hasErrors} onClick={onAddClick}
-					>Add</EditorAction
+					>Přidat</EditorAction
 				>
 			{:else if userEditorState.type === 'edit'}
 				<EditorAction actionColor="success" disabled={hasErrors} onClick={onSaveClick}
-					>Save</EditorAction
+					>Uložit</EditorAction
 				>
 			{/if}
 		{/snippet}

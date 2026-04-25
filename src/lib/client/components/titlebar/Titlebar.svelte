@@ -17,7 +17,7 @@
 		<Icon iconType="hamburger-menu" width={24} />
 	</button>
 	<div class="page-name-container center-grid" style:width={SIDEBAR_EXPANDED_WIDTH}>
-		<a class="page-name button-like" href={resolve('/librarian')}>Library</a>
+		<a class="page-name button-like" href={resolve('/librarian')}>Knihovna</a>
 	</div>
 </div>
 

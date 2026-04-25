@@ -150,7 +150,7 @@
 		returnUntilString
 	}) => [
 		bookId,
-		isLarge ? 'L' : 's',
+		isLarge ? 'V' : 'm',
 		bookName,
 		readerName,
 		readerClass,
@@ -160,7 +160,7 @@
 	]}
 	columns={[
 		{
-			columnName: 'Book ID',
+			columnName: 'Přír. č.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -182,20 +182,20 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'px', pixels: MINIMUM_COLUMN_WIDTH },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'L' : 's') },
+			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'V' : 'm') },
 			columnSorter: (l, r) => booleanSorter(l.isLarge, r.isLarge),
 			columnSearcher: {
 				type: 'filter',
 				filter: (v, q) => {
 					const queryAsBoolean =
-						q.lowercaseQuery === 'l' ? true : q.lowercaseQuery === 's' ? false : null;
+						q.lowercaseQuery === 'v' ? true : q.lowercaseQuery === 'm' ? false : null;
 					if (queryAsBoolean === null) return false;
 					return v.isLarge === queryAsBoolean;
 				}
 			}
 		},
 		{
-			columnName: 'Book Name',
+			columnName: 'Název knihy',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.bookName },
@@ -203,7 +203,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.bookName, q) }
 		},
 		{
-			columnName: 'Reader Name',
+			columnName: 'Čtenář',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -212,7 +212,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerName, q) }
 		},
 		{
-			columnName: 'Reader Class',
+			columnName: 'Třída',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -221,7 +221,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerClass, q) }
 		},
 		{
-			columnName: 'Borrow Date',
+			columnName: 'Půjčeno dne',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -234,7 +234,7 @@
 			}
 		},
 		{
-			columnName: 'Extended',
+			columnName: 'Prodlouženo',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -246,7 +246,7 @@
 			}
 		},
 		{
-			columnName: 'Return Until',
+			columnName: 'Vrátit do',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -263,18 +263,17 @@
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction
 			iconType="book-return"
-			onClick={() => onReturnClick(selectedItem[0].borrowId)}>Return</TableViewSelectAction
+			onClick={() => onReturnClick(selectedItem[0].borrowId)}>Vrátit</TableViewSelectAction
 		>
 
 		<TableViewSelectAction
 			iconType="book-add"
-			onClick={() => onExtendClick(selectedItem[0].borrowId)}>Extend</TableViewSelectAction
+			onClick={() => onExtendClick(selectedItem[0].borrowId)}>Prodloužit</TableViewSelectAction
 		>
 
 		<TableViewSelectAction
 			iconType="book-lock"
-			onClick={() => onPermanentClick(selectedItem[0].borrowId)}
-			>Make Permanent</TableViewSelectAction
+			onClick={() => onPermanentClick(selectedItem[0].borrowId)}>Trvale</TableViewSelectAction
 		>
 	{/snippet}
 </TableView>

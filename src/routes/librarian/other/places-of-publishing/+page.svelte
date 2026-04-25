@@ -79,7 +79,7 @@
 	bind:this={tableView}
 	renderAfterResolved={librarianData.loaded}
 	persistentStateId="places-of-publishing-column-sizes"
-	items={placesOfPublishing}
+	items={placesOfPublishing!}
 	itemMapper={({ id, value }) => ({ id, value })}
 	itemCopier={({ id, value }) => [id, value]}
 	columns={[
@@ -102,7 +102,7 @@
 			}
 		},
 		{
-			columnName: 'Obtained From',
+			columnName: 'Místo vydání',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.value },
@@ -113,7 +113,7 @@
 >
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}>
-			Edit
+			Upravit
 		</TableViewSelectAction>
 		<TableViewSelectAction
 			iconType="trash-can"
@@ -122,9 +122,9 @@
 			onClick={() => onDeleteClick(selectedItem[0].id)}
 		>
 			{#if usedDiscardReasonIds.has(selectedItem[0].id)}
-				This item is used somewhere!
+				Někde použito!
 			{:else}
-				Delete
+				Vymazat
 			{/if}
 		</TableViewSelectAction>
 	{/snippet}
@@ -134,7 +134,7 @@
 			iconType="merge"
 			onClick={() => onMergeClick(selectedItems.map(([v, i]) => [v.value, i]))}
 		>
-			Merge
+			Spojit
 		</TableViewSelectAction>
 	{/snippet}
 </TableView>

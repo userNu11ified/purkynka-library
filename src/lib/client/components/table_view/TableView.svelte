@@ -142,7 +142,7 @@
 					onclick={onGoUpClick}
 				>
 					{#snippet popup()}
-						Go Up
+						Zpátky nahoru
 					{/snippet}
 					<Icon iconType="chevron-up" />
 				</ButtonWithPopup>

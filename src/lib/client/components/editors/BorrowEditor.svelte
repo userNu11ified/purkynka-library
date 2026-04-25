@@ -31,18 +31,18 @@
 
 	const digitRegex = /\d/;
 	const editorState = $state({
-		borrowId: new EditorFieldIntegerState('Borrow ID', {
+		borrowId: new EditorFieldIntegerState('Výpůjčka číslo', {
 			inputOptions: { width: '128px', textAlignment: 'center', disabled: true },
 			required: true
 		}),
-		bookId: new EditorFieldIntegerState('Book', {
+		bookId: new EditorFieldIntegerState('Kniha', {
 			inputOptions: { width: '128px', textAlignment: 'center', disabled: true },
 			required: true
 		}),
-		bookName: new EditorFieldStringState('Book Name', {
+		bookName: new EditorFieldStringState('Názevk nihy', {
 			inputOptions: { disabled: true }
 		}),
-		reader: new EditorFieldSearchableState('Reader', {
+		reader: new EditorFieldSearchableState('Čtenář', {
 			list: {
 				searchIn: librarianData.readers.getArray(),
 				textCreator: (v) => v.readerName,
@@ -61,11 +61,11 @@
 			},
 			required: true
 		}),
-		borrowDate: new EditorFieldDateState('Borrow Date', {
+		borrowDate: new EditorFieldDateState('Půjčeno dne', {
 			inputOptions: { width: '128px', textAlignment: 'center' },
 			required: true
 		}),
-		returnDate: new EditorFieldDateState('Return Date', {
+		returnDate: new EditorFieldDateState('Vráceno dne', {
 			inputOptions: { width: '128px', textAlignment: 'center', disabled: true }
 		}),
 		permanent: false
@@ -167,7 +167,7 @@
 >
 	<Editor {showLoading} {@attach trapFocus(0)}>
 		{#snippet title()}
-			Borrow Book
+			Půjčit knihu
 		{/snippet}
 
 		{#snippet fields()}
@@ -188,9 +188,9 @@
 		{/snippet}
 
 		{#snippet actions()}
-			<EditorAction actionColor="error" onClick={onCancelClick}>Cancel</EditorAction>
+			<EditorAction actionColor="error" onClick={onCancelClick}>Zrušit</EditorAction>
 			<EditorAction actionColor="success" disabled={hasErrors} onClick={onBorrowClick}
-				>Borrow</EditorAction
+				>Půjčit</EditorAction
 			>
 		{/snippet}
 	</Editor>

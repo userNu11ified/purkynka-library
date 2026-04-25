@@ -67,7 +67,7 @@
 			}
 		},
 		{
-			columnName: 'Short Name',
+			columnName: 'Zkratka',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -76,7 +76,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.shortName, q) }
 		},
 		{
-			columnName: 'Long Name',
+			columnName: 'Celé jméno',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.longName },
@@ -86,9 +86,9 @@
 	]}
 >
 	{#snippet singleSelectActions(selectedItem)}
-		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}
-			>Edit</TableViewSelectAction
-		>
+		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}>
+			Upravit
+		</TableViewSelectAction>
 
 		<TableViewSelectAction
 			iconType="trash-can"
@@ -97,9 +97,9 @@
 			onClick={() => onDeleteClick(selectedItem[0].id)}
 		>
 			{#if usedLiteratureTypeIds.has(selectedItem[0].id)}
-				This item is used somewhere!
+				Někde použito!
 			{:else}
-				Delete
+				Vymazat
 			{/if}
 		</TableViewSelectAction>
 	{/snippet}

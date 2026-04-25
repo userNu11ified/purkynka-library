@@ -34,7 +34,7 @@
 			inputOptions: { disabled: true, width: '128px', textAlignment: 'center' },
 			required: true
 		}),
-		value: new EditorFieldStringState('Value', { required: true })
+		value: new EditorFieldStringState('Název', { required: true })
 	});
 
 	const hasErrors = $derived(
@@ -72,7 +72,7 @@
 <Modal onClickOutside={() => history.back()}>
 	<Editor {showLoading} {@attach trapFocus(1)}>
 		{#snippet title()}
-			Edit
+			Upravit
 		{/snippet}
 
 		{#snippet fields()}
@@ -83,9 +83,9 @@
 		{/snippet}
 
 		{#snippet actions()}
-			<EditorAction actionColor="error" onClick={onCancelClick}>Cancel</EditorAction>
+			<EditorAction actionColor="error" onClick={onCancelClick}>Zrušit</EditorAction>
 			<EditorAction actionColor="success" disabled={hasErrors} onClick={onSaveClick}
-				>Save</EditorAction
+				>Uložit</EditorAction
 			>
 		{/snippet}
 	</Editor>

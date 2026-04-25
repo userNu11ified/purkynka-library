@@ -38,7 +38,7 @@
 	{@const selectedSingle = tableViewSelectionManager.currentlySelectedMappedIndexes.size === 1}
 	<div class="table-view-select-actions center-flex">
 		<div class="table-view-select-count center-flex">
-			Selected <span class="table-view-select-count-number">
+			Vybráno <span class="table-view-select-count-number">
 				{tableViewSelectionManager.currentlySelectedMappedIndexes.size}
 			</span>
 		</div>
@@ -58,10 +58,10 @@
 
 		<div class="table-view-selection-actions center-flex">
 			<TableViewSelectAction iconType="copy" onClick={onCopyClick}>
-				<KeyboardShortcut buttons={['CTRL', 'C']}>Copy Selection</KeyboardShortcut>
+				<KeyboardShortcut buttons={['CTRL', 'C']}>Zkopírovat výběr</KeyboardShortcut>
 			</TableViewSelectAction>
 			<TableViewSelectAction iconType="selection-remove" onClick={onUnselectClick}>
-				<KeyboardShortcut buttons={['ESC']}>Unselect</KeyboardShortcut>
+				<KeyboardShortcut buttons={['ESC']}>Zrušit výběr</KeyboardShortcut>
 			</TableViewSelectAction>
 		</div>
 	</div>

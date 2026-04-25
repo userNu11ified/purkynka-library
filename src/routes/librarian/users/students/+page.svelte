@@ -74,7 +74,7 @@
 			}
 		},
 		{
-			columnName: 'Student Name',
+			columnName: 'Jméno studenta',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -83,7 +83,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerName, q) }
 		},
 		{
-			columnName: 'Student Class',
+			columnName: 'Třída studenta',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -92,7 +92,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerClass, q) }
 		},
 		{
-			columnName: 'Created',
+			columnName: 'Zapsán',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -105,7 +105,7 @@
 			}
 		},
 		{
-			columnName: 'Last Updated',
+			columnName: 'Naposledy upraven',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -121,7 +121,7 @@
 >
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}
-			>Edit</TableViewSelectAction
+			>Upravit</TableViewSelectAction
 		>
 	{/snippet}
 </TableView>

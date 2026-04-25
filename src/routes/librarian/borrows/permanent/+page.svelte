@@ -70,7 +70,7 @@
 	}}
 	itemCopier={({ bookId, isLarge, bookName, price, readerName, borrowDateString }) => [
 		bookId,
-		isLarge ? 'L' : 's',
+		isLarge ? 'V' : 'm',
 		bookName,
 		price,
 		readerName,
@@ -78,7 +78,7 @@
 	]}
 	columns={[
 		{
-			columnName: 'Book ID',
+			columnName: 'Přír. č.',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -100,20 +100,20 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'px', pixels: MINIMUM_COLUMN_WIDTH },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'L' : 's') },
+			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'V' : 'm') },
 			columnSorter: (l, r) => booleanSorter(l.isLarge, r.isLarge),
 			columnSearcher: {
 				type: 'filter',
 				filter: (v, q) => {
 					const queryAsBoolean =
-						q.lowercaseQuery === 'l' ? true : q.lowercaseQuery === 's' ? false : null;
+						q.lowercaseQuery === 'v' ? true : q.lowercaseQuery === 'm' ? false : null;
 					if (queryAsBoolean === null) return false;
 					return v.isLarge === queryAsBoolean;
 				}
 			}
 		},
 		{
-			columnName: 'Book Name',
+			columnName: 'Název knihy',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.bookName },
@@ -121,7 +121,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.bookName, q) }
 		},
 		{
-			columnName: 'Price',
+			columnName: 'Cena',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -130,7 +130,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.price, q) }
 		},
 		{
-			columnName: 'Reader Name',
+			columnName: 'Čtenář',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -139,7 +139,7 @@
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerName, q) }
 		},
 		{
-			columnName: 'Borrow Date',
+			columnName: 'Půjčeno dne',
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
@@ -156,7 +156,7 @@
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction
 			iconType="book-return"
-			onClick={() => onReturnClick(selectedItem[0].borrowId)}>Return</TableViewSelectAction
+			onClick={() => onReturnClick(selectedItem[0].borrowId)}>Vrátit</TableViewSelectAction
 		>
 	{/snippet}
 </TableView>

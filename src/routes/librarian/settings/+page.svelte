@@ -181,7 +181,7 @@
 <div class="settings-container fill-container center-grid">
 	<div class="settings">
 		<div class="category backups flex-column center-flex">
-			<h1>Backups</h1>
+			<h1>Zálohy</h1>
 			<div class="backup-list">
 				<InfiniteList items={sortedBackups} itemHeight={48}>
 					{#snippet listRow(v)}
@@ -191,10 +191,12 @@
 							<div class="backup-buttons center-flex">
 								<ButtonWithPopup
 									class="backup-button download center-grid"
+									popupPosition="left"
+									popupAlignment="end"
 									onclick={() => onDownloadBackupClick(v.backupName)}
 								>
 									{#snippet popup()}
-										Download
+										Stáhnout
 									{/snippet}
 
 									<Icon iconType="download" width={20}></Icon>
@@ -202,10 +204,12 @@
 
 								<ButtonWithPopup
 									class="backup-button apply center-grid"
+									popupPosition="left"
+									popupAlignment="end"
 									onclick={() => onApplyBackupClick(v.backupName)}
 								>
 									{#snippet popup()}
-										Apply
+										Aplikovat
 									{/snippet}
 
 									<Icon iconType="upload" width={20}></Icon>
@@ -213,10 +217,12 @@
 
 								<ButtonWithPopup
 									class="backup-button delete center-grid"
+									popupPosition="left"
+									popupAlignment="end"
 									onclick={() => onDeleteBackupClick(v.backupName)}
 								>
 									{#snippet popup()}
-										Delete
+										Vymazat
 									{/snippet}
 
 									<Icon iconType="trash-can" width={20}></Icon>
@@ -227,23 +233,23 @@
 				</InfiniteList>
 			</div>
 
-			<button class="backup-action create" onclick={onCreateBackupClick}>Create Backup</button>
-			<button class="backup-action import" onclick={onImportBackupClick}>Import Backup</button>
+			<button class="backup-action create" onclick={onCreateBackupClick}>Vytvořit zálohu</button>
+			<button class="backup-action import" onclick={onImportBackupClick}>Importovat zálohu</button>
 			<button class="backup-action import-old" onclick={onImportOldBackupClick}
-				>Import V1 Backup</button
+				>Importovat ze staré knihovny</button
 			>
 		</div>
 
 		<div class="category theming flex-column center-flex">
 			<div class="theme">
-				<div class="theme-title center-grid">Theme</div>
+				<div class="theme-title center-grid">Barevné schéma</div>
 				<div class="theme-buttons center-flex">
 					<ButtonWithPopup
 						class={`theme-button center-grid ${activeTheme === 'system' ? 'active' : ''}`}
 						onclick={() => onClickTheme('system')}
 					>
 						{#snippet popup()}
-							System
+							Systémové
 						{/snippet}
 
 						<Icon iconType="monitor" width={20}></Icon>
@@ -254,7 +260,7 @@
 						onclick={() => onClickTheme('light')}
 					>
 						{#snippet popup()}
-							Light
+							Světlé
 						{/snippet}
 
 						<Icon iconType="light-theme" width={20}></Icon>
@@ -265,7 +271,7 @@
 						onclick={() => onClickTheme('dark')}
 					>
 						{#snippet popup()}
-							Dark
+							Tmavé
 						{/snippet}
 
 						<Icon iconType="dark-theme" width={20}></Icon>
@@ -368,7 +374,7 @@
 
 	.theme {
 		display: grid;
-		grid-template-columns: 128px 128px;
+		grid-template-columns: 192px 128px;
 		gap: 16px;
 
 		margin-top: 64px;

@@ -14,7 +14,7 @@
 
 	const editorState = $state({
 		email: new EditorFieldStringState('Email', { required: true }),
-		password: new EditorFieldStringState('Password', {
+		password: new EditorFieldStringState('Heslo', {
 			inputOptions: { inputType: 'password' },
 			required: true
 		})
@@ -44,7 +44,7 @@
 <div class="login fill-container center-grid">
 	<Editor showLoading={loggingIn}>
 		{#snippet title()}
-			Login
+			Přihlásit se
 		{/snippet}
 
 		{#snippet fields()}
@@ -56,13 +56,13 @@
 
 		{#snippet actions()}
 			<EditorAction actionColor="success" disabled={hasErrors} onClick={onLoginClick}
-				>Login</EditorAction
+				>Přihlásit se</EditorAction
 			>
 		{/snippet}
 	</Editor>
 
 	{#if unsuccessful}
-		<div class="login-unsuccessful">Failed to login! Try again.</div>
+		<div class="login-unsuccessful">Přihlášení se nepovedlo! Zkuste to znovu.</div>
 	{/if}
 </div>
 

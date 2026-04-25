@@ -9,7 +9,7 @@
 	<div class="editor-line-label">
 		{inputState.name}
 		{#if inputState.settings?.required}
-			<span title="Required" class="editor-line-name-required">*</span>
+			<span title="Povinná" class="editor-line-name-required">*</span>
 		{/if}
 	</div>
 	<div class="editor-line-content">{@render children()}</div>

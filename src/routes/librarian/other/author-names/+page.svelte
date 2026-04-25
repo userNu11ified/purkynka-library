@@ -111,7 +111,7 @@
 			}
 		},
 		{
-			columnName: 'Author Name',
+			columnName: 'Jméno autora',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
 			columnRenderer: { type: 'text', textCreator: (v) => v.value },
@@ -122,7 +122,7 @@
 >
 	{#snippet singleSelectActions(selectedItem)}
 		<TableViewSelectAction iconType="edit" onClick={() => onEditClick(selectedItem[0].id)}>
-			Edit
+			Upravit
 		</TableViewSelectAction>
 		<TableViewSelectAction
 			iconType="trash-can"
@@ -131,9 +131,9 @@
 			onClick={() => onDeleteClick(selectedItem[0].id)}
 		>
 			{#if authorToBookAuthorIdKeys.includes(selectedItem[0].id)}
-				This item is used somewhere!
+				Někde použito!
 			{:else}
-				Delete
+				Vymazat
 			{/if}
 		</TableViewSelectAction>
 	{/snippet}
@@ -143,7 +143,7 @@
 			iconType="merge"
 			onClick={() => onMergeClick(selectedItems.map(([v, i]) => [v.value, i]))}
 		>
-			Merge
+			Spojit
 		</TableViewSelectAction>
 	{/snippet}
 </TableView>

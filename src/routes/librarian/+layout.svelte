@@ -46,10 +46,10 @@
 	<div class="content">
 		<ViewWithSidebar>
 			{#snippet sidebar()}
-				<SidebarLink href="/librarian/books" iconType="book">Books</SidebarLink>
-				<SidebarLink href="/librarian/borrows" iconType="book-borrow">Borrows</SidebarLink>
-				<SidebarLink href="/librarian/users" iconType="user">Users</SidebarLink>
-				<SidebarLink href="/librarian/other" iconType="list">Other</SidebarLink>
+				<SidebarLink href="/librarian/books" iconType="book">Knihy</SidebarLink>
+				<SidebarLink href="/librarian/borrows" iconType="book-borrow">Výpůjčky</SidebarLink>
+				<SidebarLink href="/librarian/users" iconType="user">Uživatelé</SidebarLink>
+				<SidebarLink href="/librarian/other" iconType="list">Další</SidebarLink>
 				<SidebarSeparator />
 
 				<SidebarButton
@@ -58,9 +58,9 @@
 					disabled={editorPageStates.bookEditorActive}
 					onClick={onBookAddClick}
 				>
-					Add Book
+					Přidat knihu
 				</SidebarButton>
-				<SidebarLink href="/librarian/settings" iconType="settings">Settings</SidebarLink>
+				<SidebarLink href="/librarian/settings" iconType="settings">Nastavení</SidebarLink>
 			{/snippet}
 
 			{#snippet view()}
