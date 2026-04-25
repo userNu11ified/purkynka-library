@@ -15,6 +15,9 @@
 	const tableViewItemManager = TableViewItemManager.context.get() as TableViewItemManager<T, R>;
 	const tableViewSelectionManager = TableViewSelectionManager.context.get();
 
+	const linkRegex =
+		/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+
 	const onRowMouseDown = (mappedItemIndex: number) => {
 		if (tableViewSelectionManager.toggledUnselecting)
 			tableViewSelectionManager.currentlySelectedMappedIndexes.delete(mappedItemIndex);
@@ -92,7 +95,14 @@
 								: ''}
 						>
 							{#if column.columnRenderer.type === 'text'}
-								{column.columnRenderer.textCreator(v)}
+								{@const text = column.columnRenderer.textCreator(v)}
+								{#if column.columnRenderer.containsLinks === true}
+									{@html text
+										.toString()
+										.replaceAll(linkRegex, `<a href="$&" target="_blank">$&</a>`)}
+								{:else}
+									{text}
+								{/if}
 							{:else}
 								{@render column.columnRenderer.snippet(v)}
 							{/if}

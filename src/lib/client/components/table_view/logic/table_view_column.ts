@@ -7,6 +7,7 @@ import type { QueryState } from '$client/collation/query_state';
 export type TableViewColumnRenderer<R> =
 	| {
 			type: 'text';
+			containsLinks?: boolean;
 			textCreator: (mappedItem: R) => string | number;
 			titleCreator?: (mappedItem: R) => string | number;
 	  }

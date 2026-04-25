@@ -1,5 +1,5 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
+	import faviconLight from '$lib/assets/favicon-light.svg';
 
 	import '$style/font.css';
 	import '$style/theme.css';
@@ -11,7 +11,8 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href={faviconLight} />
+	<title>Knihovna</title>
 </svelte:head>
 
 <div class="app-mount">
