@@ -73,5 +73,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 			redirect(303, `/login?redirectTo=${url.pathname}`);
 		}
 	}
-	return resolve(event);
+
+	const theme = event.cookies.get('theme') ?? 'system';
+
+	return resolve(event, {
+		transformPageChunk: ({ html }) => html.replace('data-theme=""', `data-theme="${theme}"`)
+	});
 };

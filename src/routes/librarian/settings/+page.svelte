@@ -3,10 +3,10 @@
 	import { page } from '$app/state';
 	import { clientLogger } from '$client/client_loggers';
 	import ButtonWithPopup from '$client/components/ButtonWithPopup.svelte';
-	import Editor from '$client/components/editor/Editor.svelte';
 	import Icon from '$client/components/icon/Icon.svelte';
 	import InfiniteList from '$client/components/infinite_list/InfiniteList.svelte';
 	import Loading from '$client/components/loading/Loading.svelte';
+	import type { AvailableTheme } from '$client/theme.svelte';
 	import { type BackupBody, type BackupError, type BackupInformation } from '$shared/types/backup';
 	import { makeAPIJsonRequest, makeAPIRequest } from '$shared/types/database/api';
 	import { Result } from '$shared/types/result';
@@ -16,6 +16,7 @@
 	let databaseImportInput: HTMLInputElement | undefined = $state();
 	let oldDatabaseImportInput: HTMLInputElement | undefined = $state();
 
+	let activeTheme: AvailableTheme | undefined = $state();
 	let loading = $state(false);
 	let backups: BackupInformation[] = $state([]);
 	const sortedBackups = $derived(
@@ -131,10 +132,33 @@
 		loading = false;
 	};
 
-	onMount(() => {
+	const onClickTheme = async (theme: AvailableTheme) => {
+		loading = true;
+
+		activeTheme = theme;
+		const response = await fetch(window.location.href, {
+			method: 'POST',
+			body: JSON.stringify({ theme: activeTheme })
+		});
+		if (!response.ok) window.location.reload();
+
+		(document.querySelector(':root')! as HTMLElement).dataset.theme = activeTheme;
+
+		loading = false;
+	};
+
+	onMount(async () => {
+		loading = true;
+
+		activeTheme =
+			((document.querySelector(':root')! as HTMLElement).dataset.theme as
+				| AvailableTheme
+				| undefined) ?? 'system';
+
+		await invalidate('app:backups');
 		backups = page.data.backups as BackupInformation[];
 
-		invalidate('app:backups');
+		loading = false;
 	});
 </script>
 
@@ -154,9 +178,9 @@
 	onchange={onImportOldChange}
 />
 
-<div class="settings-container">
+<div class="settings-container fill-container center-grid">
 	<div class="settings">
-		<div class="backups flex-column center-flex">
+		<div class="category backups flex-column center-flex">
 			<h1>Backups</h1>
 			<div class="backup-list">
 				<InfiniteList items={sortedBackups} itemHeight={48}>
@@ -208,6 +232,46 @@
 			<button class="backup-action import-old" onclick={onImportOldBackupClick}
 				>Import V1 Backup</button
 			>
+		</div>
+
+		<div class="category theming flex-column center-flex">
+			<div class="theme">
+				<div class="theme-title center-grid">Theme</div>
+				<div class="theme-buttons center-flex">
+					<ButtonWithPopup
+						class={`theme-button center-grid ${activeTheme === 'system' ? 'active' : ''}`}
+						onclick={() => onClickTheme('system')}
+					>
+						{#snippet popup()}
+							System
+						{/snippet}
+
+						<Icon iconType="monitor" width={20}></Icon>
+					</ButtonWithPopup>
+
+					<ButtonWithPopup
+						class={`theme-button center-grid ${activeTheme === 'light' ? 'active' : ''}`}
+						onclick={() => onClickTheme('light')}
+					>
+						{#snippet popup()}
+							Light
+						{/snippet}
+
+						<Icon iconType="light-theme" width={20}></Icon>
+					</ButtonWithPopup>
+
+					<ButtonWithPopup
+						class={`theme-button center-grid ${activeTheme === 'dark' ? 'active' : ''}`}
+						onclick={() => onClickTheme('dark')}
+					>
+						{#snippet popup()}
+							Dark
+						{/snippet}
+
+						<Icon iconType="dark-theme" width={20}></Icon>
+					</ButtonWithPopup>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -300,5 +364,35 @@
 
 	:global .backup-button.download {
 		color: var(--information-color);
+	}
+
+	.theme {
+		display: grid;
+		grid-template-columns: 128px 128px;
+		gap: 16px;
+
+		margin-top: 64px;
+	}
+
+	.theme-title {
+		font-size: 20px;
+		font-weight: bold;
+	}
+
+	.theme-buttons {
+		gap: 8px;
+	}
+
+	:global .theme-button {
+		height: 48px;
+		aspect-ratio: 1;
+
+		border: var(--border);
+		border-radius: 4px;
+	}
+
+	:global .theme-button.active {
+		border-color: var(--success-color);
+		color: var(--success-color);
 	}
 </style>
