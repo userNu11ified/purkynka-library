@@ -49,3 +49,47 @@
 	--past-due-4: hsl(3, 50%, 50%);
 	--past-due-5: hsl(3, 60%, 50%);
 }
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--bg-primary: hsl(0, 0%, 100%);
+		--bg-hover: hsl(0, 0%, 90%);
+
+		--bg-primary-alt: hsl(0, 0%, 90%);
+		--bg-hover-alt: hsl(0, 0%, 80%);
+
+		--border-color: hsl(0, 0%, 80%);
+
+		--text-header: hsl(0, 0%, 0%);
+		--text-primary: hsl(0, 0%, 10%);
+		--text-muted: hsl(0, 0%, 20%);
+		--text-disabled: hsl(0, 0%, 40%);
+
+		--scrollbar-color: hsl(0, 0%, 75%);
+
+		--bg-jumped-to: hsl(95, 50%, 50%);
+		--bg-selected: hsl(219, 70%, 50%);
+		--border-selected: hsl(219, 70%, 60%);
+	}
+}
+
+:root[data-theme='light'] {
+	--bg-primary: hsl(0, 0%, 100%);
+	--bg-hover: hsl(0, 0%, 90%);
+
+	--bg-primary-alt: hsl(0, 0%, 90%);
+	--bg-hover-alt: hsl(0, 0%, 80%);
+
+	--border-color: hsl(0, 0%, 80%);
+
+	--text-header: hsl(0, 0%, 0%);
+	--text-primary: hsl(0, 0%, 10%);
+	--text-muted: hsl(0, 0%, 20%);
+	--text-disabled: hsl(0, 0%, 40%);
+
+	--scrollbar-color: hsl(0, 0%, 75%);
+
+	--bg-jumped-to: hsl(95, 50%, 50%);
+	--bg-selected: hsl(219, 70%, 50%);
+	--border-selected: hsl(219, 70%, 60%);
+}
