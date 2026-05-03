@@ -29,8 +29,6 @@ export class AwaitableWorker<Request = unknown, Response = unknown> {
 	}
 
 	public recreateWorker() {
-		if (this.worker) this.worker.terminate();
-
 		this.worker = new Worker(this.workerScriptURL, { type: 'module' });
 		this.initialized = new Promise((res) => (this.initializedResolver = res));
 
