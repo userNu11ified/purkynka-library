@@ -14,15 +14,24 @@ export type AwaitableWorkerInitialized = {
 };
 
 export class AwaitableWorker<Request = unknown, Response = unknown> {
-	private worker: Worker;
+	private workerScriptURL: URL;
+
+	private worker!: Worker;
 	private nextId: number = 0;
 	private promiseResolvers: Map<number, (value: Response) => void> = new Map();
 
-	public initialized: Promise<void>;
+	public initialized!: Promise<void>;
 	private initializedResolver!: () => void;
 
 	constructor(workerScriptURL: URL) {
-		this.worker = new Worker(workerScriptURL, { type: 'module' });
+		this.workerScriptURL = workerScriptURL;
+		this.recreateWorker();
+	}
+
+	public recreateWorker() {
+		if (this.worker) this.worker.terminate();
+
+		this.worker = new Worker(this.workerScriptURL, { type: 'module' });
 		this.initialized = new Promise((res) => (this.initializedResolver = res));
 
 		this.worker.onmessage = (
