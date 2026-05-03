@@ -1,5 +1,7 @@
 import { createDatabaseBackup } from '$server/backup/backup';
+import { SendCloseRequest } from '$server/worker/database_worker/messages/close';
 import { SendConfigureRequest } from '$server/worker/database_worker/messages/configure';
+import { DatabaseWorker } from '$server/worker/workers';
 import { backupError } from '$shared/types/backup';
 import { Result } from '$shared/types/result';
 import { createAPIErrorResponse } from '../../[apiTableName=apiTableName]/shared';
@@ -20,6 +22,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	const archive = new Bun.Archive(file as File, { compress: 'gzip', level: 12 });
 
 	try {
+		await SendCloseRequest();
 		await createDatabaseBackup();
 
 		await fs.rm('./data/current', { recursive: true, force: true });
@@ -27,6 +30,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		await archive.extract('./data/current');
 
+		DatabaseWorker.recreateWorker();
 		await SendConfigureRequest({ databaseFilePath: 'env' });
 	} catch {
 		return createAPIErrorResponse(Result.error(backupError()));
