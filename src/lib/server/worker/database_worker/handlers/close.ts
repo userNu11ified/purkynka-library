@@ -1,21 +1,22 @@
 import { databaseWorkerLogger } from '$server/server_loggers';
-import { sleep } from 'bun';
 import type { DatabaseWorkerContext } from '../database_worker';
+import { Result } from '$shared/types/result';
+import type { DatabaseWorkerResult } from '../database_worker_types';
+import type { CloseResponse } from '../messages/close';
+import { constants } from 'bun:sqlite';
 
-export const handleCloseRequest = async (context: DatabaseWorkerContext) => {
+export const handleCloseRequest = async (
+	context: DatabaseWorkerContext,
+	shouldExitWorker: boolean
+): Promise<DatabaseWorkerResult<CloseResponse>> => {
 	databaseWorkerLogger.warning('Received Close Request!');
 
-	const pragmaStatement = context.db.$client.prepare('PRAGMA wal_checkpoint(TRUNCATE)');
+	const rawDb = context.db.$client;
+	rawDb.fileControl(constants.SQLITE_FCNTL_PERSIST_WAL, 0);
+	rawDb.run('PRAGMA wal_checkpoint(TRUNCATE);');
+	rawDb.close();
 
-	while (true) {
-		const result = pragmaStatement.get() as { busy: number };
-		if (result.busy === 0) break;
+	if (shouldExitWorker) process.exit();
 
-		databaseWorkerLogger.debug('Waiting for WAL checkpoint!');
-		await sleep(1000);
-	}
-
-	context.db.$client.close();
-
-	process.exit();
+	return Result.ok(true);
 };

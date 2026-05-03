@@ -8,6 +8,7 @@ import { handleUpdateRequest } from './handlers/update';
 import { handleRemoveRequest } from './handlers/remove';
 import type { DatabaseWorkerConfig } from './messages/configure';
 import { handleCloseRequest } from './handlers/close';
+import { handleClearRequest } from './handlers/clear';
 
 declare const self: Worker;
 
@@ -25,7 +26,7 @@ await AwaitableWorker.setupWorker<
 	async () => new DatabaseWorkerContext(),
 	async (context, request) => {
 		if (request.operation === 'configure') return handleConfigureRequest(context, request);
-		else if (request.operation === 'close') return handleCloseRequest(context);
+		else if (request.operation === 'close') return handleCloseRequest(context, true);
 		else if (request.operation === 'select') return handleSelectRequest(context, request);
 		else if (request.operation === 'insert') return handleInsertRequest(context, request);
 		else if (request.operation === 'update') return handleUpdateRequest(context, request);

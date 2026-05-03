@@ -4,6 +4,7 @@ import type { DatabaseWorkerContext } from '../database_worker';
 import type { DatabaseWorkerResult } from '../database_worker_types';
 import { initializeDatabase } from '../db';
 import type { ConfigureRequest, ConfigureResponse } from '../messages/configure';
+import { handleCloseRequest } from './close';
 
 export const handleConfigureRequest = async (
 	context: DatabaseWorkerContext,
@@ -12,7 +13,7 @@ export const handleConfigureRequest = async (
 	databaseWorkerLogger.debug('Reconfiguring Database Worker!');
 
 	if (context.db !== undefined) {
-		context.db.$client.close();
+		await handleCloseRequest(context, false);
 	}
 
 	context.db = initializeDatabase(config);
