@@ -16,7 +16,10 @@ export const handleCloseRequest = async (
 	rawDb.run('PRAGMA wal_checkpoint(TRUNCATE);');
 	rawDb.close();
 
-	if (shouldExitWorker) process.exit();
+	if (shouldExitWorker)
+		queueMicrotask(() => {
+			process.exit();
+		});
 
 	return Result.ok(true);
 };
