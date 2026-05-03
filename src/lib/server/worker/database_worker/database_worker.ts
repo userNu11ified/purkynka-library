@@ -29,6 +29,7 @@ await AwaitableWorker.setupWorker<
 		else if (request.operation === 'select') return handleSelectRequest(context, request);
 		else if (request.operation === 'insert') return handleInsertRequest(context, request);
 		else if (request.operation === 'update') return handleUpdateRequest(context, request);
+		else if (request.operation === 'clear') return handleClearRequest(context, request);
 		else return handleRemoveRequest(context, request);
 	}
 );

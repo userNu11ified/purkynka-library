@@ -1,4 +1,5 @@
 import type { Result } from '$shared/types/result';
+import type { ClearRequest, ClearResponse } from './messages/clear';
 import type { CloseRequest, CloseResponse } from './messages/close';
 import type { ConfigureRequest, ConfigureResponse } from './messages/configure';
 import type { DatabaseWorkerError } from './messages/error';
@@ -13,7 +14,8 @@ export type DatabaseWorkerRequest =
 	| UpdateRequest
 	| RemoveRequest
 	| ConfigureRequest
-	| CloseRequest;
+	| CloseRequest
+	| ClearRequest;
 
 export type DatabaseWorkerResponse =
 	| SelectResponse
@@ -21,7 +23,8 @@ export type DatabaseWorkerResponse =
 	| UpdateResponse
 	| RemoveResponse
 	| ConfigureResponse
-	| CloseResponse;
+	| CloseResponse
+	| ClearResponse;
 
 export type DatabaseWorkerResult<Response extends DatabaseWorkerResponse = DatabaseWorkerResponse> =
 	Result<Response, DatabaseWorkerError>;
