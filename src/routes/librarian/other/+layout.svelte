@@ -9,6 +9,11 @@
 
 <ViewWithSidebar>
 	{#snippet sidebar()}
+		<SidebarLink href="/librarian/other/udc" iconType="list-numbered">MDT</SidebarLink>
+		<SidebarLink href="/librarian/other/literature-types" iconType="list-typed">
+			Typy literatury
+		</SidebarLink>
+		<SidebarSeparator />
 		<SidebarLink href="/librarian/other/book-names" iconType="nametag" iconWidth={24}>
 			Názvy <br /> knih
 		</SidebarLink>
@@ -23,11 +28,6 @@
 		<SidebarLink href="/librarian/other/obtained-from" iconType="book-return">
 			Získáno <br /> od
 		</SidebarLink>
-		<SidebarSeparator />
-		<SidebarLink href="/librarian/other/literature-types" iconType="list-typed">
-			Typy literatury
-		</SidebarLink>
-		<SidebarLink href="/librarian/other/udc" iconType="list-numbered">MDT</SidebarLink>
 		<SidebarSeparator />
 		<SidebarLink href="/librarian/other/discard-reasons" iconType="trash-can">
 			Důvody vyřazení
