@@ -39,10 +39,12 @@
 		currentScrollTop = e.currentTarget.scrollTop;
 	};
 
+	const scrollToCenterAlignOffset = $derived(currentListHeight / itemHeight / 2 - 1);
+
 	export const scrollTo = (rowIndex: Nullable<number>) => {
 		if (rowIndex === null) return;
 
-		const scrollTo = rowIndex * itemHeight;
+		const scrollTo = Math.max(0, rowIndex - scrollToCenterAlignOffset) * itemHeight;
 		infiniteList?.scrollTo({ top: scrollTo, behavior: 'instant' });
 	};
 </script>
