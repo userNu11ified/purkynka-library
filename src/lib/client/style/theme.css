@@ -67,9 +67,9 @@
 
 		--scrollbar-color: hsl(0, 0%, 75%);
 
-		--bg-jumped-to: hsl(95, 50%, 50%);
-		--bg-selected: hsl(219, 70%, 50%);
-		--border-selected: hsl(219, 70%, 60%);
+		--bg-jumped-to: hsl(95, 50%, 75%);
+		--bg-selected: hsl(219, 70%, 85%);
+		--border-selected: hsl(219, 70%, 75%);
 	}
 }
 
@@ -89,7 +89,7 @@
 
 	--scrollbar-color: hsl(0, 0%, 75%);
 
-	--bg-jumped-to: hsl(95, 50%, 50%);
-	--bg-selected: hsl(219, 70%, 50%);
-	--border-selected: hsl(219, 70%, 60%);
+	--bg-jumped-to: hsl(95, 50%, 75%);
+	--bg-selected: hsl(219, 70%, 85%);
+	--border-selected: hsl(219, 70%, 75%);
 }
