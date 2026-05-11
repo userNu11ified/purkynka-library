@@ -5,6 +5,14 @@
 	const tableViewColumnManager = TableViewColumnManager.context.get();
 	const tableViewFilterManager = TableViewFilterManager.context.get();
 
+	const onFilterClick = (filterIndex: number) => {
+		tableViewFilterManager.currentQueries[filterIndex] = '';
+
+		tableViewFilterManager.jumpedTo = null;
+		tableViewFilterManager.filteredBy = null;
+		tableViewFilterManager.filterQuery = '';
+	};
+
 	const onFilterInput = (filterIndex: number) => {
 		if (
 			tableViewFilterManager.filteredBy !== null &&
@@ -29,6 +37,7 @@
 			type="text"
 			placeholder={`${column.columnName}...`}
 			bind:value={tableViewFilterManager.currentQueries[i]}
+			onclick={() => onFilterClick(i)}
 			oninput={() => onFilterInput(i)}
 		/>
 	{/each}
