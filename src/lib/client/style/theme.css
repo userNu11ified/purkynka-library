@@ -42,12 +42,12 @@
 
 	--drop-shadow-color: rgba(0, 0, 0, 0.5);
 
-	--past-due-0: hsl(95, 60%, 62%);
-	--past-due-1: hsl(3, 20%, 25%);
-	--past-due-2: hsl(3, 30%, 30%);
-	--past-due-3: hsl(3, 40%, 40%);
-	--past-due-4: hsl(3, 50%, 50%);
-	--past-due-5: hsl(3, 60%, 50%);
+	--not-past-due: hsl(95, 50%, 30%);
+	--past-due-month: hsl(25, 70%, 40%);
+	--past-due-two-months: hsl(325, 30%, 50%);
+	--past-due-two-months-one-week: hsl(3, 50%, 50%);
+	--past-due-two-months-two-weeks: hsl(340, 58%, 33%);
+	--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 33%);
 }
 
 @media (prefers-color-scheme: light) {
@@ -70,6 +70,13 @@
 		--bg-jumped-to: hsl(95, 50%, 75%);
 		--bg-selected: hsl(219, 70%, 85%);
 		--border-selected: hsl(219, 70%, 75%);
+
+		--not-past-due: hsl(95, 50%, 60%);
+		--past-due-month: hsl(25, 70%, 60%);
+		--past-due-two-months: hsl(325, 50%, 60%);
+		--past-due-two-months-one-week: hsl(3, 50%, 60%);
+		--past-due-two-months-two-weeks: hsl(340, 58%, 60%);
+		--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 60%);
 	}
 }
 
@@ -92,4 +99,11 @@
 	--bg-jumped-to: hsl(95, 50%, 75%);
 	--bg-selected: hsl(219, 70%, 85%);
 	--border-selected: hsl(219, 70%, 75%);
+
+	--not-past-due: hsl(95, 50%, 60%);
+	--past-due-month: hsl(25, 70%, 60%);
+	--past-due-two-months: hsl(325, 50%, 60%);
+	--past-due-two-months-one-week: hsl(3, 50%, 60%);
+	--past-due-two-months-two-weeks: hsl(340, 58%, 60%);
+	--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 60%);
 }
