@@ -157,7 +157,11 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
-			columnRenderer: { type: 'text', textCreator: (v) => v.literatureTypeShortName },
+			columnRenderer: {
+				type: 'text',
+				textCreator: (v) => v.literatureTypeShortName,
+				titleCreator: (v) => v.literatureTypeLongName
+			},
 			columnSorter: (l, r) => stringSorter(l.literatureTypeShortName, r.literatureTypeShortName),
 			columnSearcher: {
 				type: 'filter',

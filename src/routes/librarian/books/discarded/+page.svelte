@@ -134,7 +134,11 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'px', pixels: MINIMUM_COLUMN_WIDTH },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'V' : 'm') },
+			columnRenderer: {
+				type: 'text',
+				textCreator: (v) => (v.isLarge ? 'V' : 'm'),
+				titleCreator: (v) => (v.isLarge ? 'Velká' : 'Malá')
+			},
 			columnSorter: (l, r) => booleanSorter(l.isLarge, r.isLarge),
 			columnSearcher: {
 				type: 'filter',
@@ -189,7 +193,11 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
-			columnRenderer: { type: 'text', textCreator: (v) => v.literatureTypeShortName },
+			columnRenderer: {
+				type: 'text',
+				textCreator: (v) => v.literatureTypeShortName,
+				titleCreator: (v) => v.literatureTypeLongName
+			},
 			columnSorter: (l, r) => stringSorter(l.literatureTypeShortName, r.literatureTypeShortName),
 			columnSearcher: {
 				type: 'filter',

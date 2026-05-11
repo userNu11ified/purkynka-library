@@ -112,7 +112,11 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'px', pixels: MINIMUM_COLUMN_WIDTH },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.isLarge ? 'V' : 'm') },
+			columnRenderer: {
+				type: 'text',
+				textCreator: (v) => (v.isLarge ? 'V' : 'm'),
+				titleCreator: (v) => (v.isLarge ? 'Velká' : 'Malá')
+			},
 			columnSorter: (l, r) => booleanSorter(l.isLarge ?? false, r.isLarge ?? false),
 			columnSearcher: {
 				type: 'filter',

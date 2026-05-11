@@ -91,7 +91,7 @@
 						<div
 							class="table-view-column"
 							title={column.columnRenderer.type === 'text'
-								? `${column.columnRenderer.titleCreator?.(v) ?? ''}`
+								? `${column.columnRenderer.titleCreator?.(v) ?? column.columnRenderer.textCreator(v)}`
 								: ''}
 						>
 							{#if column.columnRenderer.type === 'text'}
