@@ -51,7 +51,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-	:root {
+	:root:not([data-theme='dark']) {
 		--bg-primary: hsl(0, 0%, 100%);
 		--bg-hover: hsl(0, 0%, 90%);
 
