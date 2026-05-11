@@ -186,7 +186,7 @@
 			columnName: 'Anotace',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
-			columnRenderer: { type: 'text', textCreator: (v) => v.annotation },
+			columnRenderer: { type: 'text', containsLinks: true, textCreator: (v) => v.annotation },
 			columnSorter: (l, r) => stringSorter(l.annotation, r.annotation),
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.annotation, q) }
 		},
