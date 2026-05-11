@@ -224,8 +224,11 @@
 				textCreator: (v) => v.borrowClassName,
 				titleCreator: (v) => `${v.borrowReaderName}\n${v.borrowDate}`
 			},
-			columnSorter: () => 0,
-			columnSearcher: { type: 'filter', filter: () => true }
+			columnSorter: (l, r) => stringSorter(l.borrowClassName, r.borrowClassName),
+			columnSearcher: {
+				type: 'filter',
+				filter: (v, q) => stringFilter(v.borrowClassName, q) || stringFilter(v.borrowReaderName, q)
+			}
 		},
 		{
 			columnName: 'Vyřaz.',
