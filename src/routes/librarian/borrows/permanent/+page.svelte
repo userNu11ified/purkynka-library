@@ -63,6 +63,7 @@
 			bookName: librarianData.bookNames.getValueByIdOrNull(book.bookNameId)?.value ?? '',
 			price: book.price ?? '',
 			readerName: reader.readerName,
+			readerClass: librarianData.readerClasses.getValueByIdOrNull(reader.readerClassId)!.value,
 			borrowDate,
 			borrowDateString,
 			borrowDateCompactString: borrowDateString.replaceAll(' ', '')
@@ -141,6 +142,16 @@
 			columnRenderer: { type: 'text', textCreator: (v) => v.readerName },
 			columnSorter: (l, r) => stringSorter(l.readerName, r.readerName),
 			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerName, q) }
+		},
+
+		{
+			columnName: 'Třída',
+			columnAlignment: 'center',
+			defaultColumnSize: { type: 'fr', fractions: 1 },
+
+			columnRenderer: { type: 'text', textCreator: (v) => v.readerClass },
+			columnSorter: (l, r) => stringSorter(l.readerClass, r.readerClass),
+			columnSearcher: { type: 'filter', filter: (v, q) => stringFilter(v.readerClass, q) }
 		},
 		{
 			columnName: 'Půjčeno dne',
