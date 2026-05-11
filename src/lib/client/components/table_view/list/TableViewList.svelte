@@ -1,5 +1,6 @@
 <script lang="ts" generics="T, R">
 	import InfiniteList from '$client/components/infinite_list/InfiniteList.svelte';
+	import { watch } from 'runed';
 	import { TableViewColumnManager } from '../logic/table_view_column_manager.svelte';
 	import { TableViewFilterManager } from '../logic/table_view_filter_manager.svelte';
 	import {
@@ -61,9 +62,16 @@
 		);
 	});
 
-	$effect(() => {
-		infiniteList?.scrollTo(tableViewFilterManager.jumpedTo);
-	});
+	watch(
+		() => tableViewFilterManager.jumpedTo,
+		(jumpedTo) => {
+			infiniteList?.scrollTo(jumpedTo);
+			if (jumpedTo === null) return;
+
+			tableViewSelectionManager.resetSelection();
+			tableViewSelectionManager.toggleSelectState(tableViewItemManager.collatedItems[jumpedTo][1]);
+		}
+	);
 </script>
 
 <svelte:window onmouseup={onWindowMouseUp} />
