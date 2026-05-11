@@ -190,19 +190,19 @@
 			columnAlignment: 'center',
 			defaultColumnSize: { type: 'fr', fractions: 1 },
 
-			columnRenderer: { type: 'text', textCreator: (v) => (v.permanent ? 'Yes' : 'No') },
+			columnRenderer: { type: 'text', textCreator: (v) => (v.permanent ? 'Ano' : 'Ne') },
 			columnSorter: (l, r) => booleanSorter(l.permanent, r.permanent),
 			columnSearcher: {
 				type: 'filter',
 				filter: (v, q) => {
 					const queryAsBoolean =
-						q.lowercaseQuery === 'yes' || q.lowercaseQuery === 'y'
+						q.lowercaseQuery === 'ano' || q.lowercaseQuery === 'a'
 							? true
-							: q.lowercaseQuery === 'no' || q.lowercaseQuery === 'n'
+							: q.lowercaseQuery === 'ne' || q.lowercaseQuery === 'n'
 								? false
 								: null;
 					if (queryAsBoolean === null) return false;
-					return v.isLarge === queryAsBoolean;
+					return v.permanent === queryAsBoolean;
 				}
 			}
 		},
