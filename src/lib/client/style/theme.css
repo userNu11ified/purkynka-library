@@ -71,12 +71,12 @@
 		--bg-selected: hsl(219, 70%, 85%);
 		--border-selected: hsl(219, 70%, 75%);
 
-		--not-past-due: hsl(95, 50%, 60%);
-		--past-due-month: hsl(25, 70%, 60%);
-		--past-due-two-months: hsl(325, 50%, 60%);
-		--past-due-two-months-one-week: hsl(3, 50%, 60%);
-		--past-due-two-months-two-weeks: hsl(340, 58%, 60%);
-		--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 60%);
+		--not-past-due: transparent;
+		--past-due-month: hsl(25, 70%, 75%);
+		--past-due-two-months: hsl(325, 50%, 75%);
+		--past-due-two-months-one-week: hsl(3, 50%, 75%);
+		--past-due-two-months-two-weeks: hsl(340, 58%, 75%);
+		--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 75%);
 	}
 }
 
@@ -100,10 +100,10 @@
 	--bg-selected: hsl(219, 70%, 85%);
 	--border-selected: hsl(219, 70%, 75%);
 
-	--not-past-due: hsl(95, 50%, 60%);
-	--past-due-month: hsl(25, 70%, 60%);
-	--past-due-two-months: hsl(325, 50%, 60%);
-	--past-due-two-months-one-week: hsl(3, 50%, 60%);
-	--past-due-two-months-two-weeks: hsl(340, 58%, 60%);
-	--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 60%);
+	--not-past-due: transparent;
+	--past-due-month: hsl(25, 70%, 75%);
+	--past-due-two-months: hsl(325, 50%, 75%);
+	--past-due-two-months-one-week: hsl(3, 50%, 75%);
+	--past-due-two-months-two-weeks: hsl(340, 58%, 75%);
+	--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 75%);
 }
