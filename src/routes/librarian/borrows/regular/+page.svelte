@@ -117,7 +117,7 @@
 
 <TableView
 	renderAfterResolved={librarianData.loaded}
-	persistentStateId="regular-column-sizes"
+	persistentStateId="borrows-regular"
 	items={normalBorrows}
 	itemMapper={({ id, bookId, readerId, borrowDate, timesExtended }) => {
 		const book = librarianData.books.getValueByIdOrNull(bookId)!;

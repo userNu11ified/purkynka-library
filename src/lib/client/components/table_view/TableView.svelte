@@ -56,7 +56,7 @@
 		) as TableViewColumnManager<unknown>
 	);
 
-	TableViewSortManager.context.set(new TableViewSortManager());
+	TableViewSortManager.context.set(new TableViewSortManager(() => persistentStateId));
 	TableViewFilterManager.context.set(new TableViewFilterManager());
 
 	TableViewItemManager.context.set(

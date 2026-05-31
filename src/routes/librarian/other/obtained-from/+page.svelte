@@ -78,7 +78,7 @@
 <TableView
 	bind:this={tableView}
 	renderAfterResolved={librarianData.loaded}
-	persistentStateId="obtained-from-column-sizes"
+	persistentStateId="other-obtained-from"
 	items={obtainedFrom}
 	itemMapper={({ id, value }) => ({ id, value })}
 	itemCopier={({ id, value }) => [id, value]}

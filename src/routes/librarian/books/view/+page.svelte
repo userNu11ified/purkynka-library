@@ -76,7 +76,7 @@
 
 <TableView
 	renderAfterResolved={librarianData.loaded}
-	persistentStateId="view-column-sizes"
+	persistentStateId="books-view"
 	items={librarianData.books.getArray()}
 	itemMapper={(book) => {
 		const { id, isLarge, bookNameId, annotation, udcId, note, discardDate } = book;

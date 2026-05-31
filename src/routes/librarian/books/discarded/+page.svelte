@@ -57,7 +57,7 @@
 <TableView
 	bind:this={tableView}
 	renderAfterResolved={librarianData.loaded}
-	persistentStateId="discarded-column-sizes"
+	persistentStateId="books-discarded"
 	items={discardedBooks}
 	itemMapper={({
 		id,

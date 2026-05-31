@@ -36,10 +36,9 @@ export class TableViewItemManager<T, R> {
 
 			filteredItems.sort(
 				(l, r) =>
-					this.tableViewColumnManager.columns[this.tableViewSortManager.sortedBy].columnSorter(
-						l[0],
-						r[0]
-					) * (this.tableViewSortManager.sortedDescending ? -1 : 1)
+					this.tableViewColumnManager.columns[
+						this.tableViewSortManager.sortedBy.current
+					].columnSorter(l[0], r[0]) * (this.tableViewSortManager.sortedDescending.current ? -1 : 1)
 			);
 
 			return filteredItems;

@@ -48,7 +48,7 @@
 <TableView
 	bind:this={tableView}
 	renderAfterResolved={librarianData.loaded}
-	persistentStateId="permanent-column-sizes"
+	persistentStateId="borrows-permanent"
 	items={permanentBorrows}
 	itemMapper={({ id, bookId, readerId, borrowDate }) => {
 		const book = librarianData.books.getValueByIdOrNull(bookId)!;

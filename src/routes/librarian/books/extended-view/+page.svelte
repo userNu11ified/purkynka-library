@@ -22,7 +22,7 @@
 
 <TableView
 	renderAfterResolved={librarianData.loaded}
-	persistentStateId="extended-view-column-sizes"
+	persistentStateId="books-extended-view"
 	items={librarianData.books.getArray()}
 	itemMapper={({
 		id,

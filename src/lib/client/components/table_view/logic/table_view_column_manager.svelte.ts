@@ -33,7 +33,7 @@ export class TableViewColumnManager<R> {
 		this.previousUsableWidth = new Previous(() => this.usableWidth, 0);
 
 		this.defaultColumnSizes = $derived(this.columns.map((v) => v.defaultColumnSize));
-		this.currentColumnSizes = new PersistedState(this.persistentStateId, []);
+		this.currentColumnSizes = new PersistedState(`${this.persistentStateId}-column-sizes`, []);
 
 		this.calculatedGridLayout = $derived(
 			this.currentColumnSizes.current.map((columnSize) => `${columnSize}px`).join(' ')

@@ -78,7 +78,7 @@
 <TableView
 	bind:this={tableView}
 	renderAfterResolved={librarianData.loaded}
-	persistentStateId="discard-reasons-column-sizes"
+	persistentStateId="other-discard-reasons"
 	items={discardReasons}
 	itemMapper={({ id, value }) => ({ id, value })}
 	itemCopier={({ id, value }) => [id, value]}

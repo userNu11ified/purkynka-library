@@ -27,7 +27,7 @@
 
 <TableView
 	renderAfterResolved={librarianData.loaded}
-	persistentStateId="students-column-sizes"
+	persistentStateId="other-students"
 	items={students}
 	itemMapper={({ id, readerName, readerClassId, createdOn, updatedOn }) => {
 		const readerClass = librarianData.readerClasses.getValueByIdOrNull(readerClassId)!;

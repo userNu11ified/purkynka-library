@@ -22,11 +22,12 @@
 	);
 
 	const onSorterMouseDown = (sorterIndex: number) => {
-		if (tableViewSortManager.sortedBy === sorterIndex) {
-			tableViewSortManager.sortedDescending = !tableViewSortManager.sortedDescending;
+		if (tableViewSortManager.sortedBy.current === sorterIndex) {
+			tableViewSortManager.sortedDescending.current =
+				!tableViewSortManager.sortedDescending.current;
 		} else {
-			tableViewSortManager.sortedBy = sorterIndex;
-			tableViewSortManager.sortedDescending = true;
+			tableViewSortManager.sortedBy.current = sorterIndex;
+			tableViewSortManager.sortedDescending.current = true;
 		}
 
 		if (tableViewFilterManager.jumpedTo !== null) tableViewFilterManager.resetFilter();
@@ -94,7 +95,7 @@
 
 <div class="table-view-sorters inverse-grid">
 	{#each tableViewColumnManager.columns as column, i (column.columnName)}
-		{@const isSortedByColumn = tableViewSortManager.sortedBy === i}
+		{@const isSortedByColumn = tableViewSortManager.sortedBy.current === i}
 		<button
 			class="table-view-sorter center-flex"
 			class:sorted-by={isSortedByColumn}
@@ -109,7 +110,9 @@
 					class:center={shouldCenterSortIcon[i]}
 				>
 					<Icon
-						iconType={tableViewSortManager.sortedDescending ? 'sort-descending' : 'sort-ascending'}
+						iconType={tableViewSortManager.sortedDescending.current
+							? 'sort-descending'
+							: 'sort-ascending'}
 						width={20}
 					/>
 				</div>
