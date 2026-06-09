@@ -14,11 +14,11 @@
 	} from '$client/components/table_view/logic/table_view_sorters';
 	import { stringFilter } from '$client/collation/filters';
 	import { formatDateOrNull, type Nullable } from '$shared/types/util';
-	import StudentHelp from '$client/components/student/StudentHelp.svelte';
 	import { StudentState } from '$client/components/student/student_state.svelte';
 	import Icon from '$client/components/icon/Icon.svelte';
 	import StudentUDCList from '$client/components/student/StudentUDCList.svelte';
 	import { watch } from 'runed';
+	import StudentSimpleHelp from '$client/components/student/StudentSimpleHelp.svelte';
 
 	let tableView: TableView<any, any> = $state()!;
 
@@ -101,7 +101,7 @@
 	<Loading></Loading>
 {:then}
 	{#if studentState.isStudentHelpVisible}
-		<StudentHelp></StudentHelp>
+		<StudentSimpleHelp></StudentSimpleHelp>
 	{/if}
 	{#if studentState.isUDCListVisible}
 		<StudentUDCList></StudentUDCList>
