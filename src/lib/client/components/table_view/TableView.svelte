@@ -57,7 +57,7 @@
 	);
 
 	TableViewSortManager.context.set(new TableViewSortManager(() => persistentStateId));
-	TableViewFilterManager.context.set(new TableViewFilterManager());
+	const tableViewFilterManager = TableViewFilterManager.context.set(new TableViewFilterManager());
 
 	TableViewItemManager.context.set(
 		new TableViewItemManager(
@@ -90,6 +90,12 @@
 	const onGoUpClick = () => tableViewList?.goUp();
 
 	export const clearSelection = () => tableViewSelectionManager.resetSelection();
+
+	export const searchBy = (columnIndex: number, searchQuery: string) => {
+		tableViewFilterManager.currentQueries[columnIndex] = searchQuery;
+		tableViewFilterManager.filteredBy = columnIndex;
+		tableViewFilterManager.filterQuery = searchQuery;
+	};
 
 	const resizeColumns = (usableWidth: number) => {
 		if (tableViewColumnManager.previousUsableWidth.current === 0) return;
