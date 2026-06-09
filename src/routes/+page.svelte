@@ -56,14 +56,24 @@
 		}
 	);
 
+	let timeoutId: Nullable<number> = null;
+	const resetReloadTimeout = () => {
+		if (timeoutId !== null) clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => window.location.reload(), 1000 * 60 * 5) as any;
+	};
+
 	onMount(() => {
 		(document.querySelector(':root') as HTMLElement).dataset.theme = 'light';
 
 		studentData.initialize(data.studentData).then(() => {
 			clientLogger.info('Loaded Student Data!');
+
+			tableView.resetColumnSizes();
+			tableView.resetFilter();
+			tableView.resetSort();
 		});
 
-		setInterval(() => window.location.reload(), 1000 * 60 * 5);
+		resetReloadTimeout();
 	});
 </script>
 
@@ -84,6 +94,8 @@
 				: item.returnDateString}
 	</div>
 {/snippet}
+
+<svelte:window onmousemove={() => resetReloadTimeout()} />
 
 {#await studentData.loaded}
 	<Loading></Loading>
