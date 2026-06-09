@@ -70,7 +70,7 @@
 
 			tableView.resetColumnSizes();
 			tableView.resetFilter();
-			tableView.resetSort();
+			tableView.sortBy(1, false);
 		});
 
 		resetReloadTimeout();
