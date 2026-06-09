@@ -8,11 +8,19 @@
 	import { MINIMUM_COLUMN_WIDTH } from '$client/components/table_view/logic/table_view_column_sizing';
 	import {
 		booleanSorter,
+		dateSorter,
 		numberSorter,
 		stringSorter
 	} from '$client/components/table_view/logic/table_view_sorters';
 	import { stringFilter } from '$client/collation/filters';
 	import { formatDateOrNull, type Nullable } from '$shared/types/util';
+	import StudentHelp from '$client/components/student/StudentHelp.svelte';
+	import { StudentState } from '$client/components/student/student_state.svelte';
+	import Icon from '$client/components/icon/Icon.svelte';
+	import StudentUDCList from '$client/components/student/StudentUDCList.svelte';
+	import { watch } from 'runed';
+
+	let tableView: TableView<any, any> = $state()!;
 
 	const { data }: PageProps = $props();
 
@@ -30,6 +38,24 @@
 			.join(' — ');
 	};
 
+	const studentState = StudentState.context.set(new StudentState());
+
+	const onHelpClick = () => {
+		studentState.isStudentHelpVisible = true;
+	};
+
+	const onUDCListClick = () => {
+		studentState.isUDCListVisible = true;
+	};
+
+	watch(
+		() => studentState.udcSearchedBy,
+		(udcSearchedBy) => {
+			if (udcSearchedBy === null) return;
+			tableView.searchBy(5, udcSearchedBy);
+		}
+	);
+
 	onMount(() => {
 		(document.querySelector(':root') as HTMLElement).dataset.theme = 'light';
 
@@ -46,21 +72,30 @@
 </svelte:head>
 
 {#snippet borrowed(item: { permanent: boolean; returnDateString: Nullable<string> })}
-	{@const permanent = item.permanent}
-	{@const borrowed = !item.permanent && item.returnDateString !== null}
 	<div
 		class="borrowed fill-container center-grid"
-		class:permanent
-		class:currently-borrowed={borrowed}
+		class:permanent={item.permanent}
+		class:currently-borrowed={!item.permanent && item.returnDateString !== null}
 	>
-		{item.permanent ? 'Trvale' : item.returnDateString === null ? 'Volná' : item.returnDateString}
+		{item.permanent
+			? 'Trvale'
+			: !item.permanent && item.returnDateString === null
+				? 'Volná'
+				: item.returnDateString}
 	</div>
 {/snippet}
 
 {#await studentData.loaded}
 	<Loading></Loading>
 {:then}
+	{#if studentState.isStudentHelpVisible}
+		<StudentHelp></StudentHelp>
+	{/if}
+	{#if studentState.isUDCListVisible}
+		<StudentUDCList></StudentUDCList>
+	{/if}
 	<TableView
+		bind:this={tableView}
 		renderAfterResolved={studentData.loaded}
 		persistentStateId="student"
 		items={studentData.books.getArray()}
@@ -98,10 +133,23 @@
 				columnAlignment: 'center',
 				defaultColumnSize: { type: 'fr', fractions: 0.5 },
 				columnRenderer: { type: 'snippet', snippet: borrowed },
-				columnSorter: () => 0,
+				columnSorter: (l, r) => {
+					if (l.returnDate === null || r.returnDate === null)
+						return booleanSorter(l.returnDate === null, r.returnDate === null);
+					if (l.permanent || r.permanent) return booleanSorter(l.permanent, r.permanent);
+
+					return dateSorter(l.returnDate, r.returnDate);
+				},
 				columnSearcher: {
 					type: 'filter',
-					filter: () => true
+					filter: (m, q) => {
+						if (m.returnDate === null && 'volná'.startsWith(q.lowercaseQuery)) return true;
+						if (m.permanent && 'trvale'.startsWith(q.lowercaseQuery)) return true;
+						if (!m.permanent && (m.returnDateString ?? ''.startsWith(q.lowercaseQuery)))
+							return true;
+
+						return false;
+					}
 				}
 			},
 			{
@@ -181,6 +229,14 @@
 			}
 		]}
 	></TableView>
+	<button class="extra-button help-button center-flex" onclick={onHelpClick}>
+		<Icon iconType="help" width={20}></Icon>
+		Nápověda
+	</button>
+	<button class="extra-button udc-list-button center-flex" onclick={onUDCListClick}>
+		<Icon iconType="list" width={20}></Icon>
+		Seznam MDT
+	</button>
 {/await}
 
 <style>
@@ -190,7 +246,6 @@
 		left: 0;
 
 		background-color: var(--bg-jumped-to);
-		color: var(--bg-primary);
 	}
 
 	.borrowed.permanent {
@@ -199,5 +254,27 @@
 
 	.borrowed.currently-borrowed {
 		background-color: var(--error-color);
+	}
+
+	.extra-button {
+		gap: 8px;
+
+		position: absolute;
+		bottom: 0;
+		transform: translateX(-50%);
+
+		height: 32px;
+
+		padding-inline: 8px;
+
+		font-weight: bold;
+	}
+
+	.help-button {
+		left: 40%;
+	}
+
+	.udc-list-button {
+		left: 60%;
 	}
 </style>
