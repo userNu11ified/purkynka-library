@@ -13,4 +13,9 @@ export class TableViewSortManager {
 		this.sortedBy = new PersistedState(`${this.persistentStateId}-sorted-by`, 0);
 		this.sortedDescending = new PersistedState(`${this.persistentStateId}-sorted-descending`, true);
 	}
+
+	public resetSort = () => {
+		this.sortedBy.current = 0;
+		this.sortedDescending.current = true;
+	};
 }

@@ -56,7 +56,9 @@
 		) as TableViewColumnManager<unknown>
 	);
 
-	TableViewSortManager.context.set(new TableViewSortManager(() => persistentStateId));
+	const tableViewSortManager = TableViewSortManager.context.set(
+		new TableViewSortManager(() => persistentStateId)
+	);
 	const tableViewFilterManager = TableViewFilterManager.context.set(new TableViewFilterManager());
 
 	TableViewItemManager.context.set(
@@ -90,6 +92,10 @@
 	const onGoUpClick = () => tableViewList?.goUp();
 
 	export const clearSelection = () => tableViewSelectionManager.resetSelection();
+
+	export const resetSort = tableViewSortManager.resetSort;
+	export const resetFilter = tableViewFilterManager.resetFilter;
+	export const resetColumnSizes = tableViewColumnManager.resetColumnSizes;
 
 	export const searchBy = (columnIndex: number, searchQuery: string) => {
 		tableViewFilterManager.currentQueries[columnIndex] = searchQuery;
