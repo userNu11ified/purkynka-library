@@ -103,6 +103,11 @@
 		tableViewFilterManager.filterQuery = searchQuery;
 	};
 
+	export const sortBy = (columnIndex: number, sortedDescending: boolean) => {
+		tableViewSortManager.sortedBy.current = columnIndex;
+		tableViewSortManager.sortedDescending.current = sortedDescending;
+	};
+
 	const resizeColumns = (usableWidth: number) => {
 		if (tableViewColumnManager.previousUsableWidth.current === 0) return;
 		if ((tableViewContent?.scrollWidth ?? 0) !== (tableViewContent?.clientWidth ?? 0)) return;
