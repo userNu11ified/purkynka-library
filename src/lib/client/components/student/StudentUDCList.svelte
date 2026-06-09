@@ -4,9 +4,13 @@
 	import { sineInOut } from 'svelte/easing';
 	import { StudentData } from '$shared/types/loaded_data/student_data';
 	import InfiniteList from '../infinite_list/InfiniteList.svelte';
+	import { stringSorter } from '../table_view/logic/table_view_sorters';
 
 	const studentState = StudentState.context.get();
 	const studentData = StudentData.context.get();
+
+	const udcList = studentData.udc.getArray();
+	udcList.sort((l, r) => stringSorter(l.shortName, r.shortName));
 
 	const hideUDCList = () => {
 		studentState.isUDCListVisible = false;
@@ -29,7 +33,9 @@
 	<div class="udc-list-container center-flex">
 		<div class="info-box udc-list-info center-flex flex-column">
 			<div class="info-box-title">Seznam MDT</div>
-			<p>Vpravo se nachází seznam všech <b>MDT</b>, které <b>má</b> některá z knih v knihovně.</p>
+			<p class="no-indent">
+				Vpravo se nachází seznam všech <b>MDT</b>, které <b>má</b> některá z knih v knihovně.
+			</p>
 			<p>
 				V seznamu je možné <b>kliknout</b> na jakýkoliv <b>řádek</b>, aby se v seznamu
 				<b>vyhledaly</b> všechny knihy s daným <b>MDT</b>.
@@ -37,7 +43,7 @@
 			<button class="hide-udc-list" onclick={hideUDCList}>Zavřít</button>
 		</div>
 		<div class="info-box udc-list">
-			<InfiniteList items={studentData.udc.getArray()} itemHeight={32}>
+			<InfiniteList items={udcList} itemHeight={32}>
 				{#snippet listRow(visibleRowItem)}
 					<button class="row" onclick={() => searchByUDC(visibleRowItem.shortName)}>
 						<div class="numeric center-flex">{visibleRowItem.shortName}</div>
@@ -109,7 +115,10 @@
 	}
 
 	.info-box > p {
-		line-height: 1.25lh;
+		line-height: 1.75;
+	}
+
+	.info-box > p:not(.no-indent) {
 		text-indent: 32px;
 	}
 
