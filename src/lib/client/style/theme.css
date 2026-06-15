@@ -42,12 +42,12 @@
 
 	--drop-shadow-color: rgba(0, 0, 0, 0.5);
 
-	--not-past-due: hsl(95, 50%, 30%);
-	--past-due-month: hsl(25, 70%, 40%);
-	--past-due-two-months: hsl(325, 30%, 50%);
-	--past-due-two-months-one-week: hsl(3, 50%, 50%);
-	--past-due-two-months-two-weeks: hsl(340, 58%, 33%);
-	--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 33%);
+	--past-due-transparent: transparent;
+	--past-due-yellow: hsl(64, 100%, 77%);
+	--past-due-orange: hsl(34, 100%, 77%);
+	--past-due-pink: hsl(325, 97%, 74%);
+	--past-due-red: hsl(0, 90%, 69%);
+	--past-due-purple: hsl(295, 89%, 67%);
 }
 
 @media (prefers-color-scheme: light) {
@@ -71,12 +71,12 @@
 		--bg-selected: hsl(219, 70%, 85%);
 		--border-selected: hsl(219, 70%, 75%);
 
-		--not-past-due: transparent;
-		--past-due-month: hsl(25, 70%, 75%);
-		--past-due-two-months: hsl(325, 50%, 75%);
-		--past-due-two-months-one-week: hsl(3, 50%, 75%);
-		--past-due-two-months-two-weeks: hsl(340, 58%, 75%);
-		--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 75%);
+		--past-due-transparent: transparent;
+		--past-due-yellow: hsl(64, 100%, 77%);
+		--past-due-orange: hsl(34, 100%, 77%);
+		--past-due-pink: hsl(325, 97%, 74%);
+		--past-due-red: hsl(0, 90%, 69%);
+		--past-due-purple: hsl(295, 89%, 67%);
 	}
 }
 
@@ -100,10 +100,10 @@
 	--bg-selected: hsl(219, 70%, 85%);
 	--border-selected: hsl(219, 70%, 75%);
 
-	--not-past-due: transparent;
-	--past-due-month: hsl(25, 70%, 75%);
-	--past-due-two-months: hsl(325, 50%, 75%);
-	--past-due-two-months-one-week: hsl(3, 50%, 75%);
-	--past-due-two-months-two-weeks: hsl(340, 58%, 75%);
-	--past-due-two-months-three-weeks-or-more: hsl(280, 50%, 75%);
+	--past-due-transparent: transparent;
+	--past-due-yellow: hsl(64, 100%, 77%);
+	--past-due-orange: hsl(34, 100%, 77%);
+	--past-due-pink: hsl(325, 97%, 74%);
+	--past-due-red: hsl(0, 90%, 69%);
+	--past-due-purple: hsl(295, 89%, 67%);
 }

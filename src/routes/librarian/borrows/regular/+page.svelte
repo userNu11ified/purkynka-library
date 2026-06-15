@@ -90,12 +90,12 @@
 	};
 
 	const getPastDueClassByWeekCount = (weekCount: number) => {
-		if (weekCount <= 0) return 'not-past-due';
-		if (weekCount <= 4) return 'past-due-month';
-		if (weekCount <= 8) return 'past-due-two-months';
-		if (weekCount <= 9) return 'past-due-two-months-one-week';
-		if (weekCount <= 10) return 'past-due-two-months-two-weeks';
-		return 'past-due-two-months-three-weeks-or-more';
+		if (weekCount <= 4) return 'past-due-transparent';
+		if (weekCount <= 8) return 'past-due-yellow';
+		if (weekCount <= 9) return 'past-due-orange';
+		if (weekCount <= 10) return 'past-due-pink';
+		if (weekCount <= 11) return 'past-due-red';
+		return 'past-due-purple';
 	};
 
 	onMount(() => (createPageUsed('borrows').current = page.route.id));
@@ -108,7 +108,9 @@
 })}
 	<div
 		class="return-until-column fill-container center-grid"
-		title={value.weeksPastDue <= 0 ? 'Před datem vrácení' : `${value.weeksPastDue} týd. pozdě!`}
+		title={value.weeksPastDue <= 0
+			? 'Před datem vrácení'
+			: `${value.weeksPastDue.toFixed(1)} týd. pozdě!`}
 		data-past-due-classifier={value.pastDueClassifier}
 	>
 		{value.returnUntilString}
@@ -132,9 +134,7 @@
 		);
 		const returnUntilString = formatDateOrNull(returnUntil)!;
 
-		const weeksPastDue = Math.ceil(
-			(new Date().getTime() - returnUntil.getTime()) / (1000 * 60 * 60 * 24 * 7)
-		);
+		const weeksPastDue = (new Date().getTime() - returnUntil.getTime()) / (1000 * 60 * 60 * 24 * 7);
 		const pastDueClassifier = getPastDueClassByWeekCount(weeksPastDue);
 
 		return {
@@ -308,27 +308,27 @@
 		background-color: transparent;
 	}
 
-	.return-until-column[data-past-due-classifier='not-past-due'] {
-		background-color: var(--not-past-due);
+	.return-until-column[data-past-due-classifier='past-due-transparent'] {
+		background-color: var(--past-due-transparent);
 	}
 
-	.return-until-column[data-past-due-classifier='past-due-month'] {
-		background-color: var(--past-due-month);
+	.return-until-column[data-past-due-classifier='past-due-yellow'] {
+		background-color: var(--past-due-yellow);
 	}
 
-	.return-until-column[data-past-due-classifier='past-due-two-months'] {
-		background-color: var(--past-due-two-months);
+	.return-until-column[data-past-due-classifier='past-due-orange'] {
+		background-color: var(--past-due-orange);
 	}
 
-	.return-until-column[data-past-due-classifier='past-due-two-months-one-week'] {
-		background-color: var(--past-due-two-months-one-week);
+	.return-until-column[data-past-due-classifier='past-due-pink'] {
+		background-color: var(--past-due-pink);
 	}
 
-	.return-until-column[data-past-due-classifier='past-due-two-months-two-weeks'] {
-		background-color: var(--past-due-two-months-two-weeks);
+	.return-until-column[data-past-due-classifier='past-due-red'] {
+		background-color: var(--past-due-red);
 	}
 
-	.return-until-column[data-past-due-classifier='past-due-two-months-three-weeks-or-more'] {
-		background-color: var(--past-due-two-months-three-weeks-or-more);
+	.return-until-column[data-past-due-classifier='past-due-purple'] {
+		background-color: var(--past-due-purple);
 	}
 </style>
