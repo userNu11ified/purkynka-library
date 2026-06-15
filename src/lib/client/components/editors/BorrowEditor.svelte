@@ -165,7 +165,7 @@
 		if (!editorPageStates.userEditorActive) history.back();
 	}}
 >
-	<Editor {showLoading} {@attach trapFocus(0)}>
+	<Editor {showLoading} showCaseSensitiveSwitch={true} {@attach trapFocus(0)}>
 		{#snippet title()}
 			Půjčit knihu
 		{/snippet}

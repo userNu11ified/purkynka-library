@@ -519,6 +519,7 @@
 >
 	<Editor
 		{showLoading}
+		showCaseSensitiveSwitch={true}
 		{@attach trapFocus(
 			bookEditorState.type === 'new' ? 1 : bookEditorState.type === 'discard' ? 30 : undefined
 		)}

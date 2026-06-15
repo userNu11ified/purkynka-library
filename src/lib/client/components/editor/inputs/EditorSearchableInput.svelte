@@ -5,8 +5,6 @@
 	import type { FocusEventHandler } from 'svelte/elements';
 	import EditorInput from './EditorInput.svelte';
 	import {
-		getEditorSearchableFieldCaseSensitive,
-		setEditorSearchableFieldCaseSensitive,
 		type EditorFieldSearchableState,
 		type EditorFieldSearchableStateListItem
 	} from './state/editor_field_searchable_state.svelte';
@@ -31,9 +29,6 @@
 	const listSettings = $derived(inputState.settings!.list);
 	const itemHeight = $derived(listSettings.itemHeight ?? 48);
 
-	const onCaseSensitiveClick = () =>
-		setEditorSearchableFieldCaseSensitive(!getEditorSearchableFieldCaseSensitive());
-
 	const onItemClick = (e: MouseEvent, v: EditorFieldSearchableStateListItem<T>) => {
 		(e.currentTarget as HTMLElement).blur();
 		inputState.value = `${v.text}`;
@@ -51,15 +46,6 @@
 	bind:this={editorSearchableInputContainer}
 >
 	<EditorInput state={inputState} />
-	<ButtonWithPopup
-		class={`editor-searchable-input-case-sensitive center-grid ${getEditorSearchableFieldCaseSensitive() ? 'active' : ''}`}
-		onclick={onCaseSensitiveClick}
-	>
-		{#snippet popup()}
-			Rozlišovt vel. a mal. písmena
-		{/snippet}
-		<Icon iconType="case-sensitive" width={20} />
-	</ButtonWithPopup>
 	{#if inputState.settings!.list.onSpecialAdderClick !== undefined}
 		<ButtonWithPopup
 			class="editor-searchable-field-special-adder center-grid"
@@ -109,22 +95,6 @@
 
 	.editor-searchable-input-container:focus-within .editor-searchable-input-list {
 		display: block;
-	}
-
-	:global .editor-searchable-input-case-sensitive {
-		position: absolute;
-		top: 50%;
-		right: 8px;
-		transform: translateY(-50%);
-
-		height: 32px;
-		aspect-ratio: 1;
-
-		border-radius: 4px;
-	}
-
-	:global .editor-searchable-input-case-sensitive.active {
-		color: var(--information-color);
 	}
 
 	:global .editor-searchable-field-special-adder {

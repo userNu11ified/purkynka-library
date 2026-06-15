@@ -156,7 +156,7 @@
 </script>
 
 <Modal onClickOutside={() => history.back()}>
-	<Editor {showLoading} {@attach trapFocus(0)}>
+	<Editor {showLoading} showCaseSensitiveSwitch={true} {@attach trapFocus(0)}>
 		{#snippet title()}
 			{userEditorState.type === 'new' ? 'Přidat čtenáře' : 'Upravit čtenáře'}
 		{/snippet}
