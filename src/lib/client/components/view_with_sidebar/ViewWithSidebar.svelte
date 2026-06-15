@@ -27,6 +27,7 @@
 >
 	<div class="sidebar flex-column">
 		{@render sidebar()}
+		<div class="sidebar-padding"></div>
 	</div>
 	<div class="view">
 		{@render view()}
@@ -40,5 +41,15 @@
 
 	.view {
 		position: relative;
+	}
+
+	.sidebar-padding {
+		flex: 0 0 auto;
+
+		height: calc(32px + var(--border-width));
+		width: 100%;
+
+		margin-top: auto;
+		border-top: var(--border);
 	}
 </style>
