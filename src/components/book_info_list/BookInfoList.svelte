@@ -121,7 +121,7 @@
 <List
 	bind:this={list}
 	bind:current_items
-	local_storage_key="book-list"
+	local_storage_key="book-info-list"
 	headers={['Přír. č.', '', 'Název knihy', 'Naklad.', 'Místo', 'Rok', 'Číslo', 'Str.', 'Typ', 'Cena', 'Od']}
 	items={$DATABASE.books}
 	{item_mapper}
