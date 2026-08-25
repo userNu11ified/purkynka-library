@@ -288,7 +288,7 @@
 	let list: VirtualList;
 	const force_update_unsubscriber = FORCE_UPDATE.subscribe((v) => {
 		if (v === true) {
-			list.recomputeSizes();
+			list?.recomputeSizes();
 			$FORCE_UPDATE = false;
 		}
 	});
